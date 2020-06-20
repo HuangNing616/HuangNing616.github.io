@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="前言Git 是一种版本控制系统（version system control，简称VSC)，VSC可以记录文件在一段时间内的变化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git基本操作">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="前言Git 是一种版本控制系统（version system control，简称VSC)，VSC可以记录文件在一段时间内的变化。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;concepturalGraph.png">
+<meta property="article:published_time" content="2020-05-12T02:14:57.000Z">
+<meta property="article:modified_time" content="2020-05-25T15:57:31.208Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="版本控制系统">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;concepturalGraph.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Git基本操作 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-schedule">
+
+    <a href="/schedule/" rel="section"><i class="fa fa-fw fa-calendar"></i>日程表</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-fw fa-sitemap"></i>站点地图</a>
+
+  </li>
+        <li class="menu-item menu-item-commonweal">
+
+    <a href="/404/" rel="section"><i class="fa fa-fw fa-heartbeat"></i>公益 404</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="普通人也可以活得很精彩">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Git基本操作
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-12 10:14:57" itemprop="dateCreated datePublished" datetime="2020-05-12T10:14:57+08:00">2020-05-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-05-25 23:57:31" itemprop="dateModified" datetime="2020-05-25T23:57:31+08:00">2020-05-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Git 是一种版本控制系统（version system control，简称VSC)，VSC可以<strong>记录文件在一段时间内的变化</strong>。</p>
+<a id="more"></a>
+<h1 id="文件概念图"><a href="#文件概念图" class="headerlink" title="文件概念图"></a>文件概念图</h1><p>为了便于理解git在本地上的操作，我们需要了解下方的<strong>文件概念图</strong></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/concepturalGraph.png" alt="文件概念图"></p>
+<p>其中.git history 等价于提交图(commit graph)， 它被放在隐藏文件.git中。.git history包含构造repo需要的metadata和数据库对象。 如果我们将.git 发送给用户A，那么用户A就相当于有了整个git项目。</p>
+<h1 id="Git-信息配置"><a href="#Git-信息配置" class="headerlink" title="Git 信息配置"></a>Git 信息配置</h1><ol>
+<li>git confit —global user.name “globalhuangning”                       配置全局用户姓名</li>
+<li>git config —global user.email “globalhuangning@123.com”    配置全局用户邮箱</li>
+<li>git config —local user.name “huangning”                                    配置局部用户姓名</li>
+<li>git config —local user.email “<a href="mailto:huangning@qq.com">huangning@qq.com</a>“                    配置局部用户姓名</li>
+<li>git config —list：查看配置列表</li>
+</ol>
+<h1 id="Git-本地常用操作"><a href="#Git-本地常用操作" class="headerlink" title="Git 本地常用操作"></a>Git 本地常用操作</h1><ol>
+<li>git init：创建一个空的repository（简称repo）</li>
+<li>git status：查看当前分支以及working tree 和 staging area 中文件的状态</li>
+<li>git add xx：将working tree中的xx文件放到staging area中, 使其变成tracked/将被提交的文件</li>
+<li>git add . ：将working tree中的所有文件放到staging area中, 使其变成tracked/将被提交的文件</li>
+<li>git add s*：将working tree中首字母为s的文件放到staging area中, 使其变成tracked/将被提交的文件</li>
+<li>git rm —cached xx：将staging area中的xx文件再次变成unstaged/untracked文件</li>
+<li>git diff：查看workingTree 和 staging area 之间文件的区别</li>
+<li>git diff —staged：查看staging area和最近一次commit的文件的区别</li>
+<li>git commit -m “xxx”：将staging area中的文件提交到history中，并且提交信息为xxx</li>
+<li>git commit：同上，但是可以将提交信息编辑成多行的形式</li>
+<li>git log : 提交日志，其中最新的提交显示在最顶端，提交信息包括哈希码，用户名，邮箱以及相应的提交描述</li>
+<li>git log — xxx文件：显示和xxx文件相关的提交日志</li>
+<li>git log —all —decorate —oneline —graph: 可视化提交图</li>
+</ol>
+<p>补充：</p>
+<ol>
+<li>commit 和 add 可以写在一行，中间用；隔开</li>
+<li>如果针对所有文件进行add和commit，可以用 git commit -a -m “xxx”</li>
+<li>working tree（working directory）中不包括.git子目录</li>
+<li><p>可以通过重命名的方式来方便绘制可视化：alias graph=”git log —all —decorate —oneline —graph”</p>
+</li>
+<li><p>git rm -r —cached . 将所有文件都变成为untracked（在用.gitignore的时候可能会用到，因为有的时候不小心将本该忽略的文件加入了版本控制，这样就需要将加入版本控制的文件变成untracked）</p>
+</li>
+</ol>
+<h1 id="Git-branch的使用"><a href="#Git-branch的使用" class="headerlink" title="Git branch的使用"></a>Git branch的使用</h1><p>A branch is a small label points to a commit. HEAD pointer tells us what we have checked out in Git，通常情况下 HEAD 会指向某个branch，它是一种symbolic pointer</p>
+<ol>
+<li>git branch &lt;分支A&gt;：创建分支A</li>
+<li>git branch：展示现在存在那些分支</li>
+<li>git checkout &lt;分支名称&gt;：切换到哪个分支上</li>
+<li>git commit -a -m “auth for s1” 将任何tracked并且被修改的文件add到stageArea并且被提交!!!</li>
+<li>git branch —merged：显示出哪些分支进行了合并（之后好删除分支）</li>
+<li>git branch -d &lt;分支A&gt;：删除分支A</li>
+<li><p>git branch -D &lt;分支A&gt;：可以删除还没有合并的分支A</p>
+</li>
+<li><p>git merge 分支名成：合并</p>
+</li>
+</ol>
+<p>补充：</p>
+<ul>
+<li><p>两种merge方式：</p>
+<ul>
+<li><p>fast-forward merge：被merge的分支包括<strong>master分支</strong>上的历史提交信息</p>
+</li>
+<li><p>3-ways merge：被merge的分支和<strong>master分支</strong>在不同路径上，其中3-ways表示从同一个节点分到不同的节点再到新的提交节点上</p>
+</li>
+</ul>
+</li>
+<li><p>每次切换到一个分支，workingtree和staging area中的文件都会改变（update working tree 和 staging area）</p>
+</li>
+</ul>
+<p>解决基本的merge冲突：比如修改了相同行或者相同文件的时候？<br>创建并且切换到分支的快捷命令：git checkout -b dev<br>针对与base commit而言，某一行的change和no-change,git会将前者作为获胜者，也就是merge的时候会change<br>如果同一行两个分支有不同的change，那么git就不能猜到我们到底需要哪种改变<br>如果同一行两个分支有相同的change，那么就不会引起冲突<br>如果同一行其中一个分支有change，但是另外一个分支有delete，那么就不会引起冲突<br>git merge —abort：发现merge冲突之后，终止merge（前提是我们的working tree 和stage area都是干净的）<br>起merge冲突的时候<br>vi 文件名出现的 ===== 会将两个文件起冲突的分隔开，</p>
+<p>将HEAD直接指向某个提交(我们可以直接切换到某次提交而不是某个分支)<br>我们就有了一个 detached HEAD state<br>语法：git checkout 87abc55（hash码前七位）<br>同时也可以创建一个分支<br>git branch xxx 但是创建分支之后head并不会直接指向xxx</p>
+<p>最后一点：</p>
+<ol>
+<li>如果干净的工作区和stage area不满足的话，我们就不能切换到其他分支或者很难merge</li>
+</ol>
+<p>git stash: 通过存储当前信息，实现了切换分支或者merge等功能<br>git stash list (展示所有贮藏的简短信息)<br>git stash list -p (展示所有贮藏的完整信息)<br>重新应用这些stash<br>git stash apply(会应用最新的一次stash)<br>而且应用这些stash之后原来的stash list也不会pop或者remove，所以之后仍然可以重新使用这些stash<br>git stash pop: 删除stash列表<br>git stash apply 相应的label: 使用某个指定label的stash<br>git stash save 描述信息：为每个stash label加上描述性语言</p>
+<p>============================git remote=============================================<br>remote is simply(只是) a repository in another location(可以是git服务器，可以是github上的fork，也可以是自己本机的其他repo)</p>
+<ol>
+<li>git clone 将会retrieve/copy github上的工程到本地(clone 需要工程的url，有两种：ssh和html)</li>
+<li>git fetch: 将会retrieve 或者 fetch update of repo on GitHub</li>
+<li>git push: 将会upload or push updates to the remote in github<br>当我么fetch或者push的时候不需要记得full location fo our remote 因为git可以起一个简短的名字或者别名alias（别名）</li>
+<li>git remote: 返回远程连接的名字<br>出现origin, 表示clone之后，origin是我们第一次远程连接的默认名称<br>git remote -v: 显示远程连接的名称和完整地址</li>
+</ol>
+<p>git pull = git fetch &amp;&amp; git merge<br>git pull —rebase = git fetch &amp;&amp; git rebase<br>git log —oneline —graph使得提交可视化</p>
+<p>create a github fork<br>fork 就是copy一个repo in github<br>提出场景bob想要操作别人的repo，那么首先需要fork别人在github上的repo到自己GitHub账户下，然后通过clone到本地进行修改，bob不能直接修改别人的repo</p>
+<p>ps :</p>
+<ol>
+<li>github 的repo会有一次默认的提交（添加了readme.md）</li>
+<li>origin/master branch： 它是一个remote-tacking branch ,它会告诉我们master branch的样子是什么，它主要就是让本地master分支和远程的master分支指向同一个commit</li>
+<li>git fetch origin (然后我们可以git merge origin/master 将本地的master也指向最新的commit）</li>
+<li>git pull == git fetch origin + git merge(建议不要这么做！！！还是分开写好，避免出错，这样又一个清晰的工作流程)</li>
+<li>本地修改之后，本地的master会领先github上repo的master</li>
+<li>git push origin：将本地最新的提交（本地的改变）上传到github(push 依赖于github的authentication,这个需要事前设定好SSH 的authentication)<br>%%%%%%以上都是单个remote%%%%%%%%<br>添加一个新的远程连接<br>git remote add “alias” <strong><strong><strong><em>*</em></strong></strong></strong>（另外一个repo的ssh地址）<br>git remote -v :可以看到多了一对远程连接地址<br>git remote remove <remote name> 移除某个远程连接<br>接下来让bob本地和他的origin 与 被fork的betty stay in sync</remote></li>
+</ol>
+<p>注意：和之前相比没有了之前提到的remote-tracking braching，所以我们针对上游push了最新的提交之后，需要在bob端进行git fetch upstream!!!</p>
+<p>fetch之后会发现之前bob local和origin的master虽然同步，但是已经落后于betty的master，所以我们需要在bob端进行git merge upstream/master 这样就会将local的master赶上最新的进度，但是origin端的master还是没赶上最新的提交，所以我们要进行git push origin master,使得fork的master也赶上最新的进度，这样就使得三个repo的master赶上了相同的进度<br>git branch -a 就会展示远程的分支 + 本地分支<br>git branch -r 就只会展示远程分支<br>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）<br>pull请求发完之后就可以将fork的和本地的删除了<br>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）发完</p>
+<p>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）</p>
+<ol>
+<li><p>How to undo a working tree change?（恢复working tree中的文件）<br>git checkout — xxx文件<br>stageArea中的xxx文件覆盖掉到workingTree中经过修改的xxx文件<br>ps:注意，经过此操作之后，之前在workingTree中针对s1的糟糕操作就不可以还原了！！！）</p>
+</li>
+<li><p>How to undo staging of file? (如何恢复（unstaged）stageArea中的文件?)<br>git reset HEAD(表示最近一次提交) xxx文件<br>表示将最近一次提交的xxx文件覆盖到StageArea(IndexArea)中的xxx文件，这样就做到了恢复stageArea中的xxx文件<br>ps：注意，这样操作只恢复（restore）了stageArea中的xxx文件，对于workingTree中的xxx文件还是最新版本，所以还需要git checkout — xxx文件来恢复working tree中的文件</p>
+</li>
+</ol>
+<p>更多的撤销（undo）操作（恢复操作）</p>
+<ol>
+<li><p>restore from an early commit(恢复更早的提交中恢复文件）<br>git checkout xxxxx(5位16位哈希码就可以了) — s2<br>这就将xxx码对应的那次提交中的s2文件同时恢复到stage area 和 working tree中</p>
+</li>
+<li><p>如何使一些文件不要被track？（比如一些日志文件啥的不需要track）<br>vim .gitignore</p>
+</li>
+</ol>
+<p>========================================================================================<br>vi/vim 是一个文本编辑器<br>q: 退出<br>w: 保存<br>q!: 强制退出<br>w!: 强制保存<br>qw!: 强制退出并保存</p>
+<p>Linus常用命令</p>
+<ol>
+<li>ls: 显示文件列表</li>
+<li>ls -a： 显示隐藏文件（以’.’点符号开头的文件名）</li>
+<li>ls -R: 递归显示所有子目录和子文件</li>
+<li>ls -al: 显示出文件的详细信息，详细信息会以列状格式显示出来，每列的含义如下所示:</li>
+</ol>
+<ul>
+<li>第一列：文件类型和访问权限</li>
+<li>第二列：文件的硬链接数</li>
+<li>第三列：文件的拥有者</li>
+<li>第四列：文件所属用户组</li>
+<li>第五列：文件的字节大小</li>
+<li>第六列：文件最后的修改时间</li>
+<li>第七列：文件名或目录名</li>
+</ul>
+<ol>
+<li>alias graph=”git log —all —decorate —oneline —graph” 给命令起一个外号</li>
+<li>cat 文件：查看文件</li>
+<li>more/less 文件：查看文件</li>
+</ol>
+<p>========<br>英语<br>wrap up 总结<br>a tiny bit of overhead 开销<br>sign up 注册<br>sign in 登录<br>a is ahead of b : a 领先 b<br>dropdown 下拉列表<br>request alterations 请求改变</p>
+<ol>
+<li>wildcard 通配符</li>
+<li>dash m：-m</li>
+</ol>
+<blockquote>
+<ol>
+<li>Git 核心概念讲解：<a href="https://www.bilibili.com/video/BV1pJ411n7vP" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1pJ411n7vP</a></li>
+</ol>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F/" rel="tag"># 版本控制系统</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/15/SQL%E8%A1%A8%E8%BF%9E%E6%8E%A5/" rel="prev" title="SQL表连接">
+      <i class="fa fa-chevron-left"></i> SQL表连接
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="SparkSQL学习笔记">
+      SparkSQL学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件概念图"><span class="nav-number">2.</span> <span class="nav-text">文件概念图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-信息配置"><span class="nav-number">3.</span> <span class="nav-text">Git 信息配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-本地常用操作"><span class="nav-number">4.</span> <span class="nav-text">Git 本地常用操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-branch的使用"><span class="nav-number">5.</span> <span class="nav-text">Git branch的使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">普通人也可以活得很精彩</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/demons-28-75-48" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;demons-28-75-48" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.nowcoder.com/ta/coding-interviews" title="牛客网 → https:&#x2F;&#x2F;www.nowcoder.com&#x2F;ta&#x2F;coding-interviews" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>牛客网</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.1.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>

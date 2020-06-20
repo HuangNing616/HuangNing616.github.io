@@ -3,6 +3,7 @@
 
 
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
@@ -50,15 +51,15 @@
   };
 </script>
 
-  <meta name="description" content="本篇文章主要针对硕士期间的现代数据分析方法课程中涉及到的经典题目进行了总结">
+  <meta name="description" content="本篇文章主要是针对现代数据分析方法中比较经典的问题进行了总结">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数理统计五大经典题目">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;03&#x2F;%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1&#x2F;index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="本篇文章主要针对硕士期间的现代数据分析方法课程中涉及到的经典题目进行了总结">
+<meta property="og:description" content="本篇文章主要是针对现代数据分析方法中比较经典的问题进行了总结">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-04-03T15:12:04.000Z">
-<meta property="article:modified_time" content="2020-04-04T03:38:26.933Z">
+<meta property="article:modified_time" content="2020-05-12T10:32:59.096Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="｜统计学|机器学习|python|">
 <meta name="twitter:card" content="summary">
@@ -112,7 +113,7 @@
 <body itemscope itemtype="http://schema.org/WebPage">
   <div class="container use-motion">
     <div class="headband"></div>
-
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
     <header class="header" itemscope itemtype="http://schema.org/WPHeader">
       <div class="header-inner"><div class="site-brand-container">
   <div class="site-meta">
@@ -238,7 +239,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-04 11:38:26" itemprop="dateModified" datetime="2020-04-04T11:38:26+08:00">2020-04-04</time>
+                <time title="修改时间：2020-05-12 18:32:59" itemprop="dateModified" datetime="2020-05-12T18:32:59+08:00">2020-05-12</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -269,13 +270,13 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>本篇文章主要针对硕士期间的现代数据分析方法课程中涉及到的经典题目进行了总结</p>
+        <p>本篇文章主要是针对现代数据分析方法中比较经典的问题进行了总结</p>
 <a id="more"></a>
 <h1 id="极大似然估计（MLE）"><a href="#极大似然估计（MLE）" class="headerlink" title="极大似然估计（MLE）"></a>极大似然估计（MLE）</h1><p>（1）简述极大似然（估计）的思想？<br>（2）极大似然估计一定存在吗？如果不一定存在请举出反例?<br>（3）若极大似然估计存在的话一定唯一吗？如果不一定唯一, 请举出反例?<br>答：</p>
 <p>(1) 给定一组样本$x_1, x_2, …, x_n$, 他们对应的联合密度函数就是似然函数, 极大似然的思想就是通过使似然函数达到最大，也就是当前概率达到最大来求解相应的参数估计.</p>
 <p>(2) 极大似然估计不一定存在.<br>比如：当概率密度函数标准正态分布和一般正态分布的高斯混合分布时，即</p>
 <script type="math/tex; mode=display">
-\begin{eqnarray}\label{pdf}
+\begin{eqnarray}
 f(x;\mu,\sigma^2)=\frac{1}{2}\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}+\frac{1}{2}\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}},
 \end{eqnarray}</script><p>那么(\ref{pdf})对应的极大似然估计不存在, 其中$\mu$和$\sigma^2$分别为一般正态分布的期望和方差. 我们假设$x_1, x_2, …, x_n$是$i.i.d$的，那么对应的似然函数为</p>
 <script type="math/tex; mode=display">
@@ -333,6 +334,201 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
 \end{eqnarray*}</script><p>生成指数分布随机数的步骤如下：</p>
 <p>step1. 产生$\mathrm{U}(0,1)$上的随机数$u$;</p>
 <p>step2. 根据$x=-\frac{ln(1-u)}{\lambda}$得到指数分布的随机数$x$.</p>
+<h1 id="方差缩减"><a href="#方差缩减" class="headerlink" title="方差缩减"></a>方差缩减</h1><p>(1) 简述对偶变量法和控制变量法和控制变量法</p>
+<p>(2) 选择一种方差缩减方法去缩减$\theta=e^{u}$的方差</p>
+<p>答：</p>
+<p>(1) Antithetic variates(对偶变量法)</p>
+<p>假设$x_1, x_2$为来自同一分布的两个样本, 我们要用$\frac{x_1+x_2}{2}$来估计$E(x)$.</p>
+<p>a. 当$x_1, x_2$相互独立时, $\mathrm{var}(\frac{x_1+x_2}{2})=\frac{x_1}{2}$;<br>b. 当$x_1, x_2$不独立时, $\mathrm{var}(\frac{x_1+x_2}{2})=\frac{x_1}{2}+\frac{\mathrm{cov}(x_1, x_2)}{2}$.</p>
+<p>如果$\mathrm{cov}(x_1, x_2)&lt;0$, 那么就达到了缩减方差的目的.</p>
+<p>推论：$h(u_1, u_2, …, u_n)$是关于每个自变量的单调函数, 则对$n$个独立的$\mathrm{U}(0,1)$上的随机数$u_1, u_2, …, u_n$有</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\mathrm{cov}\{h(u_1, u_2, ..., u_n), h(1-u_1, 1-u_2, ..., 1-u_n)\}\leq 0.
+\end{eqnarray*}</script><p>设$x=h(u_1, u_2, …, u_n)$, 其中$h(\cdot)$为每个分量的单调函数, $u_1, u_2, …, u_n$是服从$\mathrm{U}(0,1)$的相互独立的随机数, 那么根据推论可以得到$x_1 = h(u_1, u_2, …, u_n)$和$x_2 = h(1- u_1, 1- u_2, …, 1- u_n)$负相关, 即$\mathrm{cov}(x_1, x_2)&lt;0$, 这样就达到了方差缩减的目的.</p>
+<p>(2) Control variates</p>
+<p>思想: 找一个与$X$有相关性的随机变量$Y$, 并且$Y$的期望已知, 我们将其设为$\mathrm{E}(Y)=\mu$, 那么我们可以构造一个新的随机变量$Z=X+C(Y-\mu)$, 然后用$z_i=x_i+c(y_i-\mu)$的样本均值来估计参数$\theta$, 其中$\theta=E(x_i)$, $i=1,2,…,n$. </p>
+<p>因为$E(\overline{z})=\frac{1}{n}\sum_{i=1}^nE(z_i)=E(x_i)=\theta$, 所以可以得到$\overline{z}$也是$\theta$的无偏估计</p>
+<p>接下来证明通过上述构造方式得到的随机变量可以缩减方差</p>
+<p>证明：我们的目标是要证明$\mathrm{var}(\overline{x})&lt;\mathrm{var}(\overline{z})$</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\mathrm{var}(Z)\\
+&=&\mathrm{var}(X+c(Y-\mu))\\
+&=&\mathrm{var}(X)+c^2\mathrm{var}(Y)+2c\mathrm{cov}(X,Y)\\
+\end{eqnarray*}</script><p>为了使得上式关于$c$达到最小, 对应的最小值点为</p>
+<script type="math/tex; mode=display">
+c^*=-\frac{2\mathrm{cov}(X,Y)}{2\mathrm{var}(Y)}
+=-\frac{\mathrm{cov}(X,Y)}{\mathrm{var}(Y)}</script><p>对应的最小值为</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\frac{4\mathrm{var}(Y)\mathrm{var}(X)-4\mathrm{cov}(X,Y)^2}{4\mathrm{var}(Y)}\\
+&=&\mathrm{var}(X)-\frac{\mathrm{cov}(X,Y)^2}{\mathrm{var}(Y)}
+\end{eqnarray*}</script><p>所以有</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\mathrm{var}(\overline{z})&=&\mathrm{var}(\frac{1}{n}\sum\{x_i+c(y_i-\mu)\})\\
+&=&\frac{1}{n}\mathrm{var}(x_1+c(y_1-\mu))\\
+&=&\frac{1}{n}\mathrm{var}(x_1)-\frac{1}{n}\frac{\mathrm{cov}(x_1,y_1)^2}{\mathrm{var}(y_1)}
+\end{eqnarray*}</script><p>因为X和Y相关, 所以$\mathrm{cov}(x_1, y_1)&gt;0$, 因此$\mathrm{var}(\overline{z})&lt;\mathrm{var}(\overline{x})$, 即达到了缩减方差的目的</p>
+<p>(3)若$\theta=\mathrm{E}(e^{U})=\int_0^1e^x\mathrm{d}x$, 其中$U\sim\mathrm{U}(0,1)$. 已知$\mathrm{cov}(e^U, U)=0.14086$, $\mathrm{var}(e^U)=0.2420$, $\mathrm{var}(Y)=\frac{1}{12}$</p>
+<p>解：设$X=e^U$, 令$Y=U$, 那么$E(Y)=\frac{0+1}{2}=\frac{1}{2}$, 令新的随机变量为$Z=e^U+c(u-\frac{1}{2})$. 那么$\mathrm{var}(z)=\mathrm{var}(e^{U}+c(U-\frac{1}{2}))=0.0039$. 根据之前的控制变量法的原理简述可以得到$\overline{z}$是$\theta$的无偏估计, 并且也可以得到$\mathrm{var}(\overline{z})$的结果, 在此不再赘述. </p>
+<p>(3) 例题：</p>
+<script type="math/tex; mode=display">
+\theta=\int_0^1\int_0^1exp^{(x+y)^2}\mathrm{d}x\mathrm{d}y=\mathrm{E}_{XY}(e^{(x+y)^2})</script><p>解：令$u_1, u_2, …, u_n, u_1^{‘},u_2^{‘},…, u_n^{‘}$独立同分布与$\mathrm{U}[0,1]$, 那么</p>
+<script type="math/tex; mode=display">
+\widehat{\theta}=\frac{1}{2n}[\sum_{i=1}^ne^{(u_1+u_1^{'})^2}+\sum_{i=1}^ne^{\{(1-u_1)+(1-u_1^{'})\}^2}]</script><p>作为$\theta$的对偶变量法的估计, 所以该估计显然是无偏估计. </p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\mathrm{var}(\widehat\theta)\\
+&=&\frac{\mathrm{var}\{e^{(u_1+u_1^{'})^2}\}}{2n}+\frac{\mathrm{cov}[e^{(u_1+u_1^{'})^2}, e^{\{(2-u_1-u_1^{'})}]}{2n}
+\end{eqnarray*}</script><p>其中针对第二项我们无法直接得到结果，所以我们需要对其进行估计</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\frac{\mathrm{cov}[e^{(u_1+u_1^{'})^2}, e^{\{(2-u_1-u_1^{'})}]}{2n}\\
+&=&\frac{\mathrm{E}[\mathrm{exp}\{(u_1+u_1^{'})^2+(2-u_1-u_1')^2\}]-(\mathrm{E}[\mathrm{exp}\{(u_1+u_1^{'})^2])^2}{2n}
+\end{eqnarray*}</script><p>对于上式的估计为</p>
+<script type="math/tex; mode=display">
+\frac{1}{2n}[\frac{1}{n}\sum_{i=1}^n\mathrm{exp}\{(u_i+u_i)^2+(2-u_i-u_i')^2\}-\widehat{\theta}^2]</script><p>ps: </p>
+<p>因为$u_1+u_1’\sim\mathrm{U}[0,2]$， 所以$-(u_1+u_1’)\sim\mathrm{U}[-2,0]$， 所以$2-(u_1+u_1’)\sim\mathrm{U}[0,2]$</p>
+<h1 id="非参数估计"><a href="#非参数估计" class="headerlink" title="非参数估计"></a>非参数估计</h1><p>(1) 用核光滑法如果估计$m(x)$/核光滑法的原理/核光滑法的思想?</p>
+<p>答：核光滑法思想：已知$Y=m(x)+\varepsilon$, $(x_i, y_i)$, $i=1,2,…,n$, 选定$R$上的函数$K(\cdot)$和整的常数列$h=h_n$(ps:一般取值就是某个整数), 记$K_h(\cdot)=\frac{1}{h}K(\frac{\cdot}{h})$. 定义</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\widehat{m}_{nw}(x)=\sum_{i=1}^nW_{ni}^K(x)Y_i,
+\end{eqnarray*}</script><p>其中</p>
+<script type="math/tex; mode=display">
+W_{ni}^K(x)=\frac{K_h(x_i-x)}{\sum_{i=1}^nK_h(x_j-x)}</script><p>相当于权重, 称$W_{ni}^K(x)$为$m(x)$的$N-W$估或核估计.</p>
+<p>补充：核光滑法就是构造$m(x)$的估计量的方法, 其中$m(x)$叫光滑函数, 它的定义是</p>
+<script type="math/tex; mode=display">
+m(x)=E(Y|X=x).</script><p>所以$m(x)$也叫条件期望函数.</p>
+<p>(2) 在均匀核下，给定 $(x_i, y_i)$, $i=1,2,…,n$, 估计$m(x)$？</p>
+<p>均匀核：$K(u)=\frac{1}{2}\mathrm{I}(|u|\leq 1)$</p>
+<p>$m(x)$的核估计是</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\widehat{m}_{NW}(x)&=&\sum_{i=1}^nW_{ni}^K(x)y_i\\
+&=&\sum_{i=1}^n\frac{K_h(x_i-x)}{\sum_{j=1}^nK_h(x_j-x)}y_i\\
+&=&\sum_{i=1}^n\frac{\frac{1}{2h}\mathrm{I}(|x_i-x|\leq 1)}{\sum_{j=1}^n\frac{1}{2h}\mathrm{I}(|x_j-x|\leq 1)}y_i\\
+&=&\sum_{i=1}^n\frac{\mathrm{I}(|x_i-x|\leq 1)}{\sum_{j=1}^n\mathrm{I}(|x_j-x|\leq 1)}y_i\\
+\end{eqnarray*}</script><p>可以看出上式是等权求和, 因为针对给定的$x$, 上述示性函数都会变成1和0，所以权重都是相同的（不考虑权重为0的情况）</p>
+<p>(2) 在抛物线核下，给定 $(x_i, y_i)$, $i=1,2,…,n$, 估计$m(x)$？</p>
+<p>抛物线核：$K(u)=\frac{3}{4}(1-u^2)I(|u|\leq 1)$</p>
+<p>那么</p>
+<script type="math/tex; mode=display">
+K_h(x_i-x)=\frac{3}{4h}\{1-(\frac{x_i-x}{h})^2\}\mathrm{I}(|\frac{x_i-x}{h}|\leq1),</script><p>并且</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+W_{ni}^K=\frac{K_h(x_i-x)}{\sum_{j=1}^nK_h(x_j-x)}
+\end{eqnarray*}</script><p>因此$m(x)$的核估计是</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\widehat{m}_{NW}(x)&=&\sum_{i=1}^nW_{ni}^K(x)y_i\\
+&=&\frac{\{1-(\frac{x_i-x}{h})^2\}\mathrm{I}(|\frac{x_i-x}{h}|\leq1)}{\sum_{j=1}^n\{1-(\frac{x_j-x}{h})^2\}\mathrm{I}(|\frac{x_j-x}{h}|\leq1)}y_i.
+\end{eqnarray*}</script><p>看出上式是不等权求和, 距离x越近, 权重越大, 距离x越远, 权重越小,</p>
+<h1 id="EM算法"><a href="#EM算法" class="headerlink" title="EM算法"></a>EM算法</h1><p>(1) EM算法的思想</p>
+<p>已知$X_{obs}=x_{obs}$, $X_{mis}$对应的条件分布为</p>
+<script type="math/tex; mode=display">
+f(x_{mis}|x_{obs},\theta^{(t)})=\frac{f(x_{obs}, x_{mis}|\theta^{(t)})}{f(x_{obs}|\theta^{(t)})},</script><p>那么在完全数据的对数似然函数</p>
+<script type="math/tex; mode=display">
+lnf(x_{obs},x_{mis}|\theta^{(t)})</script><p>中, 我们将$X_{obs}=x_{obs}$看成已知, 关于未知部分$X<em>{mis}$, 求期望得到关于$\theta$的函数$Q\</em>{t}(\theta)$, 然后再求$Q_t(\theta)$的最大值点作为下一个$\theta^{(t+1)}$, 其中$X_{obs}$为观测样本, $X_{mis}$为未观测样本, $theta^{(t)}$为第$t$轮迭代得到的$theta$的估计.</p>
+<p>(2) E步和M步分别指什么?</p>
+<p>E步(期望步): 计算完全数据的对数似然函数的期望</p>
+<script type="math/tex; mode=display">
+Q_t(\theta) = E\{lnf(x_{obs},x_{mis})|x_{obs},\theta^{(t)}\},</script><p>其中期望是针对$X<em>{mis}$, 求期望的时候, $X\</em>{mis}$对应的条件密度为$f(x_{mis}|x_{obs}, \theta^{(t)})$</p>
+<p>M步(最大化步): 求$Q_t(\theta)$的最大值点$\theta^{(t+1)}$, 然后迭代进入下一步.</p>
+<p>(3) 例题: 总体的分布是$N(0,1)$, 观测样本$X_1, X_2, …, X_n$, 相应的观测值为$x_1, x_2, …, x_n$, 另外有为观测的样本$Z_1, Z_2, …, Z_m$, 仅知道$z_j&gt;a$, $j=1,2,…,m$, 假设样本之间相互独立.</p>
+<p>解: 首先完全数据的联合密度为</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+f(x_{obs}, x_{mis}|\theta)&=&\prod_{i=1}^nf(x_i)\prod_{j=1}^nf(z_i)\\
+&=&\prod_{i=1}^n\phi(x_i-\theta)\prod_{j=1}^n\phi(z_i-\theta)
+\end{eqnarray*}</script><p>已知$z_j&gt;a$, 即该部分也算是观测到的一部分，并且有</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+P(z>a)&=&P(z-\theta>a-\theta)\\
+&=&1 - P(z-\theta\leq a-\theta)\\
+&=&1-\Phi(a-\theta),
+\end{eqnarray*}</script><p>那么<strong>观测数据</strong>的似然函数(即观测到的情况所对应的联合概率)为</p>
+<script type="math/tex; mode=display">
+f(x_{obs}|\theta)=\{1-\Phi(a-\theta)\}^m\prod_{i=1}^n\phi(x_i-\theta).</script><p>所以</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+f(x_{mis}|x_{obs},\theta)&=&\frac{f(x_{obs},x_{mis}|\theta)}{f(x_{obs}|\theta)}\\
+&=&\frac{\prod_{j=1}^m\phi(z_j-\theta)}{\{1-\Phi(a-\theta)\}^m}.
+\end{eqnarray*}</script><p>迭代时, 第$t$步对应的$\theta$为$\theta^{(t)}$, 因此根据EM算法可以得到</p>
+<p>E步：</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+Q_t(\theta)&=&E\{ln\prod_{i=1}^n\phi(x_i-\theta)\prod_{j=1}^m\phi(z_i-\theta)|x, \theta^{(t)}\}\\
+&=&E\{\sum_{i=1}^nln\phi(x_i-\theta)+\sum_{j=1}^mE\{ln\phi(z_i-\theta)|x, \theta^{(t)}\}\\
+&=&\sum_{i=1}^nln\phi(x_i-\theta)+\sum_{j=1}^mE\{ln\phi(z_i-\theta)|x, \theta^{(t)}\}\\
+\end{eqnarray*}</script><p>其中$x=(x_1, x_2, … , x_n)$, $z_j$之间相互独立, 且有相同的条件密度</p>
+<script type="math/tex; mode=display">
+\frac{\phi(z-\theta^{(t)})}{1-\Phi(a-\theta^{(t)})}.</script><p>$j=1,2,…,m$, $z_j&gt;a$. 因此</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+Q_t(\theta)&=&\sum_{i=1}^nln\phi(x_i-\theta)+\sum_{j=1}^mE\{ln\phi(z_i-\theta)|x, \theta^{(t)}\}\\
+&=&\sum_{i=1}^nln\phi(x_i-\theta)+m\int_a^{+\infty}ln\phi(z-\theta)\frac{\phi(z-\theta^{(t)})}{1-\Phi(a-\theta^{(t)})}\mathrm{d}z\\
+\end{eqnarray*}</script><p>M步: 求$Q_t(\theta)$的最大值</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+\frac{\partial Q_t(\theta)}{\partial\theta}&=&-\sum_{i=1}^{n}\frac{\phi'(x_i-\theta)}{\phi(x_i-\theta)}-m\int_a^{+\infty}\frac{\phi'(z-\theta)}{\phi(z-\theta)}\frac{\phi(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\mathrm{d}z\\
+&=&\sum_{i=1}^{n}(x_i-\theta)+m\int_a^{+\infty}(z-\theta)\frac{\phi(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\mathrm{d}z\\
+&=&\sum_{i=1}^{n}(x_i-\theta)+m\int_a^{+\infty}(z-\theta^{(t)}+\theta^{(t)}-\theta)\frac{\phi(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\mathrm{d}z\\
+&=&\sum_{i=1}^{n}(x_i-\theta)+m\int_a^{+\infty}(z-\theta^{(t)})\frac{\phi(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\mathrm{d}z+ m\frac{\theta^{(t)}-\theta}{1-\Phi\{a-\theta^{(t)}\}}\int_a^{+\infty}\phi(z-\theta^{(t)})\mathrm{d}z\\
+&=&n\overline{x}-n\theta+m\int_a^{+\infty}(z-\theta^{(t)})\frac{\phi(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\mathrm{d}z+m(\theta^{(t)}-\theta)\\
+&=&-(m+n)\theta + n\overline{x}+m\theta^{(t)}+m\frac{\phi(a-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}.
+\end{eqnarray*}</script><p>其中用到了</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\int_{a-\theta^{(t)}}^{+\infty}x\phi(x)\mathrm{d}x\\
+&=&\int_{a-\theta^{(t)}}^{+\infty}x\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\mathrm{d}x\\
+&=&\int_{a-\theta^{(t)}}^{+\infty}\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\mathrm{d}\frac{x^2}{2}\\
+&=&-\frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}\int_{a-\theta^{(t)}}^{+\infty}\\
+&=&\frac{1}{\sqrt{2\pi}}e^{-\frac{(a-\theta^{(t)})^2}{2}}\\
+&=&\phi(a-\theta^{(t)})
+\end{eqnarray*}</script><p>以及</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\frac{\int_a^{+\infty}\phi(z-\theta^{(t)})\mathrm{d}z}
+{1-\Phi\{a-\theta^{(t)}\}}\\
+&=&\frac{\int_a^{+\infty}\phi(z-\theta^{(t)})\mathrm{d}(z-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}\\
+&=&\frac{\int_{a-\theta^{(t)}}^{+\infty}\phi(x)\mathrm{d}(x)}{1-\Phi\{a-\theta^{(t)}\}}\\
+&=&\frac{1-\Phi\{a-\theta^{(t)}\}}{1-\Phi\{a-\theta^{(t)}\}}\\
+&=&1
+\end{eqnarray*}</script><p>那么有</p>
+<script type="math/tex; mode=display">
+\frac{\partial Q(\theta)}{\partial\theta}=0,</script><p>可得</p>
+<script type="math/tex; mode=display">
+\theta^{(t+1)}=\frac{1}{m+n}[n\overline{x}+m\theta^{(t)}+m\frac{\phi(a-\theta^{(t)})}{1-\Phi\{a-\theta^{(t)}\}}]</script><p>(4)例题：</p>
+<p>$Y_1, Y_2,…, Y_n$独立同分布于$\mathrm{exp}(\theta)$, $y_1=5$是观测到的, $y_2$的值是缺失的.</p>
+<p>那么完全数据的对数似然函数为</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+lnL(\theta|y)&=&lnf_Y(y|\theta)\\
+&=&ln\theta e^{-\theta y_1}\theta e^{-\theta y_2}
+&=&2ln\theta-\theta y_1-\theta y_2
+\end{eqnarray*}</script><p>E步(期望步): </p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\mathrm{E}\{lnL(\theta|y)|\theta^{(t)},y_1\}\\
+&=&2ln\theta-\theta y_1-\theta\mathrm{E}\{y_2|\theta, y_1\}\\
+&=&2ln\theta-\theta y_1-\theta\frac{1}{\theta^{(t)}}
+\end{eqnarray*}</script><p>M步(最大化步):</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&\frac{2}{\theta}-5-\frac{1}{\theta^{(t)}}=0\\
+&\Leftrightarrow&\frac{2}{\theta}=5+\frac{1}{\theta^{(t)}}\\
+&\Leftrightarrow&2\theta^{(t+1)}=\frac{2\theta^{(t)}}{5\theta^{(t)}+1}\\
+\end{eqnarray*}</script><p>当$\theta^{(t+1)}=\theta^{(t)} $时, 迭代停止, 即</p>
+<script type="math/tex; mode=display">
+\begin{eqnarray*}
+&&x = \frac{2x}{5x+1}\\
+&\Rightarrow&5x^2+x=2x\\
+&\Rightarrow&5x^2-x=0\\
+&\Rightarrow&x_1=0.2, x_2=0(舍弃)
+\end{eqnarray*}</script><p>求解完毕.</p>
 
     </div>
 
@@ -348,10 +544,13 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/03/14/%E4%BA%91%E5%8D%97%E4%B9%8B%E8%A1%8C/" rel="prev" title="云南行">
-      <i class="fa fa-chevron-left"></i> 云南行
+    <a href="/2020/01/13/%E7%9B%B8%E5%85%B3%E7%B3%BB%E6%95%B0%E5%92%8C%E5%86%B3%E5%AE%9A%E7%B3%BB%E6%95%B0/" rel="prev" title="相关系数和决定系数的关系">
+      <i class="fa fa-chevron-left"></i> 相关系数和决定系数的关系
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/15/SQL%E8%A1%A8%E8%BF%9E%E6%8E%A5/" rel="next" title="SQL表连接">
+      SQL表连接 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -365,6 +564,11 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
 
           </div>
           
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -411,7 +615,7 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#极大似然估计（MLE）"><span class="nav-number">1.</span> <span class="nav-text">极大似然估计（MLE）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Inverse-CDF-Method"><span class="nav-number">2.</span> <span class="nav-text">Inverse CDF Method</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#极大似然估计（MLE）"><span class="nav-number">1.</span> <span class="nav-text">极大似然估计（MLE）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Inverse-CDF-Method"><span class="nav-number">2.</span> <span class="nav-text">Inverse CDF Method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方差缩减"><span class="nav-number">3.</span> <span class="nav-text">方差缩减</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#非参数估计"><span class="nav-number">4.</span> <span class="nav-text">非参数估计</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EM算法"><span class="nav-number">5.</span> <span class="nav-text">EM算法</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -427,20 +631,34 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/demons-28-75-48" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;demons-28-75-48" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.nowcoder.com/ta/coding-interviews" title="牛客网 → https:&#x2F;&#x2F;www.nowcoder.com&#x2F;ta&#x2F;coding-interviews" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>牛客网</a>
+      </span>
+  </div>
 
 
 
@@ -577,6 +795,22 @@ F(x)=1-e^{-\lambda x}</script><p>其中$x\geq 0$. 我们设$F(x)=u$, 那么有</
     
 
   
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
 </html>
