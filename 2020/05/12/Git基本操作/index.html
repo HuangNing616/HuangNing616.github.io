@@ -51,20 +51,68 @@
   };
 </script>
 
-  <meta name="description" content="前言Git 是一种版本控制系统（version system control，简称VSC)，VSC可以记录文件在一段时间内的变化。">
+  <meta name="description" content="前言本文是小编针对 David Mahler 在 Youtube 上对 Git 介绍进行的简单总结。Git是一种版本控制系统（version system control，简称VSC)，它可以记录文件在一段时间内的变化。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git基本操作">
+<meta property="og:title" content="Git学习笔记">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="前言Git 是一种版本控制系统（version system control，简称VSC)，VSC可以记录文件在一段时间内的变化。">
+<meta property="og:description" content="前言本文是小编针对 David Mahler 在 Youtube 上对 Git 介绍进行的简单总结。Git是一种版本控制系统（version system control，简称VSC)，它可以记录文件在一段时间内的变化。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;concepturalGraph.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;提交图.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;核心区域图.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;查看当前状态.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;gitlog.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;commit1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;commit2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;s2的删除.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;commit3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;创建分支.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;删除分支.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;删除分支2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;merge冲突3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;mergeconflict8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突11.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突12.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge13.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突14.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突15.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突16.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突17.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突18.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突19.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote3.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote4.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote5.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote6.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote7.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote8.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote9.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote10.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote11.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote12.png">
 <meta property="article:published_time" content="2020-05-12T02:14:57.000Z">
-<meta property="article:modified_time" content="2020-05-25T15:57:31.208Z">
+<meta property="article:modified_time" content="2020-06-27T08:34:09.421Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="版本控制系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;concepturalGraph.png">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;提交图.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
 
@@ -78,7 +126,7 @@
   };
 </script>
 
-  <title>Git基本操作 | 黄宁の博客</title>
+  <title>Git学习笔记 | 黄宁の博客</title>
   
 
 
@@ -148,6 +196,11 @@
     <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
 
   </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
         <li class="menu-item menu-item-about">
 
     <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
@@ -156,11 +209,6 @@
         <li class="menu-item menu-item-tags">
 
     <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
 
   </li>
   </ul>
@@ -204,7 +252,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Git基本操作
+          Git学习笔记
         </h1>
 
         <div class="post-meta">
@@ -221,7 +269,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-25 23:57:31" itemprop="dateModified" datetime="2020-05-25T23:57:31+08:00">2020-05-25</time>
+                <time title="修改时间：2020-06-27 16:34:09" itemprop="dateModified" datetime="2020-06-27T16:34:09+08:00">2020-06-27</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -233,9 +281,22 @@
                     <span itemprop="name">计算机</span>
                   </a>
                 </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">版本控制系统</span>
+                  </a>
+                </span>
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -246,140 +307,175 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>Git 是一种版本控制系统（version system control，简称VSC)，VSC可以<strong>记录文件在一段时间内的变化</strong>。</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文是小编针对 David Mahler 在 Youtube 上对 Git 介绍进行的简单总结。<strong>Git</strong>是一种<strong>版本控制系统</strong>（version system control，简称VSC)，它可以记录文件在一段时间内的变化。</p>
 <a id="more"></a>
-<h1 id="文件概念图"><a href="#文件概念图" class="headerlink" title="文件概念图"></a>文件概念图</h1><p>为了便于理解git在本地上的操作，我们需要了解下方的<strong>文件概念图</strong></p>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/concepturalGraph.png" alt="文件概念图"></p>
-<p>其中.git history 等价于提交图(commit graph)， 它被放在隐藏文件.git中。.git history包含构造repo需要的metadata和数据库对象。 如果我们将.git 发送给用户A，那么用户A就相当于有了整个git项目。</p>
-<h1 id="Git-信息配置"><a href="#Git-信息配置" class="headerlink" title="Git 信息配置"></a>Git 信息配置</h1><ol>
-<li>git confit —global user.name “globalhuangning”                       配置全局用户姓名</li>
-<li>git config —global user.email “globalhuangning@123.com”    配置全局用户邮箱</li>
-<li>git config —local user.name “huangning”                                    配置局部用户姓名</li>
-<li>git config —local user.email “<a href="mailto:huangning@qq.com">huangning@qq.com</a>“                    配置局部用户姓名</li>
-<li>git config —list：查看配置列表</li>
-</ol>
-<h1 id="Git-本地常用操作"><a href="#Git-本地常用操作" class="headerlink" title="Git 本地常用操作"></a>Git 本地常用操作</h1><ol>
-<li>git init：创建一个空的repository（简称repo）</li>
-<li>git status：查看当前分支以及working tree 和 staging area 中文件的状态</li>
-<li>git add xx：将working tree中的xx文件放到staging area中, 使其变成tracked/将被提交的文件</li>
-<li>git add . ：将working tree中的所有文件放到staging area中, 使其变成tracked/将被提交的文件</li>
-<li>git add s*：将working tree中首字母为s的文件放到staging area中, 使其变成tracked/将被提交的文件</li>
-<li>git rm —cached xx：将staging area中的xx文件再次变成unstaged/untracked文件</li>
-<li>git diff：查看workingTree 和 staging area 之间文件的区别</li>
-<li>git diff —staged：查看staging area和最近一次commit的文件的区别</li>
-<li>git commit -m “xxx”：将staging area中的文件提交到history中，并且提交信息为xxx</li>
-<li>git commit：同上，但是可以将提交信息编辑成多行的形式</li>
-<li>git log : 提交日志，其中最新的提交显示在最顶端，提交信息包括哈希码，用户名，邮箱以及相应的提交描述</li>
-<li>git log — xxx文件：显示和xxx文件相关的提交日志</li>
-<li>git log —all —decorate —oneline —graph: 可视化提交图</li>
-</ol>
-<p>补充：</p>
-<ol>
-<li>commit 和 add 可以写在一行，中间用；隔开</li>
-<li>如果针对所有文件进行add和commit，可以用 git commit -a -m “xxx”</li>
-<li>working tree（working directory）中不包括.git子目录</li>
-<li><p>可以通过重命名的方式来方便绘制可视化：alias graph=”git log —all —decorate —oneline —graph”</p>
-</li>
-<li><p>git rm -r —cached . 将所有文件都变成为untracked（在用.gitignore的时候可能会用到，因为有的时候不小心将本该忽略的文件加入了版本控制，这样就需要将加入版本控制的文件变成untracked）</p>
-</li>
-</ol>
-<h1 id="Git-branch的使用"><a href="#Git-branch的使用" class="headerlink" title="Git branch的使用"></a>Git branch的使用</h1><p>A branch is a small label points to a commit. HEAD pointer tells us what we have checked out in Git，通常情况下 HEAD 会指向某个branch，它是一种symbolic pointer</p>
-<ol>
-<li>git branch &lt;分支A&gt;：创建分支A</li>
-<li>git branch：展示现在存在那些分支</li>
-<li>git checkout &lt;分支名称&gt;：切换到哪个分支上</li>
-<li>git commit -a -m “auth for s1” 将任何tracked并且被修改的文件add到stageArea并且被提交!!!</li>
-<li>git branch —merged：显示出哪些分支进行了合并（之后好删除分支）</li>
-<li>git branch -d &lt;分支A&gt;：删除分支A</li>
-<li><p>git branch -D &lt;分支A&gt;：可以删除还没有合并的分支A</p>
-</li>
-<li><p>git merge 分支名成：合并</p>
-</li>
-</ol>
+<h1 id="Core-Concepts"><a href="#Core-Concepts" class="headerlink" title="Core Concepts"></a>Core Concepts</h1><h2 id="Commit-Graph"><a href="#Commit-Graph" class="headerlink" title="Commit Graph"></a>Commit Graph</h2><p>commit graph（提交图）展示了我们的提交历史信息</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/提交图.png" style="zoom:50%;"></p>
+<h2 id="Conceptual-Area-Diagram"><a href="#Conceptual-Area-Diagram" class="headerlink" title="Conceptual Area Diagram"></a>Conceptual Area Diagram</h2><p>Conceptual area diagram（<strong>概念区域图</strong>）为了便于理解<strong>Git</strong>在本地上的操作，我们需要了解下方的<strong>概念区域图</strong></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/核心区域图.png" style="zoom:133%;"></p>
 <p>补充：</p>
 <ul>
-<li><p>两种merge方式：</p>
+<li><p><strong>working tree</strong> 就是我们创建的netauto路径，还包含其中存在的任何子路径，但是不包含<strong>.git</strong>子路径</p>
+</li>
+<li><p><strong>.git history</strong> 等价于<strong>提交图(commit graph)</strong>， 它被放在隐藏文件<strong>.git</strong>中。</p>
+</li>
+<li><p><strong>.git</strong> 路径包含构造<strong>repo</strong>需要的metadata和数据库对象，如果将 <strong>.git</strong> 发送给某个用户，那么该用户就有了整个 <strong>git</strong> 项目。</p>
+</li>
+</ul>
+<h2 id="信息配置"><a href="#信息配置" class="headerlink" title="信息配置"></a>信息配置</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 配置全局用户姓名</span></span><br><span class="line">git config --global user.name <span class="string">"huangning"</span> </span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置全局用户邮箱</span></span><br><span class="line">git config --global user.email <span class="string">"huangning@123.com"</span>    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置局部用户姓名(给某个指定的repo单独配置姓名) </span></span><br><span class="line">git config --<span class="built_in">local</span> user.name <span class="string">"huangninglocal"</span>   </span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置局部用户邮箱(给某个指定的repo单独配置邮箱) </span></span><br><span class="line">git config --<span class="built_in">local</span> user.email <span class="string">"huangninglocal@qq.com"</span>                    </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看配置列表</span></span><br><span class="line">git config --list</span><br></pre></td></tr></table></figure>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建包含repository(简称repo）的.git路径</span></span><br><span class="line">git init</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑完新建的s1文件之后查看当前分支以及working tree 和 staging area 中文件的状态</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/查看当前状态.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将working tree中的s1文件放到staging area中, 使其变成tracked/将被提交的文件</span></span><br><span class="line">git add s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将staging area中的文件提交到history中，并且提交信息为add s1</span></span><br><span class="line">git commit -m <span class="string">"add s1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 同上，但是可以将提交信息编辑成多行的形式</span></span><br><span class="line">git commit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交日志，其中最新的提交显示在最顶端</span></span><br><span class="line"><span class="comment"># 提交信息包括: 哈希码、用户名、邮箱、提交时间以及提交描述</span></span><br><span class="line">git <span class="built_in">log</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 同上，但是获取和某个文件相关的日志信息</span></span><br><span class="line">git <span class="built_in">log</span> -- s1：显示和s1相关的提交日志</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/gitlog.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接下来创建s1的copy版本s2</span></span><br><span class="line">cp s1 s2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑s2并且修改s1</span></span><br><span class="line">gti status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit1.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看staging area和working tree中tracked文件的差别</span></span><br><span class="line">git diff</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中的多个文件s1, s2放到staging area中, 使其变成tracked/将被提交的文件</span></span><br><span class="line">git add s1 s2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中首字母为s的文件放到staging area中, 使其变成tracked/将被提交的文件</span></span><br><span class="line">git add s*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中的所有文件放到staging area中</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看staging area 和 history中最近一次commit文件的差别</span></span><br><span class="line">git diff --staged</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git基本操作/commit2.png" style="zoom:30%;"></p>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看日志的详细信息</span></span><br><span class="line">git <span class="built_in">log</span> -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从working tree和staging area中同时删除s2</span></span><br><span class="line">git rm s2</span><br><span class="line"></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git基本操作/s2的删除.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们编辑了s1之后，将staging area上的s1覆盖working tree 上的s1</span></span><br><span class="line">git checkout -- s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将最近一次提交的s1仅仅恢复/覆盖到staging area中的该文件</span></span><br><span class="line">git reset HEAD s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后将staging area上的s1覆盖working tree 上的s1</span></span><br><span class="line">git checkout -- s1</span><br></pre></td></tr></table></figure>
+<h3 id="恢复文件"><a href="#恢复文件" class="headerlink" title="恢复文件"></a>恢复文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 从之前提交的信息中找到与s2有关的日志</span></span><br><span class="line">git <span class="built_in">log</span> -- s2</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit3.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 找到指定提交信息后确定哈希码的前几位, 然后就可以将s2恢复到working tree和staging area中了</span></span><br><span class="line">git checkout 38c5029b -- s2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将staging area中的s1文件变成unstaged/untracked文件，或者说仅删除staging area中的s1</span></span><br><span class="line"><span class="comment"># 在编辑.gitignore的时候可能会用到，因为有时不小心会将本该忽略的文件变成了tracked文件</span></span><br><span class="line">git rm --cached s1</span><br></pre></td></tr></table></figure>
+<p>补充：</p>
 <ul>
-<li><p>fast-forward merge：被merge的分支包括<strong>master分支</strong>上的历史提交信息</p>
+<li><p>working tree（working directory）中不包括 <strong>.git 子目录</strong></p>
 </li>
-<li><p>3-ways merge：被merge的分支和<strong>master分支</strong>在不同路径上，其中3-ways表示从同一个节点分到不同的节点再到新的提交节点上</p>
+<li><p><strong>git分支可视化</strong></p>
+</li>
+<li><p>通过编辑<strong>.gitignore</strong>使working tree中的一些文件不需要变成tracked文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">alias</span> graph=<span class="string">"git log --all --decorate --oneline --graph"</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-</li>
-<li><p>每次切换到一个分支，workingtree和staging area中的文件都会改变（update working tree 和 staging area）</p>
-</li>
-</ul>
-<p>解决基本的merge冲突：比如修改了相同行或者相同文件的时候？<br>创建并且切换到分支的快捷命令：git checkout -b dev<br>针对与base commit而言，某一行的change和no-change,git会将前者作为获胜者，也就是merge的时候会change<br>如果同一行两个分支有不同的change，那么git就不能猜到我们到底需要哪种改变<br>如果同一行两个分支有相同的change，那么就不会引起冲突<br>如果同一行其中一个分支有change，但是另外一个分支有delete，那么就不会引起冲突<br>git merge —abort：发现merge冲突之后，终止merge（前提是我们的working tree 和stage area都是干净的）<br>起merge冲突的时候<br>vi 文件名出现的 ===== 会将两个文件起冲突的分隔开，</p>
-<p>将HEAD直接指向某个提交(我们可以直接切换到某次提交而不是某个分支)<br>我们就有了一个 detached HEAD state<br>语法：git checkout 87abc55（hash码前七位）<br>同时也可以创建一个分支<br>git branch xxx 但是创建分支之后head并不会直接指向xxx</p>
-<p>最后一点：</p>
-<ol>
-<li>如果干净的工作区和stage area不满足的话，我们就不能切换到其他分支或者很难merge</li>
-</ol>
-<p>git stash: 通过存储当前信息，实现了切换分支或者merge等功能<br>git stash list (展示所有贮藏的简短信息)<br>git stash list -p (展示所有贮藏的完整信息)<br>重新应用这些stash<br>git stash apply(会应用最新的一次stash)<br>而且应用这些stash之后原来的stash list也不会pop或者remove，所以之后仍然可以重新使用这些stash<br>git stash pop: 删除stash列表<br>git stash apply 相应的label: 使用某个指定label的stash<br>git stash save 描述信息：为每个stash label加上描述性语言</p>
-<p>============================git remote=============================================<br>remote is simply(只是) a repository in another location(可以是git服务器，可以是github上的fork，也可以是自己本机的其他repo)</p>
-<ol>
-<li>git clone 将会retrieve/copy github上的工程到本地(clone 需要工程的url，有两种：ssh和html)</li>
-<li>git fetch: 将会retrieve 或者 fetch update of repo on GitHub</li>
-<li>git push: 将会upload or push updates to the remote in github<br>当我么fetch或者push的时候不需要记得full location fo our remote 因为git可以起一个简短的名字或者别名alias（别名）</li>
-<li>git remote: 返回远程连接的名字<br>出现origin, 表示clone之后，origin是我们第一次远程连接的默认名称<br>git remote -v: 显示远程连接的名称和完整地址</li>
-</ol>
-<p>git pull = git fetch &amp;&amp; git merge<br>git pull —rebase = git fetch &amp;&amp; git rebase<br>git log —oneline —graph使得提交可视化</p>
-<p>create a github fork<br>fork 就是copy一个repo in github<br>提出场景bob想要操作别人的repo，那么首先需要fork别人在github上的repo到自己GitHub账户下，然后通过clone到本地进行修改，bob不能直接修改别人的repo</p>
-<p>ps :</p>
-<ol>
-<li>github 的repo会有一次默认的提交（添加了readme.md）</li>
-<li>origin/master branch： 它是一个remote-tacking branch ,它会告诉我们master branch的样子是什么，它主要就是让本地master分支和远程的master分支指向同一个commit</li>
-<li>git fetch origin (然后我们可以git merge origin/master 将本地的master也指向最新的commit）</li>
-<li>git pull == git fetch origin + git merge(建议不要这么做！！！还是分开写好，避免出错，这样又一个清晰的工作流程)</li>
-<li>本地修改之后，本地的master会领先github上repo的master</li>
-<li>git push origin：将本地最新的提交（本地的改变）上传到github(push 依赖于github的authentication,这个需要事前设定好SSH 的authentication)<br>%%%%%%以上都是单个remote%%%%%%%%<br>添加一个新的远程连接<br>git remote add “alias” <strong><strong><strong><em>*</em></strong></strong></strong>（另外一个repo的ssh地址）<br>git remote -v :可以看到多了一对远程连接地址<br>git remote remove <remote name> 移除某个远程连接<br>接下来让bob本地和他的origin 与 被fork的betty stay in sync</remote></li>
-</ol>
-<p>注意：和之前相比没有了之前提到的remote-tracking braching，所以我们针对上游push了最新的提交之后，需要在bob端进行git fetch upstream!!!</p>
-<p>fetch之后会发现之前bob local和origin的master虽然同步，但是已经落后于betty的master，所以我们需要在bob端进行git merge upstream/master 这样就会将local的master赶上最新的进度，但是origin端的master还是没赶上最新的提交，所以我们要进行git push origin master,使得fork的master也赶上最新的进度，这样就使得三个repo的master赶上了相同的进度<br>git branch -a 就会展示远程的分支 + 本地分支<br>git branch -r 就只会展示远程分支<br>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）<br>pull请求发完之后就可以将fork的和本地的删除了<br>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）发完</p>
-<p>git pull origin “分支名称”之后，可以在bob端的github发起一个pull request（希望自己编辑的代码被betty拉取）</p>
-<ol>
-<li><p>How to undo a working tree change?（恢复working tree中的文件）<br>git checkout — xxx文件<br>stageArea中的xxx文件覆盖掉到workingTree中经过修改的xxx文件<br>ps:注意，经过此操作之后，之前在workingTree中针对s1的糟糕操作就不可以还原了！！！）</p>
-</li>
-<li><p>How to undo staging of file? (如何恢复（unstaged）stageArea中的文件?)<br>git reset HEAD(表示最近一次提交) xxx文件<br>表示将最近一次提交的xxx文件覆盖到StageArea(IndexArea)中的xxx文件，这样就做到了恢复stageArea中的xxx文件<br>ps：注意，这样操作只恢复（restore）了stageArea中的xxx文件，对于workingTree中的xxx文件还是最新版本，所以还需要git checkout — xxx文件来恢复working tree中的文件</p>
-</li>
-</ol>
-<p>更多的撤销（undo）操作（恢复操作）</p>
-<ol>
-<li><p>restore from an early commit(恢复更早的提交中恢复文件）<br>git checkout xxxxx(5位16位哈希码就可以了) — s2<br>这就将xxx码对应的那次提交中的s2文件同时恢复到stage area 和 working tree中</p>
-</li>
-<li><p>如何使一些文件不要被track？（比如一些日志文件啥的不需要track）<br>vim .gitignore</p>
-</li>
-</ol>
-<p>========================================================================================<br>vi/vim 是一个文本编辑器<br>q: 退出<br>w: 保存<br>q!: 强制退出<br>w!: 强制保存<br>qw!: 强制退出并保存</p>
-<p>Linus常用命令</p>
-<ol>
-<li>ls: 显示文件列表</li>
-<li>ls -a： 显示隐藏文件（以’.’点符号开头的文件名）</li>
-<li>ls -R: 递归显示所有子目录和子文件</li>
-<li>ls -al: 显示出文件的详细信息，详细信息会以列状格式显示出来，每列的含义如下所示:</li>
-</ol>
+<h1 id="Branch-和-Merge"><a href="#Branch-和-Merge" class="headerlink" title="Branch 和 Merge"></a>Branch 和 Merge</h1><p><strong>Branch</strong>就是<strong>指向提交信息的指针</strong>，<strong>head</strong> 是告诉我们<strong>目前切换到哪里</strong>的指针，<strong>git</strong> 会自动创建第一个叫<strong>master</strong>的分支。</p>
+<h2 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch SDN   <span class="comment"># 创建叫SDN的分支</span></span><br><span class="line">git branch auth  <span class="comment"># 创建叫auth的分支</span></span><br><span class="line">git branch       <span class="comment"># 查看目前有哪些分支</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/创建分支.png" alt></p>
+<p>ps：图中绿色的分支表明HEAD指针正在指向master分支</p>
+<h2 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout SDN  <span class="comment"># 切换到SDN的分支</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支2.png" alt></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支.png" alt></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 SDN 分支中对 s1 文件进行编辑之后要进行 commit</span></span><br><span class="line"><span class="comment"># commit 和 add 可以写在一行，中间用 ";" 隔开</span></span><br><span class="line">git add s1; git commit -m <span class="string">"SDN for s1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在SDN分支中的文件中进行了编辑之后，切换到auth的分支</span></span><br><span class="line">git checkout auth</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支3.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># stage 和 commit 同时进行的快捷方式</span></span><br><span class="line"><span class="comment"># 将 tracked 且被修改的文件 add 到 staging area 并且被commit</span></span><br><span class="line">git commit -a -m <span class="string">"auth for s1"</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支4.png" style="zoom:50%;"></p>
+<p><strong>补充</strong></p>
 <ul>
-<li>第一列：文件类型和访问权限</li>
-<li>第二列：文件的硬链接数</li>
-<li>第三列：文件的拥有者</li>
-<li>第四列：文件所属用户组</li>
-<li>第五列：文件的字节大小</li>
-<li>第六列：文件最后的修改时间</li>
-<li>第七列：文件名或目录名</li>
+<li>每次切换到一个分支，working area 和 staging area 中的文件都会更新成当前分支下的文件内容</li>
 </ul>
+<h2 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h2><h3 id="fast-forward-merge"><a href="#fast-forward-merge" class="headerlink" title="fast-forward merge"></a>fast-forward merge</h3><p>分支 B 包含分支 A 的所有历史提交信息，换句话说两个分支在一条路径上，对应的 <strong>merge</strong> 叫 <strong>fast-forward merge</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 目标是将master分支merge到SDN分支上</span></span><br><span class="line"><span class="comment"># 查看master分支和SDN分支上的不同</span></span><br><span class="line">git diff master..SDN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将 master分支merge到SDN分支上</span></span><br><span class="line">git merge SDN</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/合并分支1.png" style="zoom:50%;"></p>
+<h3 id="3-way-merge"><a href="#3-way-merge" class="headerlink" title="3-way merge"></a>3-way merge</h3><p>分支 B 和分支 A 位于不同的路径上，换句话讲就是从一个分支出发，分成不同路径的分支，再合并到成分支的 <strong>merge</strong> 方式 叫 <strong>3-way merge</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 用3-way merge的方式需要产生新的commit, 一般commit就用系统默认的信息就行</span></span><br><span class="line">git merge auth</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/合并分支2.png" style="zoom:50%;"></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/合并分支3.png" style="zoom:50%;"></p>
+<h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看合并的分支有哪些（用于判断之后删除哪些分支）</span></span><br><span class="line">git branch --merged</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/删除分支.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除SDN分支</span></span><br><span class="line">git branch -d SDN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除auth的时候会报错，因为我们之前并没有对该分支进行merge</span></span><br><span class="line">git branch -d SDN</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/删除分支2.png" alt></p>
+<p>ps: 如果非要删除没有合并的分支，就可以采用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -D SDN</span><br></pre></td></tr></table></figure>
+<h2 id="Merge-冲突"><a href="#Merge-冲突" class="headerlink" title="Merge 冲突"></a>Merge 冲突</h2><p><strong>Merge冲突</strong>一般发生在我们在合并分支的时候，不同的分支下同一个文件中同一行内容有着不同的修改</p>
+<h3 id="构造冲突"><a href="#构造冲突" class="headerlink" title="构造冲突"></a>构造冲突</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建和切换分支的快捷方式</span></span><br><span class="line">git checkout -b dev</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改文件s1之后查看一下working tree和staging area中文件的区别</span></span><br><span class="line">git diff</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># stage并且commit修改后的s1文件</span></span><br><span class="line">git commit -a -m <span class="string">"update s1 VLANS"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到master分支</span></span><br><span class="line">git checkout master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改master分支上的s1文件中内容, 查看分支情况</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突2.png" style="zoom:50%;"></p>
+<p>修改前的s1文件内容和两个修改后的s1文件内容比较</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git基本操作/merge冲突3.png" style="zoom:50%;"></p>
+<p>从比较图可以看出：</p>
 <ol>
-<li>alias graph=”git log —all —decorate —oneline —graph” 给命令起一个外号</li>
-<li>cat 文件：查看文件</li>
-<li>more/less 文件：查看文件</li>
+<li>相比于base版本的mgmt_ip，master上进行了修改，但是dev上没有进行修改，那么合并的结果就是<strong>修改的结果</strong> </li>
+<li>相比于base的vlans，dev上的是green，而master上的是pink，也就是在两个分支上<strong>修改了相同的行</strong>，这样就产生了<strong>第1个冲突</strong></li>
+<li>相比于base的第1个ports，dev和master进行了相同的修改，所以没有冲突</li>
+<li>相比于base的第2个ports，dev进行了修改，但是master进行了删除，所以这就产生了<strong>第2个冲突</strong></li>
 </ol>
-<p>========<br>英语<br>wrap up 总结<br>a tiny bit of overhead 开销<br>sign up 注册<br>sign in 登录<br>a is ahead of b : a 领先 b<br>dropdown 下拉列表<br>request alterations 请求改变</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将可能产生冲突的分支进行merge</span></span><br><span class="line">git merge dev</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突4.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突5.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 终止合并（前提是我们的working tree 和 staging area是干净的）</span></span><br><span class="line">git merge --abort</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看当前状态</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突6.png" style="zoom:50%;"></p>
+<h3 id="解决冲突"><a href="#解决冲突" class="headerlink" title="解决冲突"></a>解决冲突</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 重新进行merge</span></span><br><span class="line">git merge dev</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看现在文件s1的内容</span></span><br><span class="line">vi s1</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突7.png" style="zoom:50%;"></p>
+<p>我们将其中的冲突修改掉，变成这样婶儿的👇</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/mergeconflict8.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将解决冲突后的s1进行add</span></span><br><span class="line">git add s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看冲突情况</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突9.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将staging area中的s1提交, 提交信息用系统提供的就可以了</span></span><br><span class="line">git commit </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看分支情况</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突10.png" style="zoom:50%;"></p>
+<h2 id="Detached-HEAD"><a href="#Detached-HEAD" class="headerlink" title="Detached HEAD"></a>Detached HEAD</h2><p>如果HEAD指针没有只想某个分支，而是志向某次commit，我们就是有一个detached HEAD state（分离的头指针状态）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 根据之前的graph/git log 我们可以找到创建s2的commit对应的sha-1 hash，因此可以将HEAD切换到相应的commit</span></span><br><span class="line">git checkout e724aef</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突11.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看当前的HEAD指针的位置</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突12.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建一个 stage branch </span></span><br><span class="line">git branch stage</span><br><span class="line"></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge13.png" style="zoom:50%;"></p>
+<p>从上图可以看到创建了一个新的分支，但是HEAD指针并没有指向该分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout stage</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突14.png" style="zoom:50%;"></p>
+<p>从上图可以看到HEAD指针不再是detached状态</p>
+<h2 id="Git-stash"><a href="#Git-stash" class="headerlink" title="Git stash"></a>Git stash</h2><p>每次前换分支或者merge分支的时候，我们的working tree 和 staging area 都是 clean 的状态，但是有时我们可能没有clean state，那么就可能会出错</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 首先切换回master分支</span><br><span class="line">git checkout master</span><br><span class="line"></span><br><span class="line"># 对master中的s1文件进行修改，并且要切换分支</span><br><span class="line">git checkout stage</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突15.png" style="zoom:50%;"></p>
+<p>从上图结果可以看到系统针对没有clean state会提供两种方法，第二种方法就是stash（贮藏）</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 快速clean state</span></span><br><span class="line">git stash</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突16.png" style="zoom:50%;"></p>
+<p>stash之后我们就可以随意checkout与merge分支了</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们可以继续进行修改文件然后stash</span></span><br><span class="line"><span class="comment"># 查看stash的的列表</span></span><br><span class="line">git stash list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看每次stash保存的修改记录和之前没修改的区别</span></span><br><span class="line">git stash list -p</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突17.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 再次应用最近一次stash的内容</span></span><br><span class="line">git stash apply</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突18.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果想要指定的stash，而不是最近一次的stash，就使用stash list中的最前面的label来调用相应的内容，最新一次的stash的label数是最小的</span></span><br><span class="line">git stash apply stash@&#123;1&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为了更好的识别每一次stash的内容，可以添加相应的注释</span></span><br><span class="line">git stash save <span class="string">"add yellow vlan"</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge冲突19.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果想要删除最近的一次stash</span></span><br><span class="line">git stash pop </span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除指定label的stash</span></span><br><span class="line">git stash pop stash@&#123;2&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Remotes"><a href="#Remotes" class="headerlink" title="Remotes"></a>Remotes</h1><p><strong>Remote</strong> 就是另外一个地方的<strong>repo</strong>, 这个地方可以是github上的repo，也可以是自己机器上的其他repo</p>
+<h2 id="GitHub连接"><a href="#GitHub连接" class="headerlink" title="GitHub连接"></a>GitHub连接</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将 github 上的 MLStockPrediction.git repo copy/retrieve 到本地</span></span><br><span class="line">git <span class="built_in">clone</span> git@github.com:HuangNing616/MLStockPrediction.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置指定repo/Local的git username</span></span><br><span class="line">git config --<span class="built_in">local</span> user.name <span class="string">"huangStock"</span></span><br><span class="line">git config --<span class="built_in">local</span> user.email <span class="string">"huangStock@stock.com"</span></span><br></pre></td></tr></table></figure>
+<h2 id="Remote"><a href="#Remote" class="headerlink" title="Remote"></a>Remote</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看远程连接有哪些</span></span><br><span class="line">git remote</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看完整地址的远程连接有哪些</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote1.png" style="zoom:50%;"></p>
+<p>从上图可以看到，<strong>origin</strong>是我们第一次远程连接repo地址的默认别名</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 构建git提交图的别名</span></span><br><span class="line"><span class="built_in">alias</span> graph=<span class="string">"git log --all --decorate --oneline --graph"</span></span><br><span class="line"></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote2.png" style="zoom:50%;"></p>
+<p>从上图可以出了本地的master以外，还多了origin/master，它是remote-tracking branch，这个分支表示origin上的master情况，换句话说github上的master分支和本地的master分支正在指向同一个commit</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们不可以再本地checkout到remote-tracking branch</span></span><br><span class="line">git checkout origin/master</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote3.png" style="zoom:50%;"></p>
+<h2 id="Fetch-和-Merge"><a href="#Fetch-和-Merge" class="headerlink" title="Fetch 和 Merge"></a>Fetch 和 Merge</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们在github上创建一个新的文件s1并提交, 但是本地不知道最新的提交，接下来需要在本地上获取github上最新的提交信息/更新后的repo</span></span><br><span class="line">git fetch origin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看目前的状态</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote4.png" style="zoom:50%;"></p>
+<p>从上图可以看到本地branch落后于origin/master</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们将origin/master mergin into 本地master</span></span><br><span class="line">git merge origin/master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在本地修改文件s1之后做一次最新的提交</span></span><br><span class="line">git commit -a -m <span class="string">"modify s1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看分支提交情况</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote5.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看最新状态</span></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote6.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将最新的commit信息上传/推到github上</span></span><br><span class="line">git push origin master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看分支提交情况</span></span><br><span class="line">graph</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote7.png" style="zoom:50%;"></p>
+<h2 id="Fork"><a href="#Fork" class="headerlink" title="Fork"></a>Fork</h2><p>假如另外一个同学A也想要加入该repo中，但是他没有向repo写/push的权利，其中一种解决办法就是使用fork，fork可以创造repo的copy版本到同学A的github中，之后同学A就可以通过gi t clone 在本地对该repo进行编辑</p>
+<h2 id="添加Remote"><a href="#添加Remote" class="headerlink" title="添加Remote"></a>添加Remote</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 添加一个额外的远程仓库的完整地址以及相应的别名</span></span><br><span class="line">git remote add upstream git@github.com:HuangNing616/JavaNote.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看remote情况</span></span><br><span class="line">git remote -v</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote8.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除某个remote</span></span><br><span class="line">git remote remove upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在提交信息中增加名称叫upstream的remote</span></span><br><span class="line">git fetch upstream</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个新的分支</span></span><br><span class="line">git checkout -b  <span class="string">"edit-s2"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有本地分支</span></span><br><span class="line">git branch </span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看所有远程分支</span></span><br><span class="line">git branch -r</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看包括远程分支的所有分支</span></span><br><span class="line">git branch -a</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote9.png" style="zoom:50%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在新的分支"edit-s2"上编辑s2之后，只将新的分支推到github上</span></span><br><span class="line">git push origin edit-s2</span><br></pre></td></tr></table></figure>
+<p><strong>补充</strong></p>
+<ul>
+<li><p>当从远端pull代码的时候用<strong>origin</strong>的前提是远端只有一个master分支，如果有多个分支的话需要指定pull具体的某个分支</p>
+</li>
+<li><p>git pull &amp; git pull —rebase</p>
+<p>假如我们fetch下来的commit graph是有两个分支情况，比如它这样婶儿的👇</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote10.png" style="zoom:50%;"><br>将两个分支进行合并有两种方法</p>
 <ol>
-<li>wildcard 通配符</li>
-<li>dash m：-m</li>
+<li><p>git merge：将两个分支合并并保留之前每个分支的提交信息</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote11.png" style="zoom:50%;"></p>
+</li>
+<li><p>git  rebase：将两个分支合并并删除之前mytask所在的分支记录</p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote12.png" style="zoom:50%;"></p>
+</li>
 </ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># git pull = git fetch &amp; git merge</span></span><br><span class="line">git pull origin</span><br><span class="line"><span class="comment"># git pull --rebase = git fetch &amp;&amp; git rebase</span></span><br><span class="line">git pull --rebase origin master</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果有冲突的话, 解决冲突后</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不需要commit，而是进行下述操作</span></span><br><span class="line">git rebase --<span class="built_in">continue</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 <blockquote>
 <ol>
-<li>Git 核心概念讲解：<a href="https://www.bilibili.com/video/BV1pJ411n7vP" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1pJ411n7vP</a></li>
+<li><a href="https://www.youtube.com/watch?v=uR6G2v_WsRA" target="_blank" rel="noopener">Introduction to Git - Core Concepts</a></li>
+<li><a href="https://www.youtube.com/watch?reload=9&amp;v=FyAAIHHClqI" target="_blank" rel="noopener">Introduction to Git - Branching and Merging</a></li>
+<li><a href="https://www.youtube.com/watch?v=Gg4bLk8cGNo&amp;t=482s" target="_blank" rel="noopener">Introduction to Git - Remotes</a></li>
 </ol>
 </blockquote>
 
@@ -471,7 +567,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件概念图"><span class="nav-number">2.</span> <span class="nav-text">文件概念图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-信息配置"><span class="nav-number">3.</span> <span class="nav-text">Git 信息配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-本地常用操作"><span class="nav-number">4.</span> <span class="nav-text">Git 本地常用操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Git-branch的使用"><span class="nav-number">5.</span> <span class="nav-text">Git branch的使用</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Core-Concepts"><span class="nav-number">2.</span> <span class="nav-text">Core Concepts</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Commit-Graph"><span class="nav-number">2.1.</span> <span class="nav-text">Commit Graph</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conceptual-Area-Diagram"><span class="nav-number">2.2.</span> <span class="nav-text">Conceptual Area Diagram</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信息配置"><span class="nav-number">2.3.</span> <span class="nav-text">信息配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number">2.4.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文件"><span class="nav-number">2.4.1.</span> <span class="nav-text">删除文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#恢复文件"><span class="nav-number">2.4.2.</span> <span class="nav-text">恢复文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Branch-和-Merge"><span class="nav-number">3.</span> <span class="nav-text">Branch 和 Merge</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建分支"><span class="nav-number">3.1.</span> <span class="nav-text">创建分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#切换分支"><span class="nav-number">3.2.</span> <span class="nav-text">切换分支</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并分支"><span class="nav-number">3.3.</span> <span class="nav-text">合并分支</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#fast-forward-merge"><span class="nav-number">3.3.1.</span> <span class="nav-text">fast-forward merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-way-merge"><span class="nav-number">3.3.2.</span> <span class="nav-text">3-way merge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除分支"><span class="nav-number">3.3.3.</span> <span class="nav-text">删除分支</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Merge-冲突"><span class="nav-number">3.4.</span> <span class="nav-text">Merge 冲突</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#构造冲突"><span class="nav-number">3.4.1.</span> <span class="nav-text">构造冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决冲突"><span class="nav-number">3.4.2.</span> <span class="nav-text">解决冲突</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Detached-HEAD"><span class="nav-number">3.5.</span> <span class="nav-text">Detached HEAD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-stash"><span class="nav-number">3.6.</span> <span class="nav-text">Git stash</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Remotes"><span class="nav-number">4.</span> <span class="nav-text">Remotes</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub连接"><span class="nav-number">4.1.</span> <span class="nav-text">GitHub连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Remote"><span class="nav-number">4.2.</span> <span class="nav-text">Remote</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fetch-和-Merge"><span class="nav-number">4.3.</span> <span class="nav-text">Fetch 和 Merge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Fork"><span class="nav-number">4.4.</span> <span class="nav-text">Fork</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加Remote"><span class="nav-number">4.5.</span> <span class="nav-text">添加Remote</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -491,7 +587,7 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span>
       </div>
       <div class="site-state-item site-state-tags">
@@ -546,7 +642,32 @@
   <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.6.0
   </div>
 
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
