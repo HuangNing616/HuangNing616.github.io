@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 4.1.0">
+<meta name="generator" content="Hexo 4.2.1">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -54,65 +54,65 @@
   <meta name="description" content="前言本文是小编针对 David Mahler 在 Youtube 上对 Git 介绍进行的简单总结。Git是一种版本控制系统（version system control，简称VSC)，它可以记录文件在一段时间内的变化。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git学习笔记">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;index.html">
+<meta property="og:url" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/index.html">
 <meta property="og:site_name" content="黄宁の博客">
 <meta property="og:description" content="前言本文是小编针对 David Mahler 在 Youtube 上对 Git 介绍进行的简单总结。Git是一种版本控制系统（version system control，简称VSC)，它可以记录文件在一段时间内的变化。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;提交图.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;核心区域图.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;查看当前状态.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;gitlog.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;commit1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;commit2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;s2的删除.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;commit3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;创建分支.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;切换分支4.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;合并分支3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;删除分支.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;删除分支2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;huangning&#x2F;HNBlog&#x2F;source&#x2F;_posts&#x2F;Git基本操作&#x2F;merge冲突3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突4.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突5.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突6.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突7.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;mergeconflict8.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突9.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突10.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突11.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突12.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge13.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突14.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突15.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突16.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突17.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突18.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;merge冲突19.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote1.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote2.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote3.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote4.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote5.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote6.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote7.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote8.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote9.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote10.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote11.png">
-<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;remote12.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E6%8F%90%E4%BA%A4%E5%9B%BE.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E6%A0%B8%E5%BF%83%E5%8C%BA%E5%9F%9F%E5%9B%BE.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/gitlog.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit1.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/s2%E7%9A%84%E5%88%A0%E9%99%A4.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit3.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF3.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF4.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF1.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%90%88%E5%B9%B6%E5%88%86%E6%94%AF3.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%A0%E9%99%A4%E5%88%86%E6%94%AF2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%81.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%812.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%813.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%814.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%815.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%816.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%817.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/mergeconflict8.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%819.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8110.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8111.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8112.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge13.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8114.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8115.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8116.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8117.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8118.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/merge%E5%86%B2%E7%AA%8119.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote1.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote3.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote4.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote5.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote6.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote7.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote8.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote9.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote10.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote11.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote12.png">
 <meta property="article:published_time" content="2020-05-12T02:14:57.000Z">
 <meta property="article:modified_time" content="2020-06-27T08:34:09.421Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="版本控制系统">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;12&#x2F;Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C&#x2F;提交图.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E6%8F%90%E4%BA%A4%E5%9B%BE.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/">
 
@@ -295,6 +295,20 @@
               </span>
               <span class="post-meta-item-text">阅读次数：</span>
               <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
             </span>
 
         </div>
@@ -634,6 +648,16 @@
     <i class="fa fa-user"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">72k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:05</span>
 </div>
 
         
