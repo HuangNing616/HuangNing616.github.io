@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SparkCore学习笔记（上）">
+<meta property="og:url" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/words%E6%95%B0%E6%8D%AE%E9%9B%86.png">
+<meta property="article:published_time" content="2020-05-23T10:51:19.000Z">
+<meta property="article:modified_time" content="2020-07-18T12:32:36.164Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="Spark学习记录｜计算机学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/words%E6%95%B0%E6%8D%AE%E9%9B%86.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>SparkCore学习笔记（上） | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="普通人也可以活得很精彩">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SparkCore学习笔记（上）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-05-23 18:51:19" itemprop="dateCreated datePublished" datetime="2020-05-23T18:51:19+08:00">2020-05-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-18 20:32:36" itemprop="dateModified" datetime="2020-07-18T20:32:36+08:00">2020-07-18</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark/Core/" itemprop="url" rel="index">
+                    <span itemprop="name">Core</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>5k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Spark是基于<strong>内存</strong>的计算框架，它主要包括<strong>SparkCore，SparkSQL，SparkML，SparkStreaming</strong>等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark</p>
+<a id="more"></a>
+<h1 id="Spark与MR的区别"><a href="#Spark与MR的区别" class="headerlink" title="Spark与MR的区别"></a>Spark与MR的区别</h1><ol>
+<li>Spark基于<strong>内存</strong>迭代计算, MR是基于<strong>磁盘</strong>迭代计算</li>
+<li>Spark中有<strong>DAG</strong>（有向无环图）</li>
+<li>MR中只有map和reduce算子（相当于Spark中的map和reduceByKey），而Spark中有很多应用不同场景的算子</li>
+</ol>
+<h1 id="Spark运行模式"><a href="#Spark运行模式" class="headerlink" title="Spark运行模式"></a>Spark运行模式</h1><ol>
+<li>Local：用于<strong>本地测试</strong>，在IDEA中经常使用Local模式</li>
+<li>Standalone：<strong>Spark自带</strong>的资源调度框架，支持分布式搭建</li>
+<li>Yarn：<strong>Hadoop生态圈</strong>中的资源调度框架，Spark可以基于Yarn运行</li>
+<li>Mesos：资源调度框架</li>
+</ol>
+<h1 id="Spark核心RDD"><a href="#Spark核心RDD" class="headerlink" title="Spark核心RDD"></a>Spark核心RDD</h1><p>RDD（<em>resilient distributed dataset</em>）也叫弹性分布式数据集</p>
+<h2 id="RDD的创建"><a href="#RDD的创建" class="headerlink" title="RDD的创建"></a>RDD的创建</h2><p>接下来通过scala的伪代码来说明RDD创建的3种方式</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式1: 外部存储HDFS创建RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd1 = makeRDD(collection, 分区个数)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式2: scala集合创建RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>[<span class="type">String</span>](</span><br><span class="line">  <span class="string">"love1"</span>, <span class="string">"love2"</span>, <span class="string">"love3"</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> rdd3 = sc.makeRDD(<span class="type">List</span>[<span class="type">String</span>](</span><br><span class="line">  <span class="string">"love1"</span>, <span class="string">"love2"</span>, <span class="string">"love3"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式3: 旧RDD转换成新的RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd4 = rdd3.map((_, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<h2 id="RDD的五大特性"><a href="#RDD的五大特性" class="headerlink" title="RDD的五大特性"></a>RDD的五大特性</h2><ol>
+<li>RDD是由partiton构成</li>
+<li><strong>算子</strong>（函数）作用在partition上</li>
+<li>RDD之间有<strong>依赖</strong>关系</li>
+<li><strong>分区器</strong>作用在（K，V）格式的RDD上</li>
+<li>partition对外提供最佳计算位置，利于数据处理的<strong>本地化</strong></li>
+</ol>
+<h2 id="RDD注意事项"><a href="#RDD注意事项" class="headerlink" title="RDD注意事项"></a>RDD注意事项</h2><ol>
+<li><p>textFile读取HDFS文件的方法的底层原理是什么？</p>
+<p>该方法的底层是通过调用MR来读取HDFS文件，即要进行split，每个split对应一个block，也对应一个partition</p>
+</li>
+<li><p>什么是<strong>（K，V）格式</strong>的RDD？</p>
+<p>RDD中的数据是一个个的二元组</p>
+</li>
+<li><p>哪里体现了RDD的<strong>弹性（容错性）</strong>？</p>
+<ul>
+<li>RDD的分区可多可少</li>
+<li>RDD之间有依赖关系</li>
+</ul>
+</li>
+<li><p>哪里体现了RDD的<strong>分布式</strong>？</p>
+<p>RDD的partition是分布在多个节点（机器）上的</p>
+</li>
+</ol>
+<h1 id="Spark的代码流程"><a href="#Spark的代码流程" class="headerlink" title="Spark的代码流程"></a>Spark的代码流程</h1><p><strong>Spark应用程序（Application）</strong>就是一段完整的spark代码，接下来小编通过<strong>WordCount</strong>来用scala来描述<strong>Spark应用程序</strong>的代码流程。下图是<strong>WordCount</strong>用到的words.txt数据集（仅展示部分数据）</p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/words数据集.png" style="zoom:50%;"></p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Step1: 配置信息</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	<span class="comment">// Spark应用程序的名称</span></span><br><span class="line">  .setMaster(<span class="string">"local"</span>)	<span class="comment">// Spark的运行模式</span></span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	<span class="comment">// 其他配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2: SparkContext是通往Spark集群的唯一通道</span></span><br><span class="line"><span class="comment">// 将之前的配置信息传入</span></span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"><span class="comment">// 设置日志等级</span></span><br><span class="line">sc.setLogLevel(<span class="string">"Error"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step3: 读入数据并加载成RDD</span></span><br><span class="line"><span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step4: RDD的转换操作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = lines.flatMap(line =&gt; &#123;</span><br><span class="line">  line.split(<span class="string">" "</span>)</span><br><span class="line">&#125;)  </span><br><span class="line"><span class="comment">// 将RDD[String]转成RDD[(String, Int)]</span></span><br><span class="line"><span class="keyword">val</span> pairWords: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map(word =&gt; &#123;</span><br><span class="line">  (word, <span class="number">1</span>)</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="comment">// 根据key进行分组，然后针对同一组的value进行运算</span></span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = pairWords.reduceByKey((v1, v2) =&gt; &#123;</span><br><span class="line">	v1 + v2</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="comment">// 根据value进行降序排序</span></span><br><span class="line"><span class="keyword">val</span> sortResult: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = result.sortBy(tuple =&gt; &#123;</span><br><span class="line">  tuple._2</span><br><span class="line">&#125;, ascending = <span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// Step5: RDD的执行操作</span></span><br><span class="line">sortResult.foreach(line =&gt; &#123;</span><br><span class="line">  println(line)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6: 关闭SparkContext</span></span><br><span class="line">sc.stop()</span><br><span class="line"></span><br><span class="line"><span class="comment">//为了减少代码量，我们可以将Step2至Step5合并，下面是wordcount的简洁版</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step1</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	</span><br><span class="line">  .setMaster(<span class="string">"local"</span>)</span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2 - Step5</span></span><br><span class="line">sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line">.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">.map((_, <span class="number">1</span>))</span><br><span class="line">.reduceByKey(_+_)</span><br><span class="line">.sortBy(_._2)</span><br><span class="line">.foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6</span></span><br><span class="line">sc.stop()</span><br></pre></td></tr></table></figure>
+<h1 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h1><h2 id="Transformations"><a href="#Transformations" class="headerlink" title="Transformations"></a>Transformations</h2><p>Transformations（转换）算子的特点是懒执行，需要执行算子（Action）触发执行</p>
+<ol>
+<li><strong>map</strong></li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// map处理数据是一对一的关系, 即进入一条数据处理，出来的还是一条数据</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[<span class="type">String</span>] = sc.parallelize(<span class="type">Array</span>[<span class="type">String</span>](<span class="string">"hello scala"</span>,<span class="string">"hello spark"</span>,<span class="string">"hello java"</span>))</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">Array</span>[<span class="type">String</span>]] = infos.map(_.split(<span class="string">" "</span>))</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>flatMap</strong></li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// flatmap处理数据是一对多的关系, 即进入一条数据处理，出来的是多条数据</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[<span class="type">String</span>] = sc.parallelize(<span class="type">Array</span>[<span class="type">String</span>](<span class="string">"hello spark"</span>,<span class="string">"hello hdfs"</span>,<span class="string">"hello bjsxt"</span>))</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">String</span>] = infos.flatMap(_.split(<span class="string">" "</span>))</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>mapPartitions</strong></li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// mapPartitions是一个个分区的遍历, 较于map中一条条数据的遍历，性能比较高</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[<span class="type">String</span>] = sc.parallelize(<span class="type">List</span>[<span class="type">String</span>](<span class="string">"a"</span>,<span class="string">"b"</span>,<span class="string">"c"</span>,<span class="string">"d"</span>,<span class="string">"e"</span>,<span class="string">"f"</span>,<span class="string">"g"</span>),<span class="number">4</span>)</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">String</span>] = infos.mapPartitions(iter=&gt;&#123;</span><br><span class="line">println(<span class="string">"创建数据库连接... ... "</span>)</span><br><span class="line"><span class="keyword">val</span> array: <span class="type">ArrayBuffer</span>[<span class="type">String</span>] = <span class="type">ArrayBuffer</span>[<span class="type">String</span>]()</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(iter.hasNext)&#123;</span><br><span class="line"><span class="keyword">val</span> s: <span class="type">String</span> = iter.next()</span><br><span class="line">println(<span class="string">"拼接sql... ... "</span>+s)</span><br><span class="line">array.append(s)</span><br><span class="line">&#125;</span><br><span class="line">println(<span class="string">"关闭数据库连接... ... "</span>)</span><br><span class="line">array.iterator</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>mapPartitionsWithIndex</strong></li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// mapPartitionsWithIndexs遍历的是每个分区中的数据, 并且给每个分区一个index, 其中preservesPartitioning表示是否保留父RDD的partitioner分区信息</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[<span class="type">String</span>] = sc.makeRDD(<span class="type">List</span>[<span class="type">String</span>](<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>, <span class="string">"d"</span>, <span class="string">"e"</span>, <span class="string">"f"</span>, <span class="string">"g"</span>), <span class="number">3</span>)</span><br><span class="line"><span class="comment">// 遍历的是每个分区中的数据, 并且给每个分区一个index, 其中preservesPartitioning表示是否保留父RDD的partitioner分区信息</span></span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">String</span>] = infos.mapPartitionsWithIndex((index, iter)=&gt;&#123;</span><br><span class="line">  <span class="keyword">val</span> arr: <span class="type">ArrayBuffer</span>[<span class="type">String</span>] = <span class="type">ArrayBuffer</span>[<span class="type">String</span>]()</span><br><span class="line">  iter.foreach(one=&gt;&#123;</span><br><span class="line">    arr.append(<span class="string">s"current partition number = 【<span class="subst">$index</span>】, value = <span class="subst">$one</span>"</span>)</span><br><span class="line">  &#125;)</span><br><span class="line">  arr.iterator</span><br><span class="line">&#125;, preservesPartitioning = <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong>combineByKey</strong></li>
+</ol>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * combineByKey执行流程:</span></span><br><span class="line"><span class="comment"> * 1. 首先给RDD中每个分区中的每个key一个初始值</span></span><br><span class="line"><span class="comment"> * 2. 其次在RDD每个分区内部 相同的key聚合一次</span></span><br><span class="line"><span class="comment"> * 3. 最后在RDD不同的分区之间将相同的key结果聚合一次</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = sc.makeRDD(<span class="type">List</span>[(<span class="type">String</span>, <span class="type">Int</span>)](</span><br><span class="line">(<span class="string">"zhangsan"</span>, <span class="number">10</span>), (<span class="string">"zhangsan"</span>, <span class="number">20</span>), (<span class="string">"wangwu"</span>, <span class="number">30</span>),</span><br><span class="line">(<span class="string">"lisi"</span>, <span class="number">40</span>), (<span class="string">"zhangsan"</span>, <span class="number">50</span>), (<span class="string">"lisi"</span>, <span class="number">60</span>),</span><br><span class="line">(<span class="string">"wangwu"</span>, <span class="number">70</span>), (<span class="string">"wangwu"</span>, <span class="number">80</span>), (<span class="string">"lisi"</span>, <span class="number">90</span>)</span><br><span class="line">), <span class="number">3</span>)</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">String</span>)] = infos.combineByKey(</span><br><span class="line">  v=&gt;&#123;v + <span class="string">"hello"</span>&#125;,</span><br><span class="line">  (in1:<span class="type">String</span>, in2)=&gt;&#123;in1 + <span class="string">"@"</span> + in2&#125;,</span><br><span class="line">  (out1:<span class="type">String</span>, out2:<span class="type">String</span>)=&gt;&#123;out1 + <span class="string">"#"</span> + out2&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="Actions"><a href="#Actions" class="headerlink" title="Actions"></a>Actions</h2><p><strong>Actions（执行算子）</strong>触发<strong>Transformations</strong>执行，spark application中<strong>有一个action算子就有一个job</strong></p>
+<ol>
+<li>collect</li>
+<li>count</li>
+<li>countByKey</li>
+<li>countByValue</li>
+<li>first</li>
+<li>take(num)</li>
+<li>foreach</li>
+<li>foreachPartition</li>
+<li>Reduce</li>
+</ol>
+<h2 id="Persistence"><a href="#Persistence" class="headerlink" title="Persistence"></a>Persistence</h2><h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><ol>
+<li><p>cache算子默认将数据存在内存中</p>
+</li>
+<li><p>cache() =  persist(StorageLevel.MEMORY_ONLY)</p>
+</li>
+</ol>
+<h3 id="persist"><a href="#persist" class="headerlink" title="persist"></a>persist</h3><ol>
+<li>可以手动指定持久化级别</li>
+<li>常用的持久化级别（存储类型）：<ul>
+<li>MEMORY_ONLY</li>
+<li>MEMORY_ONLY_SER</li>
+<li>MEMORY_AND_DISK(先存到内存，内存满了在溢写磁盘)</li>
+<li>MEMORY_AND_DISK_SER</li>
+</ul>
+</li>
+<li>存储级别的后缀”_2” 表示有副本</li>
+<li>尽量少使用DISK_ONLY的持久化级别</li>
+</ol>
+<h3 id="checkpoint"><a href="#checkpoint" class="headerlink" title="checkpoint"></a>checkpoint</h3><ol>
+<li><p>使用场景</p>
+<p>当lineage（RDD之间的依赖关系构成的链） 计算非常复杂，可以尝试使用checkpoint将数据直接持久化到指定的目录</p>
+</li>
+<li><p>执行流程</p>
+<p>step1：当spark job完成之后，Spark 会从后往前回溯，找到带有checkpoint的RDD并给它做标记<br>step2：回溯完成后，Spark框架会重新启动一个job,计算标记的RDD的数据，放入指定的checkpoint目录中<br>step3：数据计算完成并放入目录之后，会<strong>切断RDD的依赖关系</strong>，当Spark Application执行完成之后，数据目录中的<strong>数据不会被清除</strong></p>
+</li>
+</ol>
+<p>注：checkpoint要指定存储目录！！！</p>
+<h3 id="持久化算子之间联系和区别"><a href="#持久化算子之间联系和区别" class="headerlink" title="持久化算子之间联系和区别"></a>持久化算子之间联系和区别</h3><ol>
+<li>cache,persist,checkpoint 都是<strong>懒执行</strong>，最小<strong>持久化单位</strong>是partition</li>
+<li>cache和persist之后可以直接赋值给一个值，下次直接使用这个值（即持久化的数据），但是这个时候后面不能紧跟action算子</li>
+<li>cache和persist的数据，当application执行完成之后会自动清除，但是通过checkpoint持久化到数据目录中的数据不会被清除</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/Spark%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># Spark学习记录｜计算机学习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="Git学习笔记">
+      <i class="fa fa-chevron-left"></i> Git学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/" rel="next" title="SparkCore学习笔记（下）">
+      SparkCore学习笔记（下） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark与MR的区别"><span class="nav-number">1.</span> <span class="nav-text">Spark与MR的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark运行模式"><span class="nav-number">2.</span> <span class="nav-text">Spark运行模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark核心RDD"><span class="nav-number">3.</span> <span class="nav-text">Spark核心RDD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD的创建"><span class="nav-number">3.1.</span> <span class="nav-text">RDD的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD的五大特性"><span class="nav-number">3.2.</span> <span class="nav-text">RDD的五大特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD注意事项"><span class="nav-number">3.3.</span> <span class="nav-text">RDD注意事项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark的代码流程"><span class="nav-number">4.</span> <span class="nav-text">Spark的代码流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算子"><span class="nav-number">5.</span> <span class="nav-text">算子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformations"><span class="nav-number">5.1.</span> <span class="nav-text">Transformations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Actions"><span class="nav-number">5.2.</span> <span class="nav-text">Actions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Persistence"><span class="nav-number">5.3.</span> <span class="nav-text">Persistence</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cache"><span class="nav-number">5.3.1.</span> <span class="nav-text">cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#persist"><span class="nav-number">5.3.2.</span> <span class="nav-text">persist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#checkpoint"><span class="nav-number">5.3.3.</span> <span class="nav-text">checkpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化算子之间联系和区别"><span class="nav-number">5.3.4.</span> <span class="nav-text">持久化算子之间联系和区别</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">普通人也可以活得很精彩</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.zhihu.com/people/demons-28-75-48" title="知乎 → https:&#x2F;&#x2F;www.zhihu.com&#x2F;people&#x2F;demons-28-75-48" rel="noopener" target="_blank"><i class="fa fa-fw fa-weibo"></i>知乎</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://www.nowcoder.com/ta/coding-interviews" title="牛客网 → https:&#x2F;&#x2F;www.nowcoder.com&#x2F;ta&#x2F;coding-interviews" rel="noopener" target="_blank"><i class="fa fa-fw fa-google"></i>牛客网</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">79k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:12</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>

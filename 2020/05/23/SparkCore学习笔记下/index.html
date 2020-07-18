@@ -16,7 +16,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-<link rel="stylesheet" href="https://fonts.loli.net/css?family=Times New Roman:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
 
@@ -53,32 +53,31 @@
 
   <meta name="description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SparkCore学习笔记">
-<meta property="og:url" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="SparkCore学习笔记（下）">
+<meta property="og:url" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/index.html">
 <meta property="og:site_name" content="黄宁の博客">
 <meta property="og:description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/words%E6%95%B0%E6%8D%AE%E9%9B%86.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/standalone-client.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/standalone-cluster.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/yarn-client.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/yarn-cluster.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%92%8C%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hashshuffle-%E6%99%AE%E9%80%9A.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hashshuffle-%E5%90%88%E5%B9%B6.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/sortshuffle-%E6%99%AE%E9%80%9A.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/sortshuffle-bypass.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B9%BF%E6%92%AD%E5%8F%98%E9%87%8F.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%B4%AF%E5%8A%A0%E5%99%A8.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/standalone-client.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/standalone-cluster.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/yarn-client.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/yarn-cluster.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6%E5%92%8C%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/hashshuffle-%E6%99%AE%E9%80%9A.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/hashshuffle-%E5%90%88%E5%B9%B6.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/sortshuffle-%E6%99%AE%E9%80%9A.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/sortshuffle-bypass.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B9%BF%E6%92%AD%E5%8F%98%E9%87%8F.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E7%B4%AF%E5%8A%A0%E5%99%A8.png">
 <meta property="article:published_time" content="2020-05-23T10:51:19.000Z">
-<meta property="article:modified_time" content="2020-06-29T16:17:20.636Z">
+<meta property="article:modified_time" content="2020-07-18T12:33:51.664Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Spark学习记录｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/words%E6%95%B0%E6%8D%AE%E9%9B%86.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/standalone-client.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+<link rel="canonical" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/">
 
 
 <script id="page-configurations">
@@ -90,7 +89,7 @@
   };
 </script>
 
-  <title>SparkCore学习笔记 | 黄宁の博客</title>
+  <title>SparkCore学习笔记（下） | 黄宁の博客</title>
   
 
 
@@ -203,7 +202,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
@@ -216,7 +215,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          SparkCore学习笔记
+          SparkCore学习笔记（下）
         </h1>
 
         <div class="post-meta">
@@ -233,7 +232,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-30 00:17:20" itemprop="dateModified" datetime="2020-06-30T00:17:20+08:00">2020-06-30</time>
+                <time title="修改时间：2020-07-18 20:33:51" itemprop="dateModified" datetime="2020-07-18T20:33:51+08:00">2020-07-18</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -247,14 +246,14 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" itemprop="url" rel="index">
-                    <span itemprop="name">分布式计算</span>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark/" itemprop="url" rel="index">
+                    <span itemprop="name">Spark</span>
                   </a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/Spark/" itemprop="url" rel="index">
-                    <span itemprop="name">Spark</span>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark/Core/" itemprop="url" rel="index">
+                    <span itemprop="name">Core</span>
                   </a>
                 </span>
             </span>
@@ -271,14 +270,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>9.6k</span>
+              <span>6.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
+              <span>6 分钟</span>
             </span>
 
         </div>
@@ -292,146 +291,47 @@
       
         <p>Spark是基于<strong>内存</strong>的计算框架，它主要包括<strong>SparkCore，SparkSQL，SparkML，SparkStreaming</strong>等方面的内容，本片文章从SparkCore的角度出发，从与MR的区别，运行模式，核心RDD，代码流程，资源和任务调度，Shuffle等方面来介绍Spark</p>
 <a id="more"></a>
-<h1 id="Spark与MR的区别"><a href="#Spark与MR的区别" class="headerlink" title="Spark与MR的区别"></a>Spark与MR的区别</h1><ol>
-<li>Spark基于<strong>内存</strong>迭代计算, MR是基于<strong>磁盘</strong>迭代计算</li>
-<li>Spark中有<strong>DAG</strong>（有向无环图）</li>
-<li>MR中只有map和reduce算子（相当于Spark中的map和reduceByKey），而Spark中有很多应用不同场景的算子</li>
-</ol>
-<h1 id="Spark运行模式"><a href="#Spark运行模式" class="headerlink" title="Spark运行模式"></a>Spark运行模式</h1><ol>
-<li>Local：用于<strong>本地测试</strong>，在IDEA中经常使用Local模式</li>
-<li>Standalone：<strong>Spark自带</strong>的资源调度框架，支持分布式搭建</li>
-<li>Yarn：<strong>Hadoop生态圈</strong>中的资源调度框架，Spark可以基于Yarn运行</li>
-<li>Mesos：资源调度框架</li>
-</ol>
-<h1 id="Spark核心RDD"><a href="#Spark核心RDD" class="headerlink" title="Spark核心RDD"></a>Spark核心RDD</h1><p>RDD（<em>resilient distributed dataset</em>）也叫弹性分布式数据集</p>
-<h2 id="RDD的创建"><a href="#RDD的创建" class="headerlink" title="RDD的创建"></a>RDD的创建</h2><p>接下来通过scala的伪代码来说明RDD创建的3种方式</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式1: 外部存储HDFS创建RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd1 = makeRDD(collection, 分区个数)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式2: scala集合创建RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd2 = sc.parallelize(<span class="type">List</span>[<span class="type">String</span>](</span><br><span class="line">  <span class="string">"love1"</span>, <span class="string">"love2"</span>, <span class="string">"love3"</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> rdd3 = sc.makeRDD(<span class="type">List</span>[<span class="type">String</span>](</span><br><span class="line">  <span class="string">"love1"</span>, <span class="string">"love2"</span>, <span class="string">"love3"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 方式3: 旧RDD转换成新的RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd4 = rdd3.map((_, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
-<h2 id="RDD的五大特性"><a href="#RDD的五大特性" class="headerlink" title="RDD的五大特性"></a>RDD的五大特性</h2><ol>
-<li>RDD是由partiton构成</li>
-<li><strong>算子</strong>（函数）作用在partition上</li>
-<li>RDD之间有<strong>依赖</strong>关系</li>
-<li><strong>分区器</strong>作用在（K，V）格式的RDD上</li>
-<li>partition对外提供最佳计算位置，利于数据处理的<strong>本地化</strong></li>
-</ol>
-<h2 id="RDD注意事项"><a href="#RDD注意事项" class="headerlink" title="RDD注意事项"></a>RDD注意事项</h2><ol>
-<li><p>textFile读取HDFS文件的方法的底层原理是什么？</p>
-<p>该方法的底层是通过调用MR来读取HDFS文件，即要进行split，每个split对应一个block，也对应一个partition</p>
-</li>
-<li><p>什么是<strong>（K，V）格式</strong>的RDD？</p>
-<p>RDD中的数据是一个个的二元组</p>
-</li>
-<li><p>哪里体现了RDD的<strong>弹性（容错性）</strong>？</p>
-<ul>
-<li>RDD的分区可多可少</li>
-<li>RDD之间有依赖关系</li>
-</ul>
-</li>
-<li><p>哪里体现了RDD的<strong>分布式</strong>？</p>
-<p>RDD的partition是分布在多个节点（机器）上的</p>
-</li>
-</ol>
-<h1 id="Spark的代码流程"><a href="#Spark的代码流程" class="headerlink" title="Spark的代码流程"></a>Spark的代码流程</h1><p><strong>Spark应用程序（Application）</strong>就是一段完整的spark代码，接下来小编通过<strong>WordCount</strong>来用scala来描述**Spark应用程序的代码流程。下面是WordCount用到的words.txt数据集（仅展示部分数据）</p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/words数据集.png" style="zoom:50%;"></p>
-<h2 id="Scala完整版"><a href="#Scala完整版" class="headerlink" title="Scala完整版"></a>Scala完整版</h2><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Step1: 配置信息</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	<span class="comment">// Spark应用程序的名称</span></span><br><span class="line">  .setMaster(<span class="string">"local"</span>)	<span class="comment">// Spark的运行模式</span></span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	<span class="comment">// 其他配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2: SparkContext是通往Spark集群的唯一通道</span></span><br><span class="line"><span class="comment">// 将之前的配置信息传入</span></span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"><span class="comment">// 设置日志等级</span></span><br><span class="line">sc.setLogLevel(<span class="string">"Error"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step3: 读入数据并加载成RDD</span></span><br><span class="line"><span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step4: RDD的转换操作</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = lines.flatMap(line =&gt; &#123;</span><br><span class="line">  line.split(<span class="string">" "</span>)</span><br><span class="line">&#125;)  </span><br><span class="line"><span class="comment">// 将RDD[String]转成RDD[(String, Int)]</span></span><br><span class="line"><span class="keyword">val</span> pairWords: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map(word =&gt; &#123;</span><br><span class="line">  (word, <span class="number">1</span>)</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="comment">// 根据key进行分组，然后针对同一组的value进行运算</span></span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = pairWords.reduceByKey((v1, v2) =&gt; &#123;</span><br><span class="line">	v1 + v2</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="comment">// 根据value进行降序排序</span></span><br><span class="line"><span class="keyword">val</span> sortResult: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = result.sortBy(tuple =&gt; &#123;</span><br><span class="line">  tuple._1</span><br><span class="line">&#125;, ascending = <span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// Step5: RDD的执行操作</span></span><br><span class="line">sortResult.foreach(line =&gt; &#123;</span><br><span class="line">  println(line)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6: 关闭SparkContext</span></span><br><span class="line">sc.stop()</span><br></pre></td></tr></table></figure>
-<h2 id="Scala简洁版"><a href="#Scala简洁版" class="headerlink" title="Scala简洁版"></a>Scala简洁版</h2><p>为了减少代码量，我们可以将Step2至Step5合并，相应的代码如下</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Step1</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	</span><br><span class="line">  .setMaster(<span class="string">"local"</span>)</span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2 - Step5</span></span><br><span class="line">sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line">  .flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">  .map((_, <span class="number">1</span>))</span><br><span class="line">  .reduceByKey(_+_)</span><br><span class="line">  .foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6</span></span><br><span class="line">sc.stop()</span><br></pre></td></tr></table></figure>
-<h1 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h1><h2 id="Transformation"><a href="#Transformation" class="headerlink" title="Transformation"></a>Transformation</h2><p>Transformation（转换）算子的特点是懒执行，需要执行算子（Action）触发执行，常用的转换算子：</p>
-<ol>
-<li>map</li>
-<li>flatMap</li>
-<li>mapPartitions</li>
-<li>mapPartitionsWithIndex</li>
-<li>mapToPair(Java中特有的)</li>
-<li>sample</li>
-<li>sortBy</li>
-<li>soutByKey</li>
-<li>reduceByKey</li>
-<li>groupByKey</li>
-<li>join</li>
-<li>leftOuterJoin</li>
-<li>rightOuterJoin</li>
-<li>fullOuterJoin</li>
-<li>union</li>
-<li>intersection</li>
-<li>subtract</li>
-<li>distinct（根据底层远离，它也是shuffle算子）</li>
-<li>cogroup</li>
-<li>repartition</li>
-<li>coalesce</li>
-<li>zip</li>
-<li>zipWithIndex</li>
-</ol>
-<h2 id="执行算子"><a href="#执行算子" class="headerlink" title="执行算子"></a>执行算子</h2><p>执行算子（Action）触发transformation类算子执行，<strong>spark application中有一个action算子就有一个job</strong>。常用的执行算子：</p>
-<ol>
-<li>collect</li>
-<li>count</li>
-<li>countByKey</li>
-<li>countByValue</li>
-<li>first</li>
-<li>take(num)</li>
-<li>foreach</li>
-<li>foreachPartition</li>
-<li>Reduce</li>
-</ol>
-<h2 id="持久化算子"><a href="#持久化算子" class="headerlink" title="持久化算子"></a>持久化算子</h2><h3 id="cache"><a href="#cache" class="headerlink" title="cache"></a>cache</h3><ol>
-<li><p>cache算子默认将数据存在内存中</p>
-</li>
-<li><p>cache() =  persist(StorageLevel.MEMORY_ONLY)</p>
-</li>
-</ol>
-<h3 id="persist"><a href="#persist" class="headerlink" title="persist"></a>persist</h3><ol>
-<li>可以手动指定持久化级别</li>
-<li>常用的持久化级别（存储类型）：<ul>
-<li>MEMORY_ONLY</li>
-<li>MEMORY_ONLY_SER</li>
-<li>MEMORY_AND_DISK(先存到内存，内存满了在溢写磁盘)</li>
-<li>MEMORY_AND_DISK_SER</li>
-</ul>
-</li>
-<li>存储级别的后缀”_2” 表示有副本</li>
-<li>尽量少使用DISK_ONLY的持久化级别</li>
-</ol>
-<h3 id="checkpoint"><a href="#checkpoint" class="headerlink" title="checkpoint"></a>checkpoint</h3><ol>
-<li><p>使用场景</p>
-<p>当lineage（RDD之间的依赖关系构成的链） 计算非常复杂，可以尝试使用checkpoint将数据直接持久化到指定的目录</p>
-</li>
-<li><p>执行流程</p>
-<p>step1：当spark job完成之后，Spark 会从后往前回溯，找到带有checkpoint的RDD并给它做标记<br>step2：回溯完成后，Spark框架会重新启动一个job,计算标记的RDD的数据，放入指定的checkpoint目录中<br>step3：数据计算完成并放入目录之后，会<strong>切断RDD的依赖关系</strong>，当Spark Application执行完成之后，数据目录中的<strong>数据不会被清除</strong></p>
-</li>
-</ol>
-<p>注：checkpoint要指定存储目录！！！</p>
-<h3 id="持久化算子之间联系和区别"><a href="#持久化算子之间联系和区别" class="headerlink" title="持久化算子之间联系和区别"></a>持久化算子之间联系和区别</h3><ol>
-<li>cache,persist,checkpoint 都是<strong>懒执行</strong>，最小<strong>持久化单位</strong>是partition</li>
-<li>cache和persist之后可以直接赋值给一个值，下次直接使用这个值（即持久化的数据），但是这个时候后面不能紧跟action算子</li>
-<li>cache和persist的数据，当application执行完成之后会自动清除，但是通过checkpoint持久化到数据目录中的数据不会被清除</li>
-</ol>
-<h1 id="Spark任务提交（资源调度）"><a href="#Spark任务提交（资源调度）" class="headerlink" title="Spark任务提交（资源调度）"></a>Spark任务提交（资源调度）</h1><h2 id="基于Standalone-client模式提交任务"><a href="#基于Standalone-client模式提交任务" class="headerlink" title="基于Standalone-client模式提交任务"></a>基于Standalone-client模式提交任务</h2><h3 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
-<li>在客户端提交Spark application ，在客户端<strong>启动Driver</strong></li>
+<h1 id="Spark资源调度（任务提交）"><a href="#Spark资源调度（任务提交）" class="headerlink" title="Spark资源调度（任务提交）"></a>Spark资源调度（任务提交）</h1><h2 id="基于Standalone-client模式提交任务"><a href="#基于Standalone-client模式提交任务" class="headerlink" title="基于Standalone-client模式提交任务"></a>基于Standalone-client模式提交任务</h2><h3 id="执行流程"><a href="#执行流程" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
+<li>在客户端提交Spark application后 ，在客户端首先<strong>启动Driver</strong></li>
 <li>客户端向Master申请资源，Master 会找到满足资源的worker节点，<strong>启动Executor</strong></li>
 <li>Exeuctor启动之后会<strong>反向注册给Driver</strong>，<strong>Driver发送，监控Task并回收结果</strong></li>
 </ol>
-<h3 id="执行流程图"><a href="#执行流程图" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/standalone-client.png" style="zoom:100%;"></p>
-<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ol>
-<li>client 模式<strong>适用于程序测试</strong>，不适用于生产环境，当在客户端提交多个application时，有网卡流量激增的问题</li>
-<li>在客户端可以<strong>看到Task的执行和结果</strong></li>
-</ol>
-<h2 id="基于Standalone-client模式提交任务-1"><a href="#基于Standalone-client模式提交任务-1" class="headerlink" title="基于Standalone-client模式提交任务"></a>基于Standalone-client模式提交任务</h2><h3 id="执行流程-1"><a href="#执行流程-1" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
+<h3 id="执行流程图"><a href="#执行流程图" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/standalone-client.png" style="zoom:100%;"></p>
+<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><ul>
+<li><p>优点</p>
+<p>在客户端可以<strong>看到Task的执行和结果</strong></p>
+</li>
+<li><p>缺点</p>
+<p>当在客户端提交多个application时，有网卡流量激增的问题</p>
+</li>
+<li><p>使用场景</p>
+<p>client 模式<strong>适用于程序测试</strong>，不适用于生产环境</p>
+</li>
+</ul>
+<h2 id="基于Standalone-cluster模式提交任务"><a href="#基于Standalone-cluster模式提交任务" class="headerlink" title="基于Standalone-cluster模式提交任务"></a>基于Standalone-cluster模式提交任务</h2><h3 id="执行流程-1"><a href="#执行流程-1" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
 <li>在客户端提交Spark application，客户端会向Mater申请启动Driver，Master随机找到一台满足资源的Worker<strong>启动Driver</strong></li>
 <li>客户端向Master申请资源，Master 会找到满足资源的worker节点，<strong>启动Executor</strong></li>
 <li>Exeuctor启动之后会<strong>反向注册给Driver</strong>，<strong>Driver发送，监控Task并回收结果</strong></li>
 </ol>
-<h3 id="执行流程图-1"><a href="#执行流程图-1" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/standalone-cluster.png" alt></p>
-<h3 id="注意-1"><a href="#注意-1" class="headerlink" title="注意"></a>注意</h3><ol>
-<li>cluster 模式<strong>适用于生产环境</strong>，当在客户端提交多个application时，将网卡流量激增的问题分散到集群中</li>
-<li>在客户端可以<strong>看不到Task的执行和结果</strong>，要去WebUI中查看</li>
-</ol>
+<h3 id="执行流程图-1"><a href="#执行流程图-1" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/standalone-cluster.png" alt></p>
+<h3 id="注意-1"><a href="#注意-1" class="headerlink" title="注意"></a>注意</h3><ul>
+<li><p>优点</p>
+<p>当在客户端提交多个application时，将网卡流量激增的问题分散到集群中</p>
+</li>
+<li><p>缺点</p>
+<p>在客户端可以<strong>看不到Task的执行和结果</strong>，要去WebUI中查看</p>
+</li>
+<li><p>使用场景</p>
+<p>cluster 模式<strong>适用于生产环境</strong>，</p>
+</li>
+</ul>
 <h2 id="基于Yarn-client模式提交任务"><a href="#基于Yarn-client模式提交任务" class="headerlink" title="基于Yarn-client模式提交任务"></a>基于Yarn-client模式提交任务</h2><h3 id="执行流程-2"><a href="#执行流程-2" class="headerlink" title="执行流程"></a>执行流程</h3><ol>
 <li>在客户端提交Application， 在客户端<strong>启动Driver</strong></li>
 <li>客户端向RS申请启动AM，RS收到请求之后，随机在一台NM中<strong>启动AM</strong></li>
 <li>AM启动之后，会向RS申请资源，RS返回一批NM，AM连接这些NM<strong>启动Executor</strong></li>
 <li>Executor启动之后，会<strong>反向注册给Driver</strong>，<strong>Driver发送，监控Task并回收结果</strong></li>
 </ol>
-<h3 id="执行流程图-2"><a href="#执行流程图-2" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/yarn-client.png" alt></p>
+<h3 id="执行流程图-2"><a href="#执行流程图-2" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/yarn-client.png" alt></p>
 <h3 id="注意-2"><a href="#注意-2" class="headerlink" title="注意"></a>注意</h3><ol>
 <li>client 模式<strong>适用于程序测试</strong>，不适用于生产环境，当在客户端提交多个application时，有网卡流量激增的问题</li>
 <li>在客户端可以<strong>看到Task的执行和结果</strong></li>
@@ -441,7 +341,7 @@
 <li>AM（Driver）启动之后，会向RS申请资源，RS返回一批NM，AM连接这些NM<strong>启动Executor</strong></li>
 <li>Executor启动之后，会<strong>反向注册给AM（Driver），AM（Driver）发送，监控task并回收结果</strong></li>
 </ol>
-<h3 id="执行流程图-3"><a href="#执行流程图-3" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/yarn-cluster.png" alt></p>
+<h3 id="执行流程图-3"><a href="#执行流程图-3" class="headerlink" title="执行流程图"></a>执行流程图</h3><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/yarn-cluster.png" alt></p>
 <h3 id="注意-3"><a href="#注意-3" class="headerlink" title="注意"></a>注意</h3><ol>
 <li>cluster 模式<strong>适用于生产环境</strong>，当在客户端提交多个application时，将网卡流量激增的问题分散到集群中</li>
 <li>在客户端可以<strong>看不到Task的执行和结果</strong>，要去WebUI中查看</li>
@@ -489,11 +389,11 @@
 <li>reduceByKey(xxxx, numPartition)</li>
 <li>distinct(xxxx,numPartition)</li>
 <li>join(xxxx,numPartition)</li>
-<li>repartition<h1 id="Spark任务调度"><a href="#Spark任务调度" class="headerlink" title="Spark任务调度"></a>Spark任务调度</h1></li>
+<li>repartition</li>
 </ul>
 </li>
 </ol>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/任务调度.png" alt></p>
+<h1 id="Spark任务调度"><a href="#Spark任务调度" class="headerlink" title="Spark任务调度"></a>Spark任务调度</h1><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/任务调度.png" alt></p>
 <h1 id="Spark资源调度和任务调度"><a href="#Spark资源调度和任务调度" class="headerlink" title="Spark资源调度和任务调度"></a>Spark资源调度和任务调度</h1><h2 id="资源调度流程"><a href="#资源调度流程" class="headerlink" title="资源调度流程"></a>资源调度流程</h2><ol>
 <li>集群启动，Worker向Master<strong>汇报资源</strong>，Master掌握集群资源</li>
 <li>当 new SparkContext 时，会<strong>启动Driver</strong>，并创建 DAGScheduler 和 TaskScheduler</li>
@@ -506,7 +406,7 @@
 <li>TaskScheduler遍历TaskSet，<strong>拿到一个个的Task，发送到Executor中的线程池中执行</strong></li>
 <li>TaskScheduler<strong>监控Task，回收结果</strong></li>
 </ol>
-<h2 id="调度流程图"><a href="#调度流程图" class="headerlink" title="调度流程图"></a>调度流程图</h2><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/资源调度和任务调度.png" alt></p>
+<h2 id="调度流程图"><a href="#调度流程图" class="headerlink" title="调度流程图"></a>调度流程图</h2><p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/资源调度和任务调度.png" alt></p>
 <h2 id="粗力度细粒度资源申请"><a href="#粗力度细粒度资源申请" class="headerlink" title="粗力度细粒度资源申请"></a>粗力度细粒度资源申请</h2><h3 id="粗粒度申请"><a href="#粗粒度申请" class="headerlink" title="粗粒度申请"></a>粗粒度申请</h3><ul>
 <li>当application执行之前首先将所有的资源申请完毕，如果申请不到一直处于等待状态，直到自愿申请到为止。必须一次申请完毕之后才会执行任务。这样，task执行的时候就不需要自己申请资源，加快了task的执行效率。task执行快了，Job就快了，进而application就快了。<strong>必须要等最后一个task执行完毕之后，资源才会被释放</strong></li>
 <li>优点：Application执行快</li>
@@ -527,7 +427,7 @@
 <p>Spark中有两种shuffleManager，在Spark 1.2之后引入的SortShuffleManager，1.6默认使用的是SortShuffleManager，2.0+HashShuffleManager 被丢弃</p>
 <h2 id="HashShuffleManager"><a href="#HashShuffleManager" class="headerlink" title="HashShuffleManager"></a>HashShuffleManager</h2><h3 id="普通机制"><a href="#普通机制" class="headerlink" title="普通机制"></a>普通机制</h3><ul>
 <li><p>示意图</p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hashshuffle-普通.png" alt></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/hashshuffle-普通.png" alt></p>
 </li>
 <li><p>流程</p>
 <ol>
@@ -554,7 +454,7 @@
 </ul>
 <h3 id="合并机制"><a href="#合并机制" class="headerlink" title="合并机制"></a>合并机制</h3><ul>
 <li><p>示意图</p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hashshuffle-合并.png" alt></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/hashshuffle-合并.png" alt></p>
 </li>
 <li><p>流程</p>
 <ol>
@@ -573,7 +473,7 @@
 </ul>
 <h2 id="SortShuffleManager"><a href="#SortShuffleManager" class="headerlink" title="SortShuffleManager"></a>SortShuffleManager</h2><h3 id="普通机制-1"><a href="#普通机制-1" class="headerlink" title="普通机制"></a>普通机制</h3><ul>
 <li><p>普通机制示意图</p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/sortshuffle-普通.png" style="zoom:80%;"></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/sortshuffle-普通.png" style="zoom:80%;"></p>
 </li>
 <li><p>流程</p>
 <ol>
@@ -593,7 +493,7 @@
 <h3 id="bypass机制"><a href="#bypass机制" class="headerlink" title="bypass机制"></a>bypass机制</h3><ul>
 <li>bypass机制示意图</li>
 </ul>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/sortshuffle-bypass.png" alt></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记下/sortshuffle-bypass.png" alt></p>
 <ul>
 <li><p>流程<br>与普通机制相比，溢写磁盘没有排序</p>
 </li>
@@ -612,7 +512,7 @@
 <p>为了解决上述问题，引入了广播变量。将变量广播之后，在在Executor中的block manager中就有两相应的广播变量，之后每次task传输的时候不需要携带广播变量，如果在Executor中需要广播变量的话，那么就可以block manager中寻找需要的广播变量</p>
 </li>
 <li><p><strong>示意图</strong></p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/广播变量.png" alt></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记/广播变量.png" alt></p>
 </li>
 <li><p>语法格式</p>
 </li>
@@ -634,10 +534,10 @@
 <p>为了解决上述问题，引入了累加器。有了累加器之后，我们就可以将各个分区的i加在一起</p>
 </li>
 <li><p>示意图</p>
-<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/累加器.png" alt></p>
+<p><img src="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/huangning/HNBlog/source/_posts/SparkCore学习笔记/累加器.png" alt></p>
 </li>
 <li><p>语法格式</p>
-<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建累加器对象，初始值默认为0</span></span><br><span class="line"><span class="keyword">val</span> accum: <span class="type">LongAccumulator</span> = sc.longAccumulator</span><br><span class="line"></span><br><span class="line"><span class="comment">// 将数据加载成5个分区的RDD</span></span><br><span class="line"><span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">val</span> rdd2: <span class="type">RDD</span>[<span class="type">String</span>] = words.map(one =&gt; &#123;</span><br><span class="line">  accum.add(<span class="number">1</span>)</span><br><span class="line">  println(<span class="string">s"Executor accumulator = <span class="subst">$&#123;accum&#125;</span>"</span>)</span><br><span class="line">  one</span><br><span class="line">&#125;)</span><br><span class="line">rdd2.collect()</span><br><span class="line"></span><br><span class="line">println(<span class="string">s"accumulator = <span class="subst">$&#123;accum.value&#125;</span>"</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">object</span> <span class="title">AccumulatorTest</span> </span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">main</span></span>(args: <span class="type">Array</span>[<span class="type">String</span>]): <span class="type">Unit</span> = &#123;</span><br><span class="line">    <span class="keyword">val</span> spark: <span class="type">SparkSession</span> = <span class="type">SparkSession</span>.builder().appName(<span class="string">"test"</span>).master(<span class="string">"local"</span>).getOrCreate()</span><br><span class="line">    <span class="keyword">val</span> sc: <span class="type">SparkContext</span> = spark.sparkContext</span><br><span class="line">    sc.setLogLevel(<span class="string">"Error"</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始值默认为0</span></span><br><span class="line">    <span class="keyword">val</span> accum: <span class="type">LongAccumulator</span> = sc.longAccumulator</span><br><span class="line">    <span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>, <span class="number">5</span>)</span><br><span class="line">    <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line">    <span class="keyword">val</span> rdd2: <span class="type">RDD</span>[<span class="type">String</span>] = words.map(one =&gt; &#123;</span><br><span class="line">      i += <span class="number">1</span></span><br><span class="line">      println(<span class="string">s"current i value = <span class="subst">$i</span>"</span>)</span><br><span class="line">      accum.add(<span class="number">1</span>)</span><br><span class="line">      println(<span class="string">s"Executor accumulator = <span class="subst">$accum</span>"</span>)</span><br><span class="line">      one</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 变量i是在executor中累加，但是打印的i是仍然是在driver端中的i</span></span><br><span class="line">    rdd2.foreach(println)</span><br><span class="line">    println(<span class="string">s"driver端的i值为<span class="subst">$i</span>"</span>)</span><br><span class="line">    println(<span class="string">s"accumulator = <span class="subst">$&#123;accum.value&#125;</span>"</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>注意</p>
 <ul>
@@ -667,12 +567,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="SparkSQL学习笔记">
-      <i class="fa fa-chevron-left"></i> SparkSQL学习笔记
+    <a href="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/" rel="prev" title="SparkCore学习笔记（上）">
+      <i class="fa fa-chevron-left"></i> SparkCore学习笔记（上）
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/06/17/Scala%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Scala学习笔记">
-      Scala学习笔记 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="SparkSQL学习笔记">
+      SparkSQL学习笔记 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -738,7 +638,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark与MR的区别"><span class="nav-number">1.</span> <span class="nav-text">Spark与MR的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark运行模式"><span class="nav-number">2.</span> <span class="nav-text">Spark运行模式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark核心RDD"><span class="nav-number">3.</span> <span class="nav-text">Spark核心RDD</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD的创建"><span class="nav-number">3.1.</span> <span class="nav-text">RDD的创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD的五大特性"><span class="nav-number">3.2.</span> <span class="nav-text">RDD的五大特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD注意事项"><span class="nav-number">3.3.</span> <span class="nav-text">RDD注意事项</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark的代码流程"><span class="nav-number">4.</span> <span class="nav-text">Spark的代码流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala完整版"><span class="nav-number">4.1.</span> <span class="nav-text">Scala完整版</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scala简洁版"><span class="nav-number">4.2.</span> <span class="nav-text">Scala简洁版</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算子"><span class="nav-number">5.</span> <span class="nav-text">算子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformation"><span class="nav-number">5.1.</span> <span class="nav-text">Transformation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行算子"><span class="nav-number">5.2.</span> <span class="nav-text">执行算子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化算子"><span class="nav-number">5.3.</span> <span class="nav-text">持久化算子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cache"><span class="nav-number">5.3.1.</span> <span class="nav-text">cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#persist"><span class="nav-number">5.3.2.</span> <span class="nav-text">persist</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#checkpoint"><span class="nav-number">5.3.3.</span> <span class="nav-text">checkpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#持久化算子之间联系和区别"><span class="nav-number">5.3.4.</span> <span class="nav-text">持久化算子之间联系和区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark任务提交（资源调度）"><span class="nav-number">6.</span> <span class="nav-text">Spark任务提交（资源调度）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-client模式提交任务"><span class="nav-number">6.1.</span> <span class="nav-text">基于Standalone-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程"><span class="nav-number">6.1.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图"><span class="nav-number">6.1.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">6.1.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-client模式提交任务-1"><span class="nav-number">6.2.</span> <span class="nav-text">基于Standalone-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-1"><span class="nav-number">6.2.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-1"><span class="nav-number">6.2.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-1"><span class="nav-number">6.2.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-client模式提交任务"><span class="nav-number">6.3.</span> <span class="nav-text">基于Yarn-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-2"><span class="nav-number">6.3.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-2"><span class="nav-number">6.3.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-2"><span class="nav-number">6.3.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-cluster模式提交任务"><span class="nav-number">6.4.</span> <span class="nav-text">基于Yarn-cluster模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-3"><span class="nav-number">6.4.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-3"><span class="nav-number">6.4.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-3"><span class="nav-number">6.4.3.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stage"><span class="nav-number">7.</span> <span class="nav-text">Stage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark任务调度"><span class="nav-number">8.</span> <span class="nav-text">Spark任务调度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark资源调度和任务调度"><span class="nav-number">9.</span> <span class="nav-text">Spark资源调度和任务调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源调度流程"><span class="nav-number">9.1.</span> <span class="nav-text">资源调度流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务调度流程"><span class="nav-number">9.2.</span> <span class="nav-text">任务调度流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度流程图"><span class="nav-number">9.3.</span> <span class="nav-text">调度流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粗力度细粒度资源申请"><span class="nav-number">9.4.</span> <span class="nav-text">粗力度细粒度资源申请</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#粗粒度申请"><span class="nav-number">9.4.1.</span> <span class="nav-text">粗粒度申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#细粒度申请"><span class="nav-number">9.4.2.</span> <span class="nav-text">细粒度申请</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SparkShuffle"><span class="nav-number">10.</span> <span class="nav-text">SparkShuffle</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shuffle的提出"><span class="nav-number">10.1.</span> <span class="nav-text">Shuffle的提出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashShuffleManager"><span class="nav-number">10.2.</span> <span class="nav-text">HashShuffleManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通机制"><span class="nav-number">10.2.1.</span> <span class="nav-text">普通机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并机制"><span class="nav-number">10.2.2.</span> <span class="nav-text">合并机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortShuffleManager"><span class="nav-number">10.3.</span> <span class="nav-text">SortShuffleManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通机制-1"><span class="nav-number">10.3.1.</span> <span class="nav-text">普通机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bypass机制"><span class="nav-number">10.3.2.</span> <span class="nav-text">bypass机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播变量"><span class="nav-number">11.</span> <span class="nav-text">广播变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#累加器"><span class="nav-number">12.</span> <span class="nav-text">累加器</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark资源调度（任务提交）"><span class="nav-number">1.</span> <span class="nav-text">Spark资源调度（任务提交）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-client模式提交任务"><span class="nav-number">1.1.</span> <span class="nav-text">基于Standalone-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程"><span class="nav-number">1.1.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图"><span class="nav-number">1.1.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">1.1.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-cluster模式提交任务"><span class="nav-number">1.2.</span> <span class="nav-text">基于Standalone-cluster模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-1"><span class="nav-number">1.2.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-client模式提交任务"><span class="nav-number">1.3.</span> <span class="nav-text">基于Yarn-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-2"><span class="nav-number">1.3.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-2"><span class="nav-number">1.3.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-cluster模式提交任务"><span class="nav-number">1.4.</span> <span class="nav-text">基于Yarn-cluster模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-3"><span class="nav-number">1.4.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-3"><span class="nav-number">1.4.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-3"><span class="nav-number">1.4.3.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stage"><span class="nav-number">2.</span> <span class="nav-text">Stage</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark任务调度"><span class="nav-number">3.</span> <span class="nav-text">Spark任务调度</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark资源调度和任务调度"><span class="nav-number">4.</span> <span class="nav-text">Spark资源调度和任务调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#资源调度流程"><span class="nav-number">4.1.</span> <span class="nav-text">资源调度流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务调度流程"><span class="nav-number">4.2.</span> <span class="nav-text">任务调度流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度流程图"><span class="nav-number">4.3.</span> <span class="nav-text">调度流程图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粗力度细粒度资源申请"><span class="nav-number">4.4.</span> <span class="nav-text">粗力度细粒度资源申请</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#粗粒度申请"><span class="nav-number">4.4.1.</span> <span class="nav-text">粗粒度申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#细粒度申请"><span class="nav-number">4.4.2.</span> <span class="nav-text">细粒度申请</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SparkShuffle"><span class="nav-number">5.</span> <span class="nav-text">SparkShuffle</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Shuffle的提出"><span class="nav-number">5.1.</span> <span class="nav-text">Shuffle的提出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashShuffleManager"><span class="nav-number">5.2.</span> <span class="nav-text">HashShuffleManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通机制"><span class="nav-number">5.2.1.</span> <span class="nav-text">普通机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并机制"><span class="nav-number">5.2.2.</span> <span class="nav-text">合并机制</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SortShuffleManager"><span class="nav-number">5.3.</span> <span class="nav-text">SortShuffleManager</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通机制-1"><span class="nav-number">5.3.1.</span> <span class="nav-text">普通机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bypass机制"><span class="nav-number">5.3.2.</span> <span class="nav-text">bypass机制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播变量"><span class="nav-number">6.</span> <span class="nav-text">广播变量</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#累加器"><span class="nav-number">7.</span> <span class="nav-text">累加器</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -753,18 +653,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -812,12 +712,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">72k</span>
+    <span title="站点总字数">79k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:05</span>
+    <span title="站点阅读时长">1:12</span>
 </div>
 
         
