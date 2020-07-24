@@ -63,8 +63,8 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%8A%B6%E6%80%81.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/gitlog.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit1.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit2.png">
-<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/s2%E7%9A%84%E5%88%A0%E9%99%A4.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit2.png">
+<meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/s2%E7%9A%84%E5%88%A0%E9%99%A4.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit3.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%9B%E5%BB%BA%E5%88%86%E6%94%AF.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF2.png">
@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote11.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote12.png">
 <meta property="article:published_time" content="2020-05-12T02:14:57.000Z">
-<meta property="article:modified_time" content="2020-07-11T07:17:53.002Z">
+<meta property="article:modified_time" content="2020-07-24T02:25:49.431Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="版本控制系统">
 <meta name="twitter:card" content="summary">
@@ -264,7 +264,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-11 15:17:53" itemprop="dateModified" datetime="2020-07-11T15:17:53+08:00">2020-07-11</time>
+                <time title="修改时间：2020-07-24 10:25:49" itemprop="dateModified" datetime="2020-07-24T10:25:49+08:00">2020-07-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -338,9 +338,9 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 接下来创建s1的copy版本s2</span></span><br><span class="line">cp s1 s2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑s2并且修改s1</span></span><br><span class="line">gti status</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit1.png" style="zoom:50%;"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看staging area和working tree中tracked文件的差别</span></span><br><span class="line">git diff</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中的多个文件s1, s2放到staging area中, 使其变成tracked/将被提交的文件</span></span><br><span class="line">git add s1 s2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中首字母为s的文件放到staging area中, 使其变成tracked/将被提交的文件</span></span><br><span class="line">git add s*</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将working tree中的所有文件放到staging area中</span></span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看staging area 和 history中最近一次commit文件的差别</span></span><br><span class="line">git diff --staged</span><br></pre></td></tr></table></figure>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git基本操作/commit2.png" style="zoom:30%;"></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit2.png" style="zoom:30%;"></p>
 <h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看日志的详细信息</span></span><br><span class="line">git <span class="built_in">log</span> -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从working tree和staging area中同时删除s2</span></span><br><span class="line">git rm s2</span><br><span class="line"></span><br><span class="line">git status</span><br></pre></td></tr></table></figure>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/huangning/HNBlog/source/_posts/Git基本操作/s2的删除.png" style="zoom:50%;"></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/s2的删除.png" style="zoom:50%;"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 我们编辑了s1之后，将staging area上的s1覆盖working tree 上的s1</span></span><br><span class="line">git checkout -- s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将最近一次提交的s1仅仅恢复/覆盖到staging area中的该文件</span></span><br><span class="line">git reset HEAD s1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后将staging area上的s1覆盖working tree 上的s1</span></span><br><span class="line">git checkout -- s1</span><br></pre></td></tr></table></figure>
 <h3 id="恢复文件"><a href="#恢复文件" class="headerlink" title="恢复文件"></a>恢复文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 从之前提交的信息中找到与s2有关的日志</span></span><br><span class="line">git <span class="built_in">log</span> -- s2</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/commit3.png" style="zoom:50%;"></p>
@@ -357,11 +357,11 @@
 </ul>
 <h1 id="Branch-和-Merge"><a href="#Branch-和-Merge" class="headerlink" title="Branch 和 Merge"></a>Branch 和 Merge</h1><p><strong>Branch</strong>就是<strong>指向提交信息的指针</strong>，<strong>head</strong> 是告诉我们<strong>目前切换到哪里</strong>的指针，<strong>git</strong> 会自动创建第一个叫<strong>master</strong>的分支。</p>
 <h2 id="创建分支"><a href="#创建分支" class="headerlink" title="创建分支"></a>创建分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch SDN   <span class="comment"># 创建叫SDN的分支</span></span><br><span class="line">git branch auth  <span class="comment"># 创建叫auth的分支</span></span><br><span class="line">git branch       <span class="comment"># 查看目前有哪些分支</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/创建分支.png" alt></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/创建分支.png" style="zoom:50%;"></p>
 <p>ps：图中绿色的分支表明HEAD指针正在指向master分支</p>
 <h2 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout SDN  <span class="comment"># 切换到SDN的分支</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支2.png" alt></p>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支.png" alt></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支2.png" style="zoom:53%;"></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支.png" style="zoom:40%;"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在 SDN 分支中对 s1 文件进行编辑之后要进行 commit</span></span><br><span class="line"><span class="comment"># commit 和 add 可以写在一行，中间用 ";" 隔开</span></span><br><span class="line">git add s1; git commit -m <span class="string">"SDN for s1"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在SDN分支中的文件中进行了编辑之后，切换到auth的分支</span></span><br><span class="line">git checkout auth</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/切换分支3.png" style="zoom:50%;"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># stage 和 commit 同时进行的快捷方式</span></span><br><span class="line"><span class="comment"># 将 tracked 且被修改的文件 add 到 staging area 并且被commit</span></span><br><span class="line">git commit -a -m <span class="string">"auth for s1"</span></span><br></pre></td></tr></table></figure>
@@ -380,7 +380,7 @@
 <h3 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看合并的分支有哪些（用于判断之后删除哪些分支）</span></span><br><span class="line">git branch --merged</span><br></pre></td></tr></table></figure>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/删除分支.png" style="zoom:50%;"></p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除SDN分支</span></span><br><span class="line">git branch -d SDN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除auth的时候会报错，因为我们之前并没有对该分支进行merge</span></span><br><span class="line">git branch -d SDN</span><br></pre></td></tr></table></figure>
-<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/删除分支2.png" alt></p>
+<p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/删除分支2.png" style="zoom:50%;"></p>
 <p>ps: 如果非要删除没有合并的分支，就可以采用</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -D SDN</span><br></pre></td></tr></table></figure>
 <h2 id="Merge-冲突"><a href="#Merge-冲突" class="headerlink" title="Merge 冲突"></a>Merge 冲突</h2><p><strong>Merge冲突</strong>一般发生在我们在合并分支的时候，不同的分支下同一个文件中同一行内容有着不同的修改</p>
@@ -469,10 +469,10 @@
 <p>假如我们fetch下来的commit graph是有两个分支情况，比如它这样婶儿的👇</p>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote10.png" style="zoom:50%;"><br>将两个分支进行合并有两种方法</p>
 <ol>
-<li><p>git merge：将两个分支合并并保留之前每个分支的提交信息</p>
+<li><p><strong>git merge</strong>：将两个分支合并并保留之前每个分支的提交信息</p>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote11.png" style="zoom:50%;"></p>
 </li>
-<li><p>git  rebase：将两个分支合并并删除之前mytask所在的分支记录</p>
+<li><p><strong>git  rebase</strong>：将两个分支合并并删除之前mytask所在的分支记录</p>
 <p><img src="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/remote12.png" style="zoom:50%;"></p>
 </li>
 </ol>
@@ -649,12 +649,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">84k</span>
+    <span title="站点总字数">88k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:16</span>
+    <span title="站点阅读时长">1:20</span>
 </div>
 
         
