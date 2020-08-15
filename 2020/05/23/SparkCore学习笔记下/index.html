@@ -436,8 +436,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/" rel="prev" title="SparkCore学习笔记（上）">
-      <i class="fa fa-chevron-left"></i> SparkCore学习笔记（上）
+    <a href="/2020/05/12/Git%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C/" rel="prev" title="Git学习笔记">
+      <i class="fa fa-chevron-left"></i> Git学习笔记
     </a></div>
       <div class="post-nav-item">
     <a href="/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="SparkSQL学习笔记">
@@ -496,6 +496,10 @@
   <aside class="sidebar">
     <div class="sidebar-inner">
 
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
           文章目录
@@ -510,6 +514,8 @@
           <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Stage"><span class="nav-number">1.</span> <span class="nav-text">Stage</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDD的宽窄依赖"><span class="nav-number">1.1.</span> <span class="nav-text">RDD的宽窄依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#宽依赖（shuffle依赖）"><span class="nav-number">1.1.1.</span> <span class="nav-text">宽依赖（shuffle依赖）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#窄依赖"><span class="nav-number">1.1.2.</span> <span class="nav-text">窄依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">1.1.3.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#相关术语"><span class="nav-number">1.2.</span> <span class="nav-text">相关术语</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#资源层面"><span class="nav-number">1.2.1.</span> <span class="nav-text">资源层面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务层面"><span class="nav-number">1.2.2.</span> <span class="nav-text">任务层面</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stage的生成"><span class="nav-number">1.3.</span> <span class="nav-text">Stage的生成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Stage的并行度"><span class="nav-number">1.3.1.</span> <span class="nav-text">Stage的并行度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spark计算模式"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spark计算模式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Spark提交任务"><span class="nav-number">2.</span> <span class="nav-text">Spark提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-client模式提交任务"><span class="nav-number">2.1.</span> <span class="nav-text">基于Standalone-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程"><span class="nav-number">2.1.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图"><span class="nav-number">2.1.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意"><span class="nav-number">2.1.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Standalone-cluster模式提交任务"><span class="nav-number">2.2.</span> <span class="nav-text">基于Standalone-cluster模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-1"><span class="nav-number">2.2.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-client模式提交任务"><span class="nav-number">2.3.</span> <span class="nav-text">基于Yarn-client模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-2"><span class="nav-number">2.3.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-2"><span class="nav-number">2.3.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-2"><span class="nav-number">2.3.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于Yarn-cluster模式提交任务"><span class="nav-number">2.4.</span> <span class="nav-text">基于Yarn-cluster模式提交任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程-3"><span class="nav-number">2.4.1.</span> <span class="nav-text">执行流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#执行流程图-3"><span class="nav-number">2.4.2.</span> <span class="nav-text">执行流程图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注意-3"><span class="nav-number">2.4.3.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#资源调度-amp-任务调度"><span class="nav-number">3.</span> <span class="nav-text">资源调度&amp;任务调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#调度流程"><span class="nav-number">3.1.</span> <span class="nav-text">调度流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度流程图"><span class="nav-number">3.2.</span> <span class="nav-text">调度流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#补充-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#粗力度细粒度资源申请"><span class="nav-number">3.3.</span> <span class="nav-text">粗力度细粒度资源申请</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#粗粒度申请"><span class="nav-number">3.3.1.</span> <span class="nav-text">粗粒度申请</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#细粒度申请"><span class="nav-number">3.3.2.</span> <span class="nav-text">细粒度申请</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#广播变量"><span class="nav-number">4.</span> <span class="nav-text">广播变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提出背景"><span class="nav-number">4.1.</span> <span class="nav-text">提出背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">4.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意-4"><span class="nav-number">4.3.</span> <span class="nav-text">注意</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#累加器"><span class="nav-number">5.</span> <span class="nav-text">累加器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#提出背景-1"><span class="nav-number">5.1.</span> <span class="nav-text">提出背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍-1"><span class="nav-number">5.2.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意-5"><span class="nav-number">5.3.</span> <span class="nav-text">注意</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
+
+
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -687,5 +693,22 @@ NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
 });
 </script>
 
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
 </html>

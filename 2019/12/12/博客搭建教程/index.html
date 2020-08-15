@@ -515,6 +515,10 @@
   <aside class="sidebar">
     <div class="sidebar-inner">
 
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
       <ul class="sidebar-nav motion-element">
         <li class="sidebar-nav-toc">
           文章目录
@@ -529,6 +533,8 @@
           <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#搭建流程"><span class="nav-number">2.</span> <span class="nav-text">搭建流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GitHub账号注册以及新建仓库"><span class="nav-number">2.1.</span> <span class="nav-text">GitHub账号注册以及新建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装博客需要的框架"><span class="nav-number">2.2.</span> <span class="nav-text">安装博客需要的框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSH-Key"><span class="nav-number">2.3.</span> <span class="nav-text">配置SSH Key</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建Hexo框架"><span class="nav-number">2.4.</span> <span class="nav-text">搭建Hexo框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#将博客关联到GitHub仓库"><span class="nav-number">2.5.</span> <span class="nav-text">将博客关联到GitHub仓库</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用方法"><span class="nav-number">3.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#丰富博客样式"><span class="nav-number">4.</span> <span class="nav-text">丰富博客样式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#注意事项"><span class="nav-number">5.</span> <span class="nav-text">注意事项</span></a></li></ol></div>
       </div>
       <!--/noindex-->
+
+
 
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -706,5 +712,22 @@ NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
 });
 </script>
 
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
 </html>
