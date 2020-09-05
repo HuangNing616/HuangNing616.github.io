@@ -61,8 +61,10 @@
 <meta property="og:description" content="本文记录了小编在学习Linux的过程中总结的常用知识点">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ls-l%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/awk1.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/huangning/HNBlog/source/_posts/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/awk2.png">
 <meta property="article:published_time" content="2020-08-16T03:29:00.000Z">
-<meta property="article:modified_time" content="2020-08-22T13:43:07.962Z">
+<meta property="article:modified_time" content="2020-09-05T03:58:20.378Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Linux快速入门｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
@@ -218,7 +220,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-22 21:43:07" itemprop="dateModified" datetime="2020-08-22T21:43:07+08:00">2020-08-22</time>
+                <time title="修改时间：2020-09-05 11:58:20" itemprop="dateModified" datetime="2020-09-05T11:58:20+08:00">2020-09-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -232,7 +234,13 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" itemprop="url" rel="index">
+                    <span itemprop="name">操作系统</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
                     <span itemprop="name">Linux学习笔记</span>
                   </a>
                 </span>
@@ -250,14 +258,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.4k</span>
+              <span>9.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>9 分钟</span>
             </span>
 
         </div>
@@ -271,8 +279,21 @@
       
         <p>本文记录了小编在学习Linux的过程中总结的常用知识点</p>
 <a id="more"></a>
-<h1 id="Shell"><a href="#Shell" class="headerlink" title="Shell"></a>Shell</h1><p>Shell就是一个进程，分成GUI（Graphical User Interface）和CLI（Command Line Interface）两种类型</p>
+<h1 id="Linux特点"><a href="#Linux特点" class="headerlink" title="Linux特点"></a>Linux特点</h1><p>Linux中一切皆文件，就好比Java中的一切皆对象，Linux有以下特点</p>
 <ol>
+<li><p>目录树</p>
+<p>Linux存在目录树，存在目录树这样的虚拟结构是为了和磁盘分区解耦，增强代码的可移植性，比如只要有两台linux系统的计算机有相同的目录树结构，就可以执行相同的程序</p>
+</li>
+<li><p>和Windows的区别：<br>1）Windows通过<code>%%</code>来取变量值，而Linux通过<code>$</code><br>2）Windows通过<code>;</code>来分割PATH路径，而Linux通过<code>:</code>来分割PATH路径<br>3）Window是图形界面，而Linux是字符串界面</p>
+</li>
+<li><p>文件的后缀名</p>
+<p>在打开文件的时候需要先指定程序再打开文件，所以Linux中文件的后缀名没有意义，但是Windows中的后缀名是有意义的，因为在Windows中打开文件的方式有两种，第一种方式是先指定程序再打开文件，第二种方式是直接双击打开文件，后者的远离原理就是根据文件后缀名先启动相应的程序，然后反过来再打开指定文件</p>
+</li>
+<li><p>文件描述符</p>
+<p>文件描述符（<code>file descriptor</code>）是用来描述输入输出流，其中0表示输入，1表示正常输出，2表示错误输出，类似Java中的输入输出流对象</p>
+</li>
+</ol>
+<h1 id="Linux启动"><a href="#Linux启动" class="headerlink" title="Linux启动"></a>Linux启动</h1><ol>
 <li><p>计算机启动后，其中叫bias的小芯片中的代码导入内存执行，决定从磁盘还是光驱引导操作系统执行</p>
 </li>
 <li><p>在磁盘的0磁道上找到引导程序的分区位置之后，将程序放入内存中执行</p>
@@ -284,11 +305,11 @@
 </li>
 <li><p>将目录挂载到分区，挂载后找到sbin目录</p>
 </li>
-<li><p>找到sbin目录下的init程序（inittab文件），将其放入内存中执行（启动用户的第一个程序init），initab程序的最后一行配置表明操作系统以什么方式启动，其中3表示命令行，5表示图形界面，1表示single方式（使用场景是当所有人都忘记了服务器登陆密码，需要重启服务器，之后就进入了single）</p>
+<li><p>找到sbin目录下的init程序（inittab文件），将其放入内存中执行（启动用户的第一个程序init），inittab程序的最后一行配置表明操作系统以什么方式启动，其中3表示命令行，5表示图形界面，1表示single方式（使用场景是当所有人都忘记了服务器登陆密码，需要重启服务器，之后就进入了single）</p>
 </li>
-<li><p>紧接着吊起第二个程序login</p>
+<li><p>紧接着调起第二个程序login</p>
 </li>
-<li><p>然后切换成bash（shell的实现），它是一种人机交互程序，以命令提示符的方式呈现</p>
+<li><p>然后切换成bash（shell的实现），它是一种人机交互程序，以命令提示符的方式呈现，其中bash是shell的具体实现，shell是一个进程，分成GUI（Graphical User Interface）和CLI（Command Line Interface）两种类型</p>
 </li>
 </ol>
 <h1 id="bash命令"><a href="#bash命令" class="headerlink" title="bash命令"></a>bash命令</h1><ul>
@@ -392,7 +413,7 @@
 <li><p><code>touch</code>：创建新文件或将已有文件统一访问时间（access time），内容修改时间（modify time）以及元数据修改时间（change time） ，touch对已有文件作用可以应用于异地备份或者断网</p>
 </li>
 </ol>
-<h2 id="文本操作命令"><a href="#文本操作命令" class="headerlink" title="文本操作命令"></a>文本操作命令</h2><ol>
+<h1 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h1><ol>
 <li><p><code>cat</code>：查看全文并退出，是外部命令，下面指令为类似的查看操作</p>
 <p>1）<code>more</code>：分页形式，最后退出，一般用在没有滚动条的服务器端，可以用空格和<code>B</code>来控制向下和向上翻页</p>
 <p>2）<code>less</code>：分页形式，最后不退出</p>
@@ -404,8 +425,80 @@
 <p>2）<code>head -3 b.txt | tail -1</code>：将b.txt中的第3行打印出来</p>
 <p>3）<code>echo &quot;/&quot; |xargs ls -l</code>：显示根目录下的文件信息，其中不能使用<code>echo &quot;/&quot; |ls -l</code>查询根目录，因为<code>ls</code>读取接受标准输入中的内容，即不能读取文件内容，所以这种管道用法对<code>ls</code>无效，而<code>xargs</code>是可以在标准输入中读取到内容，xargs将自己的参数理解成字符串，然后模仿shell做split，将第一个子字符串理解为命令，然后将分割后的第2个子字符串进行拼接和之前读取的内容进行拼接执行</p>
 </li>
+<li><p><code>cut</code>：对文本内容进行切割</p>
+<p>1）<code>-d</code>：自定义分隔符，比如<code>-d&#39; &#39;</code>表示按照空格进行切割</p>
+<p>2）<code>-s</code>：不显示没有分隔符的行</p>
+<p>2）<code>-f</code>：选择显示的列，比如<code>-f1,3</code>表示显示第一列和第三列</p>
+</li>
+<li><p><code>sort</code>：对文本内容进行排序，排序分成字典序（默认）和数值序</p>
+<p>1）<code>-n</code>：按照数值排序</p>
+<p>2）<code>-r</code>：倒序排列，比如<code>-nr</code>就是按照数值进行倒序排列</p>
+<p>3）<code>-t</code>：自定义分隔符，比如<code>-t&#39; &#39;</code>是按照空格进行切割</p>
+<p>4）<code>-k</code>：选择排序列，比如<code>-k2</code>是按照第2列进行排序，<code>-k1,3, -k1-3</code>等表示指定多列进行排序，<code>sort -t&#39; &#39; -k2 -n xxx.txt</code>表示按照空格进行分割，针对第二列按照数值进行排序</p>
+<p>5）<code>-u</code>：合并相同行</p>
+<p>6）<code>-f</code>：忽略大小写</p>
+</li>
+<li><p><code>wc</code>：计算文本行数，常用于断点测试，断点测试分成两种，第一种是通过手动监控，可以用wc来判断数据是否完成导入，比如通过<code>cat xxx.txt | wc -l</code>来输出文本的行数，第二种是自动监控，比如监控生成<code>_success</code>数据是否完成导入</p>
+</li>
+<li><p><code>sed</code>：行编辑器，语法格式为sed [options] ‘AddressCommand’ file…</p>
+<p>1）<code>-n</code>：静默模式，不再默认显示模式空间中的内容</p>
+<p>2）<code>-i</code>：直接修改原文件</p>
+<p>3）<code>-e</code>：SCRIPT：可以同时执行多个脚本</p>
+<p>4）<code>-f</code>：/PATH/TO/SET_SED_SCRIPT</p>
+<p>5）<code>-r</code>：表示使用扩展的正则表达式</p>
+<p>行编辑器command</p>
+<p>1）<code>d</code>：删除符合条件的行</p>
+<p>2）<code>p</code>：显示符合条件的行</p>
+<p>3）<code>a\string</code>：在指定的行后面追加新行，内容为string</p>
+<p>4）<code>\n</code>：可以用于换行</p>
+<p>5）<code>i\string</code>：在指定的行前面添加新行，内容为string</p>
+<p>6）<code>r FILE</code>：将指定的文件内容添加到符合条件的行处</p>
+<p>7）<code>w FILE</code>：将地址指定的范围内的行另存至指定的文件夹中</p>
+<p>8）<code>s/pattern/string/</code>修饰符：查找并替换，默认只替换美汉中第一次被模式匹配到的字符串</p>
+<pre><code>- `g`：行内全局替换
+- `i`：忽略字符大小写
+- `s///`：s###，s@@@
+</code></pre><p>行编辑器Address</p>
+<ul>
+<li><p>可以没有</p>
+</li>
+<li><p>需要给定范围</p>
+</li>
+<li><p>查找指定行/str/</p>
+<p>比如希望将<code>inittab</code>文件中最后一行配置的数字替换成5（图形界面）</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">'s/\(id:\)[0-6]\(:initdefault:\)/\15\2/ig'</span> inittab</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<h2 id="VI-全屏文本编辑器"><a href="#VI-全屏文本编辑器" class="headerlink" title="VI 全屏文本编辑器"></a>VI 全屏文本编辑器</h2><h3 id="文件模式"><a href="#文件模式" class="headerlink" title="文件模式"></a>文件模式</h3><h4 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h4><p>按键具有编辑文本功能，默认打开进入编辑模式</p>
+<ol>
+<li><p><code>awk</code>：强大的文本分析工具，相比于grep的查找以及sed的编辑，awk的优势在于可以对数据进行分析并产生报告，简单来讲它就是把文件逐行读入，（空格，制表符）为默认的分隔符将每行切片，切开的部分在进行各种分析处理，语法格式<code>awk -F &#39;pattern + action&#39;{filenames}</code></p>
+<ul>
+<li>支持自定义分隔符</li>
+<li>支持正则表达式匹配</li>
+<li>支持自定义变量，数组a[1]，a[tom]，数组本质是map</li>
+<li>支持内置变量，比如<code>NF</code>表示浏览记录的列的个数，<code>NR</code>表示浏览记录的行数</li>
+<li>支持函数，比如<code>print</code>，<code>split</code>，<code>substr</code>，<code>sub</code>，<code>qsub</code></li>
+<li>支持流程控制语句，类似C语言，比如<code>if</code>、<code>while</code>、<code>do/while</code>、<code>for</code>、<code>break</code>、<code>continue</code></li>
+</ul>
+<p>比如希望查找/etc/passwd的账号名和相应的用户id（第1列和第3列），其中passwd文件按照<code>:</code>分隔符分割一共有7列，分别为：账号名，占位（原来是加密的密码），用户id，用户默认组id，用户描述信息，用户家目录（root用户的家目录在/root，普通用户的家目录在/home/xxx）以及交互接口的程序</p>
+<p><img src="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/awk1.png" style="zoom:67%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 思路: 首先通过冒号分割，然后打印分割后的第一列和第三列并打印</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># awk</span></span><br><span class="line">awk -F<span class="string">':'</span> <span class="string">'&#123;print $1 "," $3&#125;'</span> <span class="comment"># 相当于匿名函数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># cut</span></span><br><span class="line">cut -d<span class="string">':'</span> -f1,3 passwd</span><br></pre></td></tr></table></figure>
+<p>比如希望查找/etc/passwd的账号名和相应的shell（第1列和第7列），而账户与shell之间是以逗号进行分割，在每行的末尾显示行号，列数，并且在所有行开始前添加列名<code>name，shell</code>，在最后一行添加<code>&quot;blue,/bin/nosh&quot;</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># awk，提供了BEGIN和END这两个有名函数</span></span><br><span class="line">awk -F<span class="string">':'</span> <span class="string">'BEGIN&#123;print "name, shell"&#125;&#123;print $1 "," $7 "," NR "," NF&#125;END&#123;print "blue"&#125;'</span> passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>比如搜索/etc/passwd有root关键字的所有行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk <span class="string">'/root/&#123;print $0&#125;'</span> passwd</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>针对数据awk.txt</p>
+<p><img src="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/huangning/HNBlog/source/_posts/Linux学习笔记/awk2.png" style="zoom:67%;"></p>
+<p>统计一月份每个人的工资</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># awk 默认按照空格进行分割，分割后的索引从1开始</span></span><br><span class="line">awk <span class="string">'&#123;split($3, date, "-"); </span></span><br><span class="line"><span class="string">			if(date[2]=="01")&#123;</span></span><br><span class="line"><span class="string">				name[$1]+=$5;</span></span><br><span class="line"><span class="string">        if($2=="0")&#123;</span></span><br><span class="line"><span class="string">        role[$1]="M"</span></span><br><span class="line"><span class="string">        &#125;else&#123;</span></span><br><span class="line"><span class="string">        role[$1]="W"</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">			&#125;</span></span><br><span class="line"><span class="string">		&#125;END&#123;</span></span><br><span class="line"><span class="string">		for(i in name)&#123;  # 增强for循环</span></span><br><span class="line"><span class="string">			print i  "\t" name[i] "\t" role[i]</span></span><br><span class="line"><span class="string">		&#125;   </span></span><br><span class="line"><span class="string">		&#125;'</span> awk</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ol>
+<h1 id="VI编辑器"><a href="#VI编辑器" class="headerlink" title="VI编辑器"></a>VI编辑器</h1><p>VI是一款全凭的文本编辑器，在Linux系统中用VI文本编辑器编辑的文本保存之后，默认是utif-8格式，其中1个字母要开辟一个字节的内存空间，1个汉字要开辟3个字节的空间。最基础的编码格式是ascii编码，但是由于ascii编码包含的内容少，所有后来又有了扩展字符集。接下来简单介绍一下用VI编辑器编辑的文件模式以及模式之间的相互转换</p>
+<h2 id="文件模式"><a href="#文件模式" class="headerlink" title="文件模式"></a>文件模式</h2><h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><p>按键具有编辑文本功能，默认打开进入编辑模式</p>
 <ol>
 <li><p>移动光标</p>
 <p>1）字符：<code>h</code>（左），<code>j</code>（下），<code>k</code>（上），<code>l</code>（右）</p>
@@ -430,11 +523,11 @@
 <p>3）<code>.</code>：重复上一步的操作</p>
 </li>
 </ol>
-<h4 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h4><p>就是正常的输入按键内容</p>
-<h4 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h4><p>接受用户命令输入，比如可以通过set（设置）决定是否展示文本行数</p>
+<h3 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h3><p>就是正常的输入按键内容</p>
+<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>接受用户命令输入，比如可以通过set（设置）决定是否展示文本行数</p>
 <p>1）set nu：展示行数</p>
 <p>2）set nonu：不展示行数</p>
-<h3 id="文件模式转换"><a href="#文件模式转换" class="headerlink" title="文件模式转换"></a>文件模式转换</h3><ol>
+<h2 id="文件模式转换"><a href="#文件模式转换" class="headerlink" title="文件模式转换"></a>文件模式转换</h2><ol>
 <li><p>编辑模式转输入模式</p>
 <p>1）i: 在当前光标所在字符的前面，转为输入模式</p>
 <p>2）a: 在当前光标所在字符的后面，转为输入模式</p>
@@ -450,7 +543,7 @@
 <p><code>ESC</code></p>
 </li>
 </ol>
-<h3 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h3><ol>
+<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><ol>
 <li><p><code>vim /path/xxx.txt</code>：打开path路径下的xxx.txt</p>
 </li>
 <li><p><code>vim +# xxx.txt</code>：打开xxx.txt，并定位于第#行 </p>
@@ -460,7 +553,7 @@
 <li><p><code>vim +/PATTERN xxx.txt</code>：打开xxx.txt，定位至第一次被PATTERN匹配到的行的行首</p>
 </li>
 </ol>
-<h3 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h3><p>进入末行模式<code>：</code></p>
+<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>进入末行模式<code>：</code></p>
 <ol>
 <li><code>:q</code>： 退出，没有动过文件</li>
 <li><code>:wq</code>：保存并退出 ，动过了不后悔</li>
@@ -469,22 +562,55 @@
 <li><code>w!</code>：强行保存</li>
 <li><code>shit+ZZ</code>：在编辑模式中直接保存并退出，不需要冒号（末行模式）</li>
 </ol>
-<h1 id="Linux特点"><a href="#Linux特点" class="headerlink" title="Linux特点"></a>Linux特点</h1><p>Linux中一切皆文件，就好比Java中的一切皆对象，Linux有以下特点</p>
-<ol>
-<li><p>Linux中存在目录树这样的虚拟结构是为了和磁盘分区解耦，增强代码的可移植性，比如只要两台linux系统的计算机有相同的目录树结构，就可以执行执行的程序</p>
-</li>
-<li><p>和Windows的区别：</p>
-<p>1）Windows通过<code>%%</code>来取变量值，而Linux通过<code>$</code></p>
-<p>2）Windows通过<code>;</code>来分割PATH路径，而Linux通过<code>:</code>来分割PATH路径</p>
-<p>3）Window是图形界面，而Linux是字符串界面</p>
-</li>
-<li><p>在Linux系统中用vi文本编辑器编辑的文本保存之后，默认是utif-8格式，其中一个字母要开辟一个字节的内存空间，一个汉字要开辟三个字节的空间（最基础的编码格式是ascii编码，由于ascii编码包含的内容少，所有后来又有了扩展字符集）</p>
-</li>
-<li><p>Linux在打开文件的时候需要先指定程序再打开文件，所以文件的后缀名没有意义，但是在Windows中后缀名是有意义的，因为在Window中除了先指定程序再打开指定文件的方式之外，还可以直接双击文件打开，原理就是根据文件后缀名先启动相应的程序，然后反过来再执行相应的文件</p>
-</li>
-<li><p>file descriptor（文件描述符）：描述输入输出流，取值有0（输入），1（正常输出），2（错误输出），类似Java中的输入输出流对象</p>
-</li>
+<h1 id="字符匹配"><a href="#字符匹配" class="headerlink" title="字符匹配"></a>字符匹配</h1><p>在终端我们可以通过通配符进行匹配文件或者文件名，比如<code>*</code>表示任意长的任意字符，<code>?</code>表示任意一个字符。在这一部分主要介绍一下字符匹配，字符匹配分为静态匹配和动态匹配，静态匹配也叫绝对匹配，比如匹配一个具体的字符串，动态匹配也就是用正则表达式进行匹配，其中正则表达式的操作符分为以下两种</p>
+<h2 id="匹配操作符"><a href="#匹配操作符" class="headerlink" title="匹配操作符"></a>匹配操作符</h2><ol>
+<li><code>\</code>：转义字符</li>
+<li><code>.</code>：匹配任意单个字符</li>
+<li><code>[0-7],[^5],[a-k],[123kb]</code>：匹配其中的存在一个字符</li>
+<li><code>^</code>：行首</li>
+<li><code>$</code>：行尾</li>
+<li><code>\&lt;\&gt;</code>：匹配单词的首尾边界，比如<code>\&lt;abc</code>就是匹配单词abc的开头</li>
+<li><code>｜</code>：连接操作符（基本操作符）</li>
+<li><code>(,)</code>：选择操作符（基本操作符）</li>
+<li><code>\n</code>：反向引用（基本操作符）</li>
 </ol>
+<h2 id="重复操作符"><a href="#重复操作符" class="headerlink" title="重复操作符"></a>重复操作符</h2><ol>
+<li><code>*</code>：匹配前面的字符0至多个</li>
+<li><code>？</code>：匹配前面的字符0至1个（基本操作符）</li>
+<li><code>+</code>：匹配前面的字符1至多个（基本操作符）</li>
+<li><code>{n}</code>：匹配n次（基本操作符）</li>
+<li><code>{n,}</code>：匹配n到多次（基本操作符）</li>
+<li><code>{n,m}</code>：匹配n到m次（基本操作符）</li>
+</ol>
+<p>补充</p>
+<ul>
+<li><code>.*</code>就是匹配任意长度的任意字符，相当于通配符中的<code>*</code></li>
+<li>grep仅支持基本正则表达式以及转义的正则表达式</li>
+</ul>
+<h1 id="用户资源与权限"><a href="#用户资源与权限" class="headerlink" title="用户资源与权限"></a>用户资源与权限</h1><p>用户，资源（文件，目录或者程序）以及权限之间相互绑定才有意义，单说任意一项都没有意义，接下来通过举例子来简单介绍用户，资源与权限</p>
+<h2 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h2><p>有一台服务器以及两个部门，现在需要添加两个用户hn01和hn02</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 普通用户只能用passwd修改自己的密码，root用户可以用passwd修改别人的密码</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加用户hn01(删除用户用userdel)</span></span><br><span class="line">useradd hn01</span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于服务器的安全级别高，每个新增用户必须新添加密码</span></span><br><span class="line">passwd hn01</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入密码，密码不能是回文，字符长度不能小于8</span></span><br><span class="line">xxxxxxxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加用户hn02</span></span><br><span class="line">useradd hn02</span><br><span class="line"></span><br><span class="line"><span class="comment"># 由于服务器的安全级别高，每个新增用户必须新添加密码</span></span><br><span class="line">passwd hn02</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入密码，密码不能是回文，字符长度不能小于8</span></span><br><span class="line">xxxxxxxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过id 用户名可以查看用户id（名称） ,初始组id（名称），以及所有的组groups（名称）</span></span><br><span class="line">id hn01</span><br></pre></td></tr></table></figure>
+<p>之后就可以在<code>/home/</code>下看到两个用户名称</p>
+<h2 id="用户共享文件夹"><a href="#用户共享文件夹" class="headerlink" title="用户共享文件夹"></a>用户共享文件夹</h2><p>将之前新增加的两个用户共享一个文件夹用于工作交流</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 在根目录下创建一个share文件夹</span></span><br><span class="line">mkdir share</span><br><span class="line"><span class="comment"># 创建后可以发现share的属主和属组都是root</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建一个虚拟的组hngroup(删除组用groupdel)</span></span><br><span class="line">groupadd hngroup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 将share的属组更改成刚创建的hngroup</span></span><br><span class="line">chown root:hngroup share</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 将两个用户添加到新建的hngroup里面(相当于修改用户的元信息)</span></span><br><span class="line">usermod -a -G hngroup hn01</span><br><span class="line">usermod -a -G hngroup hn02</span><br><span class="line"></span><br><span class="line"><span class="comment">######### 2-4 完成了用户与资源的绑定 ##########</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 修改share的属组权限，让hn01和hn02都有读share的权利（也就是可以cd进share），使二者成为当前软件的管理员</span></span><br><span class="line"><span class="comment"># 补充</span></span><br><span class="line"><span class="comment"># 1）管理员有两种：第一种是操作系统管理员，也就是root用户，第二种是某个或某些软件的管理员，也就是普通用户</span></span><br><span class="line"><span class="comment"># 2）修改权限有两种方式：第一种是字符型，比如将属主权限增加rwx，属组权限增加rw，其他人权限去掉rw，那么命令就可以写成chmod u+rwx g+rw o-rw; 第二种是数值型，也就是用二进制表示相应权限是否开启，并将其转成十进制作为指令来修改权限</span></span><br><span class="line"><span class="comment"># 3）如果修改当前用户的权限，在修改完权限之后重新进入该用户来刷新权限</span></span><br><span class="line"><span class="comment"># 4）文件夹权限一般是奇数，比如：755，文件权限一般是偶数，比如：664（相比文件夹权限少了x）</span></span><br><span class="line"><span class="comment"># 5）权限x，针对文件夹是cd，针对文件是执行；权限r表示读取文件夹或者文件的元信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">######### 5 完成了与权限的绑定 ##########</span></span><br></pre></td></tr></table></figure>
+<h2 id="控制不同用户的权限"><a href="#控制不同用户的权限" class="headerlink" title="控制不同用户的权限"></a>控制不同用户的权限</h2><p>假设新安装了sql软件，增加了一个sql的管理员用户hnadmin，hnadmin有控制sql的sbin中服务的权限，而之前创建的普通用户hn01和hn02只有执行bin下客户端的权限</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在opt下创建mysql</span></span><br><span class="line">mkdir /opt/mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入mysql创建bin和sbin</span></span><br><span class="line">mkdir &#123;bin, sbin&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加一个管理员用户mysqladmin</span></span><br><span class="line">useradd mysqladmin</span><br><span class="line"></span><br><span class="line"><span class="comment"># 递归地将mysql以及子目录的属主修改成新增的用户</span></span><br><span class="line">chown -R mysqladmin:root mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加一个虚拟的组mysqlgroup</span></span><br><span class="line">groupadd mysqlgroup</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将两个普通用户添加到新建的虚拟组里面</span></span><br><span class="line">usermod -a -G mysqlgroup hn01</span><br><span class="line">usermod -a -G mysqlgroup hn02</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新修改属主和属组信息</span></span><br><span class="line">chown -R mysqladmin:mysqlgroup mysql</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改sbin目录下的权限，只有管理员有修改（w）的权限，其他人没有修改的权限</span></span><br><span class="line"><span class="built_in">cd</span> sbin</span><br><span class="line">chmod 744 xxx.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入bin目录下，使得普通人有执行的权利</span></span><br><span class="line">chown mysqladmin:mysqlgroup mysqlcli.sh</span><br><span class="line">chmod 754 myslqcli.sh</span><br></pre></td></tr></table></figure>
+<h1 id="软件安装"><a href="#软件安装" class="headerlink" title="软件安装"></a>软件安装</h1><p>软件安装一般分成三种类型，<strong>编译安装，包安装</strong>以及<strong>仓库安装</strong>。针对编译安装，虚拟机中会经常用到，比如想要嵌入个性化代码的时候会用到编译安装，但是编译过程（比如javac）往往不是很关心；针对包安装，由于不是所有的仓库都包含所有包，比如java分成open java（apache）以及oracle的java（需要license），后者的包就不再任意一个仓库里面，所以包安装<strong>（rpm）</strong>也比较重要；针对仓库的安装，仓库将依赖的jar包放在一起，比如maven仓库，所以仓库安装<strong>（yum）</strong>也有存在的必要性。下面就简单描述编译安装的一般流程</p>
+<h2 id="编译安装"><a href="#编译安装" class="headerlink" title="编译安装"></a>编译安装</h2><ol>
+<li>用<code>scp</code>将压缩包上传到虚拟机</li>
+<li>用<code>tar xf</code>解压压缩包，然后cd到源码的目录，使用<code>make</code>进行编译安装的前提需要有MakeFile文件，如果没有就读<code>README</code>来定位到安装部分的说明</li>
+<li>查看帮助信息<code>./configure --help | more</code>，发现配置文件未来将安装到<code>--prefix</code>路径，如果没有路径会自动创建路径，执行<code>./configure --prefix=/opt/hn/nginx</code></li>
+<li>发现缺少c编译器，执行<code>yum install gcc -y</code>，再执行<code>./configure --prefix=/opt/hn/nginx</code></li>
+<li>发现缺少PCRE，执行<code>yum search PCRE</code>，发现有版本i686（32位）和i86（64位），yum会自动选择匹配操作系统的版本，执行<code>yum install pcre-devel</code>，输入<code>yes</code>，再执行<code>./configure --prefix=/opt/hn/nginx</code></li>
+<li>发现缺少openssl-devel，通过<code>yum search openssl</code>，执行<code>yum install openss-devel</code>，输入<code>yes</code>（yum会自动安装依赖）</li>
+<li>出现<code>makeFile</code>后执行<code>make</code>，执行流程是首先定位到<code>Makefile</code>中的<code>default</code>，然后到<code>built</code>，然后到<code>objs</code>，最后到真正做事的<code>obj</code>下执行<code>makeFile</code>，这步是真正意义上的安装，即拷贝的过程</li>
+<li>执行<code>make install</code>，执行流是<code>make</code>拿着<code>install</code>打开<code>Makefile</code>，然后定位到<code>install</code>章节，根据内容进入到<code>objs/Makefile</code>，最后找到<code>install</code>进行安装</li>
+<li>cd到<code>/opt/hn/nginx</code>，执行<code>./nginx</code>，因为nginx是webserver，因此可以访问<code>192.168.79.31:80</code>（不用加80的端口号也可以），页面是否成功来判断<strong>编译+安装+执行</strong>是否成功</li>
+</ol>
+<p><strong>补充</strong></p>
+<p>产生<code>makeFile</code>文件之后，用vi打开它可以看到</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">default: build</span><br><span class="line">build: obj&#x2F;makeFile</span><br></pre></td></tr></table></figure>
+<p><code>make</code>是编译和安装的命令， 执行<code>make</code>开始进行编译的时候，如果<code>make</code>后面没有参数，那就默认执行<code>makeFile</code>文件中的<code>default</code>，然后调用<code>built</code>，进而执行<code>obj</code>下面的<code>makeFile</code>进行编译，编译用到的编译器是gcc，其中gcc就是将C语言开源的gnu开源的C语言编译器</p>
 
     </div>
 
@@ -503,10 +629,13 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/07/07/SparkStreaming%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="SparkStreaming学习笔记">
-      <i class="fa fa-chevron-left"></i> SparkStreaming学习笔记
+    <a href="/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="PostMan学习笔记">
+      <i class="fa fa-chevron-left"></i> PostMan学习笔记
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/09/05/SparkML%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="SparkML学习笔记">
+      SparkML学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -575,7 +704,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell"><span class="nav-number">1.</span> <span class="nav-text">Shell</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bash命令"><span class="nav-number">2.</span> <span class="nav-text">bash命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-number">3.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ls-l的介绍"><span class="nav-number">3.1.</span> <span class="nav-text">ls -l的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统层次化标准"><span class="nav-number">3.2.</span> <span class="nav-text">文件系统层次化标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作命令"><span class="nav-number">3.3.</span> <span class="nav-text">文件操作命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文本操作命令"><span class="nav-number">3.4.</span> <span class="nav-text">文本操作命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#VI-全屏文本编辑器"><span class="nav-number">3.5.</span> <span class="nav-text">VI 全屏文本编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件模式"><span class="nav-number">3.5.1.</span> <span class="nav-text">文件模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#编辑模式"><span class="nav-number">3.5.1.1.</span> <span class="nav-text">编辑模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输入模式"><span class="nav-number">3.5.1.2.</span> <span class="nav-text">输入模式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#末行模式"><span class="nav-number">3.5.1.3.</span> <span class="nav-text">末行模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件模式转换"><span class="nav-number">3.5.2.</span> <span class="nav-text">文件模式转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开文件"><span class="nav-number">3.5.3.</span> <span class="nav-text">打开文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭文件"><span class="nav-number">3.5.4.</span> <span class="nav-text">关闭文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux特点"><span class="nav-number">4.</span> <span class="nav-text">Linux特点</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux特点"><span class="nav-number">1.</span> <span class="nav-text">Linux特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux启动"><span class="nav-number">2.</span> <span class="nav-text">Linux启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bash命令"><span class="nav-number">3.</span> <span class="nav-text">bash命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-number">4.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ls-l的介绍"><span class="nav-number">4.1.</span> <span class="nav-text">ls -l的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统层次化标准"><span class="nav-number">4.2.</span> <span class="nav-text">文件系统层次化标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作命令"><span class="nav-number">4.3.</span> <span class="nav-text">文件操作命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本操作"><span class="nav-number">5.</span> <span class="nav-text">文本操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VI编辑器"><span class="nav-number">6.</span> <span class="nav-text">VI编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模式"><span class="nav-number">6.1.</span> <span class="nav-text">文件模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑模式"><span class="nav-number">6.1.1.</span> <span class="nav-text">编辑模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入模式"><span class="nav-number">6.1.2.</span> <span class="nav-text">输入模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#末行模式"><span class="nav-number">6.1.3.</span> <span class="nav-text">末行模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模式转换"><span class="nav-number">6.2.</span> <span class="nav-text">文件模式转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开文件"><span class="nav-number">6.3.</span> <span class="nav-text">打开文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭文件"><span class="nav-number">6.4.</span> <span class="nav-text">关闭文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符匹配"><span class="nav-number">7.</span> <span class="nav-text">字符匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配操作符"><span class="nav-number">7.1.</span> <span class="nav-text">匹配操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复操作符"><span class="nav-number">7.2.</span> <span class="nav-text">重复操作符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户资源与权限"><span class="nav-number">8.</span> <span class="nav-text">用户资源与权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加用户"><span class="nav-number">8.1.</span> <span class="nav-text">添加用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户共享文件夹"><span class="nav-number">8.2.</span> <span class="nav-text">用户共享文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制不同用户的权限"><span class="nav-number">8.3.</span> <span class="nav-text">控制不同用户的权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装"><span class="nav-number">9.</span> <span class="nav-text">软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">9.1.</span> <span class="nav-text">编译安装</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -592,18 +721,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -645,12 +774,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">100k</span>
+    <span title="站点总字数">109k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:31</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
 
         

@@ -53,12 +53,12 @@
   };
 </script>
 
-  <meta name="description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本文从SparkSQL的角度出发，从SparkSQL的发展，DataSet，DataFrame，UDF和UDAF，OverFunction这几个方面来介绍Spark">
+  <meta name="description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本文从SparkSQL的的发展，DataSet，DataFrame，UDF和UDAF，OverFunction来介绍SparkSQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SparkSQL学习笔记">
 <meta property="og:url" content="http://yoursite.com/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本文从SparkSQL的角度出发，从SparkSQL的发展，DataSet，DataFrame，UDF和UDAF，OverFunction这几个方面来介绍Spark">
+<meta property="og:description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本文从SparkSQL的的发展，DataSet，DataFrame，UDF和UDAF，OverFunction来介绍SparkSQL">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E8%B0%93%E8%AF%8D%E4%B8%8B%E6%8E%A8.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%B5%8C%E5%A5%97%E6%A0%BC%E5%BC%8F.png">
@@ -67,7 +67,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/json%E6%95%B0%E7%BB%84%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F.png">
 <meta property="og:image" content="http://yoursite.com/2020/05/23/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/UDAF%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F.png">
 <meta property="article:published_time" content="2020-05-23T10:51:19.000Z">
-<meta property="article:modified_time" content="2020-08-22T06:02:53.763Z">
+<meta property="article:modified_time" content="2020-09-05T04:49:18.126Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="｜统计学|机器学习|python|">
 <meta name="twitter:card" content="summary">
@@ -223,7 +223,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-08-22 14:02:53" itemprop="dateModified" datetime="2020-08-22T14:02:53+08:00">2020-08-22</time>
+                <time title="修改时间：2020-09-05 12:49:18" itemprop="dateModified" datetime="2020-09-05T12:49:18+08:00">2020-09-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -237,13 +237,13 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">Spark学习笔记</span>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式计算</span>
                   </a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/Spark%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/SparkSQL%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
                     <span itemprop="name">SparkSQL学习笔记</span>
                   </a>
                 </span>
@@ -280,7 +280,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>Spark是基于<strong>内存</strong>的计算框架，它主要包括<strong>SparkCore，SparkSQL，SparkML，SparkStreaming</strong>等方面的内容，本文从SparkSQL的角度出发，从SparkSQL的发展，DataSet，DataFrame，UDF和UDAF，OverFunction这几个方面来介绍<strong>Spark</strong></p>
+        <p>Spark是基于<strong>内存</strong>的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等方面的内容，本文从<strong>SparkSQL的的发展，DataSet，DataFrame，UDF和UDAF，OverFunction</strong>来介绍<strong>SparkSQL</strong></p>
 <a id="more"></a>
 <h1 id="SparkSQL的发展"><a href="#SparkSQL的发展" class="headerlink" title="SparkSQL的发展"></a>SparkSQL的发展</h1><p>SparkSQL是支持<strong>使用SQL来查询分布式数据</strong>的技术栈，它的发展过程是<strong>Hive  -&gt; Shark -&gt; SparkSQL</strong></p>
 <h2 id="与Hive的区别"><a href="#与Hive的区别" class="headerlink" title="与Hive的区别"></a>与Hive的区别</h2><p>SparkSQL中写的sql底层解析成Sparkjob，Hive中写的hql底层解析成MRjob</p>
@@ -371,7 +371,7 @@
 </ul>
 <figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="comment">-- load基本语法</span></span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> [<span class="keyword">local</span>] inpath <span class="string">'filepath'</span> [overwrite]</span><br><span class="line"><span class="keyword">into</span> <span class="keyword">table</span> tablename [<span class="keyword">partition</span> (partcol1=val1,partcol2=val2...)]</span><br><span class="line">   </span><br><span class="line"><span class="comment">-- 方式1. 将本地的数据文件导入上步创建的t表，并且覆盖原来的数据</span></span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'./data/student_t.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> t</span><br><span class="line">   </span><br><span class="line"><span class="comment">-- 方式2. 将HDFS中的数据文件导入上步创建的t表，并且覆盖原来的数据</span></span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> inpath <span class="string">'/i/student_t.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> t3</span><br></pre></td></tr></table></figure>
 <h2 id="DataFrame原生API"><a href="#DataFrame原生API" class="headerlink" title="DataFrame原生API"></a>DataFrame原生API</h2><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="keyword">val</span> df: <span class="type">DataFrame</span> = spark.read.json(<span class="string">"./data/json"</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// 打印schema信息</span></span><br><span class="line">df.printSchema()  </span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取第1行数据</span></span><br><span class="line"><span class="keyword">val</span> row1: <span class="type">Row</span> = df.first() 			</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取前4数据</span></span><br><span class="line"><span class="keyword">val</span> rows3: <span class="type">Array</span>[<span class="type">Row</span>] = df.head(<span class="number">4</span>) 		</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取前4数据</span></span><br><span class="line"><span class="keyword">val</span> rows2: <span class="type">Array</span>[<span class="type">Row</span>] = df.take(<span class="number">4</span>) 							     </span><br><span class="line"></span><br><span class="line"><span class="comment">// 展示前rownum行的数据(默认展示前20行)，truncate=false 表示将数据展开</span></span><br><span class="line">df.show(rownum, truncate=<span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// 查询方法</span></span><br><span class="line"><span class="keyword">val</span> df1: <span class="type">DataFrame</span> = df.select(<span class="string">"name"</span>) </span><br><span class="line"><span class="keyword">val</span> df2: <span class="type">DataFrame</span> = df.select(<span class="string">"name"</span>, <span class="string">"age"</span>) </span><br><span class="line"><span class="keyword">val</span> df3: <span class="type">DataFrame</span> = df.select($<span class="string">"name"</span>.as(<span class="string">"studentNanme"</span>), $<span class="string">"age"</span>)</span><br><span class="line"><span class="keyword">val</span> df4: <span class="type">DataFrame</span> = df.select($<span class="string">"name"</span>, ($<span class="string">"age"</span> + <span class="number">1</span>).as(<span class="string">"addAge"</span>))</span><br><span class="line"><span class="keyword">val</span> df5: <span class="type">DataFrame</span> = df.select(df.col(<span class="string">"name"</span>) , (df.col(<span class="string">"age"</span>) + <span class="number">1</span>).as(<span class="string">"addAge"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 过滤方法</span></span><br><span class="line"><span class="keyword">val</span> df1: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.filter(<span class="string">"age &gt; 18"</span>) </span><br><span class="line"><span class="keyword">val</span> df2: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.filter($<span class="string">"age"</span>&gt;<span class="number">18</span>)</span><br><span class="line"><span class="keyword">val</span> df3: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.filter(df.col(<span class="string">"age"</span>)&gt;<span class="number">18</span>)</span><br><span class="line"><span class="keyword">val</span> df4: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.filter(df.col(<span class="string">"name"</span>).equalTo(<span class="string">"zhangsan"</span>))</span><br><span class="line"><span class="keyword">val</span> df5: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.filter(<span class="string">"name = 'zhangsan4' or name = 'zhangsan5'"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 排序方法</span></span><br><span class="line"><span class="keyword">val</span> df1: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.sort($<span class="string">"age"</span>.asc, $<span class="string">"name"</span>.desc)</span><br><span class="line"><span class="keyword">val</span> df2: <span class="type">Dataset</span>[<span class="type">Row</span>] = df.sort(df.col(<span class="string">"age"</span>).asc, df.col(<span class="string">"name"</span>).desc)</span><br><span class="line"><span class="keyword">val</span> df3: <span class="type">DataFrame</span> = df.select(df.col(<span class="string">"name"</span>).as(<span class="string">"studentName"</span>), df.col(<span class="string">"age"</span>).alias(<span class="string">"studentAge"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// 分组方法</span></span><br><span class="line"><span class="keyword">val</span> df1: <span class="type">DataFrame</span> = df.groupBy(<span class="string">"age"</span>).count() </span><br><span class="line"></span><br><span class="line"><span class="comment">// map方法</span></span><br><span class="line"><span class="comment">// 数据框中的每一行都是Row类型，它可以像数组一样可以通过下标获取值</span></span><br><span class="line"><span class="comment">// Row类型相比数组的优点是保存列信息，也就是可以根据row中的字段名称获取值</span></span><br><span class="line"><span class="keyword">val</span> df1: <span class="type">DataFrame</span> = df.map(row =&gt; <span class="string">"Name: "</span> + row(<span class="number">0</span>)).show()</span><br><span class="line"><span class="keyword">val</span> df2: <span class="type">DataFrame</span> = df.map(row =&gt; <span class="string">"name: "</span> + row.getAs[<span class="type">String</span>](<span class="string">"name"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// join方法: 每一种连接方法都会将两个连接键保留</span></span><br><span class="line"><span class="comment">// 1. 内连接</span></span><br><span class="line"><span class="keyword">val</span> inner_df1 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>))</span><br><span class="line"><span class="keyword">val</span> inner_df2 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"inner"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 左连接</span></span><br><span class="line"><span class="keyword">val</span> left_df1 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"left"</span>)</span><br><span class="line"><span class="keyword">val</span> left_df2 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"left_outer"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 右连接</span></span><br><span class="line"><span class="keyword">val</span> right_df1 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"right"</span>)</span><br><span class="line"><span class="keyword">val</span> right_df2 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"right_outer"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 全连接</span></span><br><span class="line"><span class="keyword">val</span> outer_df1 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"full"</span>)</span><br><span class="line"><span class="keyword">val</span> outer_df2 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"outer"</span>)</span><br><span class="line"><span class="keyword">val</span> outer_df3 = df1.join(df2, df1(<span class="string">"name"</span>) === df2(<span class="string">"name"</span>), joinType = <span class="string">"full_outer"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据框列名的重命名</span></span><br><span class="line"><span class="keyword">import</span> spark.implicits._ </span><br><span class="line"><span class="keyword">val</span> temp: <span class="type">DataFrame</span> = df.withColumnRenamed(<span class="string">"name"</span>, <span class="string">"people_name"</span>)</span><br><span class="line"><span class="keyword">val</span> temp: <span class="type">DataFrame</span> = idMappingDF.select($<span class="string">"name"</span>.alias(<span class="string">"people_name"</span>))</span><br><span class="line"><span class="keyword">val</span> temp: <span class="type">DataFrame</span> = idMappingDF.select($<span class="string">"name"</span>.as(<span class="string">"people_name"</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">// DataFrame转成Row类型的RDD</span></span><br><span class="line"><span class="keyword">val</span> rdd: <span class="type">RDD</span>[<span class="type">Row</span>] = df.rdd</span><br><span class="line">rdd.foreach(row =&gt; &#123;</span><br><span class="line">  <span class="comment">//打印row</span></span><br><span class="line">  println(row)</span><br><span class="line">  <span class="comment">// row中获取值的两种方式：1.getAs("字段名") 2.getAs(下标)</span></span><br><span class="line">  <span class="keyword">val</span> nameField: <span class="type">String</span> = row.getAs[<span class="type">String</span>](<span class="string">"name"</span>)</span><br><span class="line">  <span class="keyword">val</span> ageField: <span class="type">Long</span> = row.getAs[<span class="type">Long</span>](<span class="string">"age"</span>)</span><br><span class="line">  <span class="keyword">val</span> nameIndex: <span class="type">String</span> = row.getAs[<span class="type">String</span>](<span class="number">1</span>)</span><br><span class="line">  <span class="keyword">val</span> ageIndex: <span class="type">Long</span> = row.getAs[<span class="type">Long</span>](<span class="number">0</span>)</span><br><span class="line">  println(<span class="string">s"name = <span class="subst">$nameIndex</span>, age = <span class="subst">$ageIndex</span>"</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
-<p>总结：</p>
+<p><strong>补充</strong></p>
 <ul>
 <li>filter/sort 得到的结果是DataSet</li>
 <li>df.col(“xxx”) 和 $xxx的作用相同</li>
@@ -498,18 +498,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">17</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -551,12 +551,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">100k</span>
+    <span title="站点总字数">109k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:31</span>
+    <span title="站点阅读时长">1:39</span>
 </div>
 
         

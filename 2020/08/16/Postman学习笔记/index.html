@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="说在前面的话Postman是一款功能强大的网页调试与发送HTTP请求的工具，通过它可以发送任意类型的HTTP请求，比如GET，POST，HEAD，DELETE，还支持不同的认证机制，比如basic，digest，OAuth。本文主要介绍PostMan中HTTP消息，测试用例的3A原则以及变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostMan学习笔记">
+<meta property="og:url" content="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="说在前面的话Postman是一款功能强大的网页调试与发送HTTP请求的工具，通过它可以发送任意类型的HTTP请求，比如GET，POST，HEAD，DELETE，还支持不同的认证机制，比如basic，digest，OAuth。本文主要介绍PostMan中HTTP消息，测试用例的3A原则以及变量">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HTTP%E8%AF%B7%E6%B1%82.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8Ba.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%8F%98%E9%87%8Fa.png">
+<meta property="article:published_time" content="2020-08-16T03:29:00.000Z">
+<meta property="article:modified_time" content="2020-09-05T03:59:20.147Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="Postman快速入门｜计算机学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HTTP%E8%AF%B7%E6%B1%82.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>PostMan学习笔记 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="穷尽一生探索普通人的天花板">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PostMan学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-16 11:29:00" itemprop="dateCreated datePublished" datetime="2020-08-16T11:29:00+08:00">2020-08-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-05 11:59:20" itemprop="dateModified" datetime="2020-09-05T11:59:20+08:00">2020-09-05</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Postman学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.2k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>Postman是一款功能强大的网页调试与发送HTTP请求的工具，通过它可以发送任意类型的HTTP请求，比如<code>GET</code>，<code>POST</code>，<code>HEAD</code>，<code>DELETE</code>，还支持不同的认证机制，比如<code>basic</code>，<code>digest</code>，<code>OAuth</code>。本文主要介绍PostMan中<strong>HTTP消息</strong>，测试用例的<strong>3A原则</strong>以及<strong>变量</strong></p>
+<a id="more"></a>
+<h1 id="HTTP消息"><a href="#HTTP消息" class="headerlink" title="HTTP消息"></a>HTTP消息</h1><p>HTTP消息，即数据的交换方式有<strong>请求（request）和响应（response）</strong></p>
+<p><img src="/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HTTP请求.png" style="zoom:30%;"></p>
+<h2 id="HTTP-请求"><a href="#HTTP-请求" class="headerlink" title="HTTP 请求"></a>HTTP 请求</h2><p>HTTP 请求分成<code>GET</code>，<code>POST</code>，<code>HEAD</code>，<code>DELETE</code>这四种类型，它的结构分成以下3部分</p>
+<ol>
+<li>状态行/起始行：版本协议 + url + 其他</li>
+<li><code>header</code>（配置信息）：一长串的字符串，中间是<code>key：value</code>的形式</li>
+<li><code>body</code>：请求的具体信息，比如在进行spark任务请求的时候，用的是<code>post</code>类型<code>body</code>中的<code>row</code>来编辑具体任务，但是 <code>GET</code>，<code>HEAD</code>，<code>DELETE</code> 都不需要<code>body</code></li>
+</ol>
+<h2 id="HTTP-响应"><a href="#HTTP-响应" class="headerlink" title="HTTP 响应"></a>HTTP 响应</h2><p>HTTP 响应的结构分成以下3部分</p>
+<ol>
+<li>状态行/起始行：版本协议 + 状态码（status code） + 状态文本（status code），其中2xx，3xx表示请求成功，4xx（请求问题），5xx（存在Bug）表示请求失败，常出现的状态码有以下几种<br>1）200 OK（请求成功）<br>2）201 created（资源成功被创建）<br>3）3xx 重定向，比如请求一个api之后又跳转到其他页面<br>4）400 缺参数<br>5）401 需要健全<br>6）403 没有权限访问<br>7）404 找不到资源<br>8）405 请求方法错误<br>9）500 接口存在问题<br>10）502 bad gate</li>
+<li><code>header</code>（配置信息）：一长串的字符串，中间是<code>key：value</code>的形式</li>
+<li><code>body</code>：包含状态信息，响应的结果，其中不是所有状态下的响应都有body，比如状态码为201和204的时候就没有body</li>
+</ol>
+<h1 id="3A原则"><a href="#3A原则" class="headerlink" title="3A原则"></a>3A原则</h1><p>如果想要通过PostMan写测试用例，那么可以在在request模块的Test部分编辑测试用例，在response模块的Test Result部分查看，在编写测试用例的时候需要遵循的<strong>3A原则</strong></p>
+<ol>
+<li>arrange：测试用例的初始化</li>
+<li>act：传不同参数来调不同接口</li>
+<li>assert（断言）：根据response来写断言，判断实际的response结果和预期结果是否一致</li>
+</ol>
+<p>接下来实现”返回状态码是200，返回以获取10条内容”的测试用例</p>
+<p><img src="/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/测试用例a.png" style="zoom:30%;"></p>
+<h1 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h1><p>本着数据驱动的目的而不用固定常量作为参数的目的提出了变量的概念，语法格式为<code></code>，变量分为<strong>本地变量，环境变量以及全局变量</strong></p>
+<ol>
+<li><strong>本地变量</strong>：在sandbox中（沙箱）进行定义的变量，其中Test或者Pre-request Script中写的测试用例都是sandbox中执行的，sandbox就是 JS（Java Script）执行环境</li>
+<li><strong>环境变量</strong>：是在指定环境中定义的变量</li>
+<li><strong>全局变量</strong>：是指不在任何一个环境中的时候所调用的变量</li>
+</ol>
+<p>其中从外部导入的变量值会覆盖环境变量或者全局变量的变量值</p>
+<p><img src="/2020/08/16/Postman%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/变量a.png" style="zoom:30%;"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/Postman%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># Postman快速入门｜计算机学习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/07/SparkStreaming%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="SparkStreaming学习笔记">
+      <i class="fa fa-chevron-left"></i> SparkStreaming学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Linux学习笔记">
+      Linux学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话"><span class="nav-number">1.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP消息"><span class="nav-number">2.</span> <span class="nav-text">HTTP消息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-请求"><span class="nav-number">2.1.</span> <span class="nav-text">HTTP 请求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-响应"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP 响应</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3A原则"><span class="nav-number">3.</span> <span class="nav-text">3A原则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-number">4.</span> <span class="nav-text">变量</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">穷尽一生探索普通人的天花板</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">17</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">109k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:39</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>
