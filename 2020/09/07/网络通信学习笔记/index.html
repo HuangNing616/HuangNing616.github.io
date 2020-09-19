@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP&#x2F;IP通信协议，TCP&#x2F;IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍TCP&#x2F;IP协议，以及三种常用的网络通信模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络通信学习笔记">
+<meta property="og:url" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP&#x2F;IP通信协议，TCP&#x2F;IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍TCP&#x2F;IP协议，以及三种常用的网络通信模型">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%8F%A1%E6%89%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%88%86%E6%89%8B%E5%9B%BE.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/route.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/arp.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/S_NAT.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/D_NAT.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/DR.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/TUN.png">
+<meta property="article:published_time" content="2020-09-07T01:35:25.000Z">
+<meta property="article:modified_time" content="2020-09-12T05:05:32.728Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="网络通信快速入门｜计算机学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>网络通信学习笔记 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="务实敢为 追求极致">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络通信学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-09-07 09:35:25" itemprop="dateCreated datePublished" datetime="2020-09-07T09:35:25+08:00">2020-09-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-09-12 13:05:32" itemprop="dateModified" datetime="2020-09-12T13:05:32+08:00">2020-09-12</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">网络通信学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.6k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>2 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP/IP通信协议，TCP/IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍<strong>TCP/IP协议</strong>，以及三种常用的网络通信模型</p>
+<a id="more"></a>
+<h1 id="TCP-IP协议"><a href="#TCP-IP协议" class="headerlink" title="TCP/IP协议"></a>TCP/IP协议</h1><p>根据7层OSI（Open System Interconnect）参考模型得到了TCP/IP（Transmission Control Protocol/Internet Protocol）四层模型</p>
+<h2 id="TCP-IP四层模型"><a href="#TCP-IP四层模型" class="headerlink" title="TCP/IP四层模型"></a>TCP/IP四层模型</h2><p>下面介绍TCP/IP四层模型中每一层的作用以及相应的协议</p>
+<h3 id="7层应用层"><a href="#7层应用层" class="headerlink" title="7层应用层"></a>7层应用层</h3><p>应用层常用的协议有http协议，ssh协议等，其中http协议就是用来描述将数据如何格式化表示，应用层是负责使得交互的内容遵从某种表示格式，比如ssh在客户端排版的格式，server那边就能读懂，server回馈的客户端就能解析</p>
+<h3 id="4层传输控制层"><a href="#4层传输控制层" class="headerlink" title="4层传输控制层"></a>4层传输控制层</h3><p>传输控制层的主要工作是三次握手，数据传输以及四次分手，主要工作有两方面</p>
+<ol>
+<li><p>建立连接</p>
+<p>这里的连接不是物理连接，而是确认过眼神的连接（得到对方的确认）</p>
+</li>
+<li><p>申请端口号</p>
+<p>在客户端随机申请一个端口号来发送信息，端口号不等于进程号，但是二者有一定的映射关系，可以通过<code>netstat -natp</code>命令来查看客户端的IP和port，服务器的IP和port，其中natp的含义:</p>
+<p>1）n表示显示IP</p>
+<p>2）a表示all</p>
+<p>3）t表示tcp</p>
+<p>4）p表示进程</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png" style="zoom:37%;"></p>
+</li>
+</ol>
+<p>传输控制层的握手流程图</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/握手图.png" style="zoom:50%;"></p>
+<p>其中第一步是发送sync数据包（握手包），服务器接收数据包之后返回sync+ack数据包表示确认接收，第三步就是发送ack数据包表示客户端确认接收了服务端的数据包；第1次和第2次握手是从客户端的角度确认了输出（被接收到）和输入，第2次和第3次从服务端的角度确认了确认了输出（被接收到）和输入</p>
+<p>传输控制层的握手流程图</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/分手图.png" style="zoom:50%;"></p>
+<p>其中第一步是发送分手包，第二步是确认分手包，第三步是我也分手包，第四步是返回同意</p>
+<h3 id="3层网络层"><a href="#3层网络层" class="headerlink" title="3层网络层"></a>3层网络层</h3><p>IP的构造是点分字节，为了读取方便将二进制转成了十进制，每一个点之间的范围在0～255，IP的构造采用了分治的思想（可以通过hash取模，然后线性遍历，或者优化后的红黑树遍历）进而可以快速定位。从IP可以读取以下两部分内容</p>
+<ol>
+<li>网络号地址：掩码与IP取与</li>
+<li>主机地址：IP最后一点的后面三位</li>
+</ol>
+<p>根据<code>route -n</code>命令可以查看路由表，显示网关（路由器）的IP地址，互联网就是小网拼成大网，路由表的第一列就是网络号，即IP与子网掩码做与运算得到的。如果匹配的网络号是本地网络号，对应的网关IP（也就是下一跳）就是0.0.0.0，并且那么就不需要进行下一跳而是直接在自己的网络中进行通信</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/route.png" style="zoom:37%;"></p>
+<h3 id="2层链路层"><a href="#2层链路层" class="headerlink" title="2层链路层"></a>2层链路层</h3><p>可以通过<code>arp - a</code>命令来查看网关的IP和硬件地址（网卡地址，MAC地址）的映射，这样就可以地址找到下一跳的硬件地址，在最开始提到的数据包中的MAC地址就是硬件地址（经典的传纸条例子）</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/arp.png" style="zoom:40%;"></p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>同一个网络中的计算机在最开始的时候是通过ARP协议偷偷获取网关的MAC地址。具体流程是最开始计算机A会先发一个小的数据包，里面封装了目标IP就是网关B的IP，然后通过交换机发给同一个网络中的所有计算机，然后同一个网络中除了路由器以外的其他计算机拆开数据包发现不是发给自己的都会直接丢掉，而只有网关B收到数据包之后根据计算机A的IP地址通过交换机直接回复数据包给计算机A，这个时候机器A就拥有了网关B的MAC地址</p>
+<h2 id="通信流程"><a href="#通信流程" class="headerlink" title="通信流程"></a>通信流程</h2><ol>
+<li>7层建立表达格式的限制</li>
+<li>4层建立握手包，但不发送</li>
+<li>3层IP确认网络号</li>
+<li>2层确认吓一跳</li>
+<li>4层发送握手包建立通信</li>
+<li>7层发送请求</li>
+</ol>
+<h1 id="3种通信模型"><a href="#3种通信模型" class="headerlink" title="3种通信模型"></a>3种通信模型</h1><p>IP是逻辑上的两个端点（客户端和服务端），端点间的TCP传输有三个特点，确认机制，状态机制（根据状态分析数据包）以及不可分割（比如3次握手，4次分手都不可分割），IP分成私有IP和公有IP，其中私有IP不能发送到互联网中（因为私有IP不唯一）；MAC（硬件的网卡地址）是物理上的两个节点（每一条都更换MAC地址）。下面简单介绍家里的网络通信原理</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/S_NAT.png" style="zoom:30%;"></p>
+<p>从上述图片看出可能存在一些问题，假设家里的两台设备将数据包经过路由器发送到外部，如果发送的数据包申请的端口号都一样，经过路由器转换之后变成了相同的IP以及端口号，那么接收数据包的时候就不知道将数据包返回给哪一台设备，这个时候需要借助路由器内部存储的路由表，它是记录路由器给每发送出去的数据包随机申请一个端口号，将其与设备的私有ip+端口号建立映射关系，这样等返回数据包的时候根据路由表的映射关系就可以判断出来将其返回给哪一台设备。</p>
+<p>在介绍三种通信模型之前需要介绍4个名词</p>
+<ol>
+<li><p>CIP：客户端IP地址</p>
+</li>
+<li><p>VIP：虚拟服务器地址，也就是客户端访问网站域名解析完的IP</p>
+</li>
+<li><p>DIP：负责转发的IP地址</p>
+<p>1）和RIP通信：遵循ARP协议，获取Real Server的RIP（MAC地址）</p>
+</li>
+<li><p>RIP（Real）：后端真实主机（后端服务器）的IP</p>
+</li>
+</ol>
+<h2 id="D-NAT"><a href="#D-NAT" class="headerlink" title="D-NAT"></a>D-NAT</h2><p>后端的各个服务器必须是镜像的，不要出现从不同服务器接受的网页信息是不一致的</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/D_NAT.png" style="zoom:30%;"></p>
+<p>有一个细节就是将数据包发送到real server的时候socket对应关系（TCP关系）是CIP的端口号对应RIP的端口号，如果和VIP没有任何关系，发送的返回数据包是RIP_CIP，如果直接发送给客户端的话，客户端直接就会丢弃，所以解决办法就是通过负载均衡服务器，然后负载均衡服务器将RIP_CIP恢复成VIP_CIP就可以了，为了让Real Server将数据包发送给负载均衡服务器，需要将默认网关（掩码是4个0）指向负载均衡服务器，这样以后无论客户端的IP地址无论怎么变换，只要和4个0做与运算，就会指向默认网关，即下一跳一定是负载均衡服务器。</p>
+<p>局限性在于发送需要做一次D_NAT，返回也需要做一次D_NAT，压力有点过大，在互联网中请求是小量的，请求的东西是大量的，所以IO实际上是不对称的。比如在同一个带宽可能由5万个请求，可能恢复1个请求的东西，所以运营商会将网络传输设计成上传的带宽（波段）压低，下载的的带宽提高。</p>
+<h2 id="四层DR"><a href="#四层DR" class="headerlink" title="四层DR"></a>四层DR</h2><p>为了减缓接受压力，将RIP接收的数据包通过网络直接传输回客户端，由于需要遵循TCP协议即一台机器只能暴露一个IP，所以需要将VIP隐藏起来，即对外隐藏对内可见</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/DR.png" style="zoom:30%;"></p>
+<p>局限性在于服务器和负载均衡要在同一个局域网（交换机）中，应用场景就是互联网的<strong>数据中心</strong>。</p>
+<h2 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h2><p>IP背着IP，允许负载和服务器离的远一点</p>
+<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/TUN.png" style="zoom:30%;"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 网络通信快速入门｜计算机学习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/05/python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="Python学习笔记">
+      <i class="fa fa-chevron-left"></i> Python学习笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP协议"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP四层模型"><span class="nav-number">1.1.</span> <span class="nav-text">TCP&#x2F;IP四层模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7层应用层"><span class="nav-number">1.1.1.</span> <span class="nav-text">7层应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4层传输控制层"><span class="nav-number">1.1.2.</span> <span class="nav-text">4层传输控制层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3层网络层"><span class="nav-number">1.1.3.</span> <span class="nav-text">3层网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2层链路层"><span class="nav-number">1.1.4.</span> <span class="nav-text">2层链路层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">1.1.5.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通信流程"><span class="nav-number">1.2.</span> <span class="nav-text">通信流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3种通信模型"><span class="nav-number">2.</span> <span class="nav-text">3种通信模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#D-NAT"><span class="nav-number">2.1.</span> <span class="nav-text">D-NAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四层DR"><span class="nav-number">2.2.</span> <span class="nav-text">四层DR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隧道"><span class="nav-number">2.3.</span> <span class="nav-text">隧道</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">务实敢为 追求极致</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">118k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:47</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>
