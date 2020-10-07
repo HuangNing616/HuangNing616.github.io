@@ -60,14 +60,13 @@
 <meta property="og:site_name" content="黄宁の博客">
 <meta property="og:description" content="本文记录了小编在学习Linux的过程中总结的常用知识点">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ls-l%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4.png">
-<meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/awk2.png">
+<meta property="og:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/huangning/HNBlog/source/_posts/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/linuxfs.png">
 <meta property="article:published_time" content="2020-08-16T03:29:00.000Z">
-<meta property="article:modified_time" content="2020-09-19T08:33:30.764Z">
+<meta property="article:modified_time" content="2020-10-07T11:22:03.422Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Linux快速入门｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ls-l%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%91%BD%E4%BB%A4.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/huangning/HNBlog/source/_posts/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/linuxfs.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
@@ -219,7 +218,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-19 16:33:30" itemprop="dateModified" datetime="2020-09-19T16:33:30+08:00">2020-09-19</time>
+                <time title="修改时间：2020-10-07 19:22:03" itemprop="dateModified" datetime="2020-10-07T19:22:03+08:00">2020-10-07</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,14 +256,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
+              <span>8.2k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
+              <span>7 分钟</span>
             </span>
 
         </div>
@@ -278,7 +277,7 @@
       
         <p>本文记录了小编在学习Linux的过程中总结的常用知识点</p>
 <a id="more"></a>
-<h1 id="Linux特点"><a href="#Linux特点" class="headerlink" title="Linux特点"></a>Linux特点</h1><p>Linux中一切皆文件，就好比Java中的一切皆对象，Linux有以下特点</p>
+<h1 id="Linux特点"><a href="#Linux特点" class="headerlink" title="Linux特点"></a>Linux特点</h1><p>Linux中<strong>一切皆文件</strong>，好比Java中的<strong>一切皆对象</strong></p>
 <ol>
 <li>目录树<br>Linux存在目录树，存在目录树这样的虚拟结构是为了和磁盘分区解耦，增强代码的可移植性，比如只要有两台linux系统的计算机有相同的目录树结构，就可以执行相同的程序</li>
 <li>和Windows的区别：<br>1）Windows通过<code>%%</code>来取变量值，而Linux通过<code>$</code><br>2）Windows通过<code>;</code>来分割PATH路径，而Linux通过<code>:</code>来分割PATH路径<br>3）Window是图形界面，而Linux是字符串界面</li>
@@ -303,21 +302,7 @@
 <li><code>ps -fe</code><br>进程列表，比如查看docker的进程可以通过<code>ps -ef | grep docker</code></li>
 <li><code>whereis</code><br>定位命令位置</li>
 </ul>
-<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><h2 id="ls-l的介绍"><a href="#ls-l的介绍" class="headerlink" title="ls -l的介绍"></a>ls -l的介绍</h2><p><img src="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/ls-l文件系统命令.png" style="zoom:50%;"></p>
-<p>下面针对文件系统命令<code>ls -l</code>查询结果的每一列进行分析</p>
-<ul>
-<li>文件类型<br>1）-：文本，mp3，mp4等类型<br>2）d：目录<br>3）b：块设备文件 （block），也可称为字节流文件，一般是io设备类型，比如磁盘<br>4）c：字符设备文件 （character），也可称为字符流（在字节流上增加了编码格式）文件，一般是io设备类型，比如屏幕的使用过程中呈现的图像是由像素构成的，每个像素由三原色组成，每个色取值从0到255，三原色需要同时打在屏幕上，有了规则控制所以是字符流文件，再比如键盘由快捷键绑定，有了规则控制所以也是字符流文件<br>5）p：命令管道文件(pipe)<br>6）s：套接字（socket）类型文件，比如将百度服务器，即文件读入到本地</li>
-<li>文件权限<br>一共9位，每3位一组，共3组（User，Group，Other），每一组的权限有rwx(读，写，执行)</li>
-<li>文件硬链接的次数</li>
-<li>文件的属主(owner)</li>
-<li>文件的属组(group)</li>
-<li>文件大小(size)，单位是字节</li>
-<li>时间戳(timestamp)：最近一次被修改的时间</li>
-<li>访问时间（access）</li>
-<li>文件内容修改的时间（modify）</li>
-<li>metadata修改时间（change）</li>
-</ul>
-<h2 id="文件系统层次化标准"><a href="#文件系统层次化标准" class="headerlink" title="文件系统层次化标准"></a>文件系统层次化标准</h2><ol>
+<h1 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h1><h2 id="根目录下文件内容"><a href="#根目录下文件内容" class="headerlink" title="根目录下文件内容"></a>根目录下文件内容</h2><ol>
 <li><code>/boot</code>：引导系统启动相关的文件，如内核、initrd以及grub(bootloader)</li>
 <li><code>/dev</code>：设备文件，除了cpu外一切IO设备都抽象成文件并放到该目录下</li>
 <li><code>/etc</code>：配置文件，相当于Windows中的控制面板</li>
@@ -325,23 +310,47 @@
 <li><code>/bin</code>：可执行文件</li>
 <li><code>/var</code>：产生的数据文件</li>
 <li><code>/home</code>：普通用户的家目录，每一个用户的家目录通常默认为/home/USERNAME</li>
-<li><code>/root</code>: 管理员的家目录</li>
-<li><code>/opt</code>：可选目录，是第三方程序的安装目录</li>
+<li><code>/root</code>：管理员的家目录</li>
+<li><code>/opt</code>：第三方程序的安装目录</li>
 <li><code>/usr</code>：内部结构和当前结构类似</li>
 </ol>
 <h2 id="文件操作命令"><a href="#文件操作命令" class="headerlink" title="文件操作命令"></a>文件操作命令</h2><ol>
-<li><code>df</code>：显示磁盘使用情况<br> 比如：<code>df -h</code> 查看磁盘信息和挂载信息( <code>df</code> 相当于进入了 window 中“我的电脑”，<code>-h</code>表示以人类可视化的方式)</li>
-<li><code>du</code>：显示文件系统使用情况<br> 比如：du -sh 统计每个目录所占的总空间信息</li>
-<li><code>ls</code>：显示目录<br> 比如：ls -l 以长列表的形式可视化当前目录下的文件内容</li>
-<li><code>cd</code>：切换工作目录<br> 1）<code>cd/cd ~</code>：进入家目录，这里面涉及到<code>~</code>扩展，比如bash执行<code>~/god</code>会首先将其变成<code>/home/god</code>然后执行<br> 2）<code>cd ..</code>：进入上一级目录<br> 3）<code>cd /</code>：进入根目录<br> 4）<code>cd -</code>：进入上一次目录</li>
-<li><code>pwd</code>：显示当前工作目录</li>
-<li><code>mkdir</code>：创建目录<br> 1）<code>mkdir -p ./a/b/c</code>：创建多层目录<br> 2）<code>–mkdir a/{1,2,3}dir</code>：创建多个同级目录(Linux对空白符特别敏感，每条Linux指令的第一部分就是某个程序，因此千万不要夹杂空白符，否则bash会根据空白符号进行分割)</li>
-<li><code>rm</code>：删除</li>
-<li><code>cp</code>：拷贝<br> 1）<code>cp /etc/{profile,inittab} ./</code>：将profile,inittab文件同时拷贝到当前目录下<br> 2）<code>cp -r ./a ./new</code>：当前目录下的a文件拷贝一份成new</li>
-<li><code>mv</code>：移动</li>
-<li><code>ln</code>：链接<br>1) <code>ln /xxx/xx/xx.txt  硬连接名</code>：硬连接（默认），和原文件的磁盘索引相同，删除了原文件，硬连接的内容还在<br>2）<code>ln -s /xxx/xx/xx.txt 软连接名</code>  ：软连接，和原文件文件对应的磁盘索引不同，若删除了原文件，那软连接的内容也不见了，如果创建了和原文件名称一样的新文件，那软连接的内容会更新成新文件的内容</li>
-<li><code>stat</code>：查看元数据，其中Linux中文件的元数据就是windows系统中的属性，可以查看到文件的访问时间（access time），内容修改时间（modify time），元数据修改时间（change time） </li>
-<li><code>touch</code>：创建新文件或将已有文件统一访问时间（access time），内容修改时间（modify time）以及元数据修改时间（change time） ，touch对已有文件作用可以应用于异地备份或者断网</li>
+<li><p><code>df</code>：显示磁盘使用情况<br> 比如：<code>df -h</code> 查看磁盘信息和挂载信息( <code>df</code> 相当于进入了 window 中“我的电脑”，<code>-h</code>表示以人类可视化的方式)</p>
+</li>
+<li><p><code>du</code>：显示文件系统使用情况<br> 比如：du -sh 统计每个目录所占的总空间信息</p>
+</li>
+<li><p><code>ls</code>：显示目录<br> 比如：ls -l 以长列表的形式可视化当前目录下的文件内容</p>
+<p> <img src="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/huangning/HNBlog/source/_posts/Linux学习笔记/linuxfs.png" style="zoom:10%;"></p>
+<p> 第1列是<strong>文件类型</strong>+权限，类型包括</p>
+<p> 1）-：文本，mp3，mp4等类型<br> 2）d：目录<br> 3）b：块设备文件 （block），也可称为字节流文件，一般是io设备类型，比如磁盘<br> 4）c：字符设备文件 （character），也可称为字符流（在字节流上增加了编码格式）文件，一般是io设备类型，比如屏幕的使用过程中呈现的图像是由像素构成的，每个像素由三原色组成，每个色取值从0到255，三原色需要同时打在屏幕上，有了规则控制所以是字符流文件，再比如键盘由快捷键绑定，有了规则控制所以也是字符流文件<br> 5）p：命令管道文件（pipe）<br> 6）s：套接字（socket）类型文件，比如将百度服务器，即文件读入到本地</p>
+<p> 权限一共9位，每3位一组，共3组（User，Group，Other），每一组的权限有rwx(读，写，执行)</p>
+<p> 第2列是文件硬链接的次数</p>
+<p> 第3列是文件的属主(owner)</p>
+<p> 第4列是文件的属组(group)</p>
+<p> 第5列是文件大小(size)，单位是字节</p>
+<p> 第6列是时间戳(timestamp)：最近一次被修改的时间</p>
+<p> 第7列是访问时间（access）</p>
+<p> 第8列是文件内容修改的时间（modify）</p>
+<p> 第9列是metadata修改时间（change）</p>
+</li>
+<li><p><code>cd</code>：切换工作目录<br> 1）<code>cd/cd ~</code>：进入家目录，这里面涉及到<code>~</code>扩展，比如bash执行<code>~/god</code>会首先将其变成<code>/home/god</code>然后执行<br> 2）<code>cd ..</code>：进入上一级目录<br> 3）<code>cd /</code>：进入根目录<br> 4）<code>cd -</code>：进入上一次目录</p>
+</li>
+<li><p><code>pwd</code>：显示当前工作目录</p>
+</li>
+<li><p><code>mkdir</code>：创建目录<br> 1）<code>mkdir -p ./a/b/c</code>：创建多层目录<br> 2）<code>–mkdir a/{1,2,3}dir</code>：创建多个同级目录(Linux对空白符特别敏感，每条Linux指令的第一部分就是某个程序，因此千万不要夹杂空白符，否则bash会根据空白符号进行分割)</p>
+</li>
+<li><p><code>rm</code>：删除</p>
+</li>
+<li><p><code>cp</code>：拷贝<br> 1）<code>cp /etc/{profile,inittab} ./</code>：将profile,inittab文件同时拷贝到当前目录下<br> 2）<code>cp -r ./a ./new</code>：当前目录下的a文件拷贝一份成new</p>
+</li>
+<li><p><code>mv</code>：移动</p>
+</li>
+<li><p><code>ln</code>：链接<br>1) <code>ln /xxx/xx/xx.txt  硬连接名</code>：硬连接（默认），和原文件的磁盘索引相同，删除了原文件，硬连接的内容还在<br>2）<code>ln -s /xxx/xx/xx.txt 软连接名</code>  ：软连接，和原文件文件对应的磁盘索引不同，若删除了原文件，那软连接的内容也不见了，如果创建了和原文件名称一样的新文件，那软连接的内容会更新成新文件的内容</p>
+</li>
+<li><p><code>stat</code>：查看元数据，其中Linux中文件的元数据就是windows系统中的属性，可以查看到文件的访问时间（access time），内容修改时间（modify time），元数据修改时间（change time） </p>
+</li>
+<li><p><code>touch</code>：创建新文件或将已有文件统一访问时间（access time），内容修改时间（modify time）以及元数据修改时间（change time） ，touch对已有文件作用可以应用于异地备份或者断网</p>
+</li>
 </ol>
 <h1 id="文本操作"><a href="#文本操作" class="headerlink" title="文本操作"></a>文本操作</h1><ol>
 <li><code>cat</code>：查看全文并退出，是外部命令，下面指令为类似的查看操作<br>1）<code>more</code>：分页形式，最后退出，一般用在没有滚动条的服务器端，可以用空格和<code>B</code>来控制向下和向上翻页<br>2）<code>less</code>：分页形式，最后不退出<br>3）<code>head -2 xxx.txt</code>：查看开头2行<br>4）<code>tail -2 xxx.txt</code>：查看末尾2行</li>
@@ -349,42 +358,19 @@
 <li><code>cut</code>：对文本内容进行切割<br>1）<code>-d</code>：自定义分隔符，比如<code>-d&#39; &#39;</code>表示按照空格进行切割<br>2）<code>-s</code>：不显示没有分隔符的行<br>3）<code>-f</code>：选择显示的列，比如<code>-f1,3</code>表示显示第一列和第三列</li>
 <li><code>sort</code>：对文本内容进行排序，排序分成字典序（默认）和数值序<br>1）<code>-n</code>：按照数值排序<br>2）<code>-r</code>：倒序排列，比如<code>-nr</code>就是按照数值进行倒序排列<br>3）<code>-t</code>：自定义分隔符，比如<code>-t&#39; &#39;</code>是按照空格进行切割<br>4）<code>-k</code>：选择排序列，比如<code>-k2</code>是按照第2列进行排序，<code>-k1,3, -k1-3</code>等表示指定多列进行排序，<code>sort -t&#39; &#39; -k2 -n xxx.txt</code>表示按照空格进行分割，针对第二列按照数值进行排序<br>5）<code>-u</code>：合并相同行<br>6）<code>-f</code>：忽略大小写</li>
 <li><code>wc</code>：计算文本行数，常用于断点测试，断点测试分成两种，第一种是通过手动监控，可以用wc来判断数据是否完成导入，比如通过<code>cat xxx.txt | wc -l</code>来输出文本的行数，第二种是自动监控，比如监控生成<code>_success</code>数据是否完成导入</li>
-<li><p><code>sed</code>：行编辑器，语法格式为sed [options] ‘AddressCommand’ file…<br>1）<code>-n</code>：静默模式，不再默认显示模式空间中的内容<br>2）<code>-i</code>：直接修改原文件<br>3）<code>-e</code>：SCRIPT：可以同时执行多个脚本<br>4）<code>-f</code>：/PATH/TO/SET_SED_SCRIPT<br>5）<code>-r</code>：表示使用扩展的正则表达式<br>行编辑器command<br>1）<code>d</code>：删除符合条件的行<br>2）<code>p</code>：显示符合条件的行<br>3）<code>a\string</code>：在指定的行后面追加新行，内容为string<br>4）<code>\n</code>：可以用于换行<br>5）<code>i\string</code>：在指定的行前面添加新行，内容为string<br>6）<code>r FILE</code>：将指定的文件内容添加到符合条件的行处<br>7）<code>w FILE</code>：将地址指定的范围内的行另存至指定的文件夹中<br>8）<code>s/pattern/string/</code>修饰符：查找并替换，默认只替换美汉中第一次被模式匹配到的字符串</p>
-<pre><code>- `g`：行内全局替换
-- `i`：忽略字符大小写
-- `s///`：s###，s@@@
-</code></pre><p>行编辑器Address</p>
-<ul>
-<li>可以没有</li>
-<li>需要给定范围</li>
-<li>查找指定行/str/<br>比如希望将<code>inittab</code>文件中最后一行配置的数字替换成5（图形界面）</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sed <span class="string">'s/\(id:\)[0-6]\(:initdefault:\)/\15\2/ig'</span> inittab</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">   </span><br><span class="line">7. &#96;awk&#96;：强大的文本分析工具，相比于grep的查找以及sed的编辑，awk的优势在于可以对数据进行分析并产生报告，简单来讲它就是把文件逐行读入，（空格，制表符）为默认的分隔符将每行切片，切开的部分在进行各种分析处理，语法格式&#96;awk -F &#39;pattern + action&#39;&#123;filenames&#125;&#96;</span><br><span class="line"></span><br><span class="line">   - 支持自定义分隔符</span><br><span class="line">   - 支持正则表达式匹配</span><br><span class="line">   - 支持自定义变量，数组a[1]，a[tom]，数组本质是map</span><br><span class="line">   - 支持内置变量，比如&#96;NF&#96;表示浏览记录的列的个数，&#96;NR&#96;表示浏览记录的行数</span><br><span class="line">   - 支持函数，比如&#96;print&#96;，&#96;split&#96;，&#96;substr&#96;，&#96;sub&#96;，&#96;qsub&#96;</span><br><span class="line">   - 支持流程控制语句，类似C语言，比如&#96;if&#96;、&#96;while&#96;、&#96;do&#x2F;while&#96;、&#96;for&#96;、&#96;break&#96;、&#96;continue&#96;</span><br><span class="line"></span><br><span class="line">   比如希望查找&#x2F;etc&#x2F;passwd的账号名和相应的用户id（第1列和第3列），其中passwd文件按照&#96;:&#96;分隔符分割一共有7列，分别为：账号名，占位（原来是加密的密码），用户id，用户默认组id，用户描述信息，用户家目录（root用户的家目录在&#x2F;root，普通用户的家目录在&#x2F;home&#x2F;xxx）以及交互接口的程序</span><br><span class="line"></span><br><span class="line">   &lt;img src&#x3D;&quot;.&#x2F;Linux学习笔记&#x2F;awk1.png&quot; style&#x3D;&quot;zoom:67%;&quot; &#x2F;&gt;</span><br><span class="line"></span><br><span class="line">   &#96;&#96;&#96;bash</span><br><span class="line">   # 思路: 首先通过冒号分割，然后打印分割后的第一列和第三列并打印</span><br><span class="line">   </span><br><span class="line">   # awk</span><br><span class="line">   awk -F&#39;:&#39; &#39;&#123;print $1 &quot;,&quot; $3&#125;&#39; # 相当于匿名函数</span><br><span class="line">   </span><br><span class="line">   # cut</span><br><span class="line">   cut -d&#39;:&#39; -f1,3 passwd</span><br></pre></td></tr></table></figure>
-<p>比如希望查找/etc/passwd的账号名和相应的shell（第1列和第7列），而账户与shell之间是以逗号进行分割，在每行的末尾显示行号，列数，并且在所有行开始前添加列名<code>name，shell</code>，在最后一行添加<code>&quot;blue,/bin/nosh&quot;</code></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># awk，提供了BEGIN和END这两个有名函数</span></span><br><span class="line">awk -F<span class="string">':'</span> <span class="string">'BEGIN&#123;print "name, shell"&#125;&#123;print $1 "," $7 "," NR "," NF&#125;END&#123;print "blue"&#125;'</span> passwd</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>比如搜索/etc/passwd有root关键字的所有行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">awk <span class="string">'/root/&#123;print $0&#125;'</span> passwd</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>针对数据awk.txt</p>
-<p><img src="/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/awk2.png" style="zoom:67%;"></p>
-<p>统计一月份每个人的工资</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># awk 默认按照空格进行分割，分割后的索引从1开始</span></span><br><span class="line">awk <span class="string">'&#123;split($3, date, "-"); </span></span><br><span class="line"><span class="string">			if(date[2]=="01")&#123;</span></span><br><span class="line"><span class="string">				name[$1]+=$5;</span></span><br><span class="line"><span class="string">        if($2=="0")&#123;</span></span><br><span class="line"><span class="string">        role[$1]="M"</span></span><br><span class="line"><span class="string">        &#125;else&#123;</span></span><br><span class="line"><span class="string">        role[$1]="W"</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">			&#125;</span></span><br><span class="line"><span class="string">		&#125;END&#123;</span></span><br><span class="line"><span class="string">		for(i in name)&#123;  # 增强for循环</span></span><br><span class="line"><span class="string">			print i  "\t" name[i] "\t" role[i]</span></span><br><span class="line"><span class="string">		&#125;   </span></span><br><span class="line"><span class="string">		&#125;'</span> awk</span><br></pre></td></tr></table></figure>
-</li>
 </ol>
 <h1 id="VI编辑器"><a href="#VI编辑器" class="headerlink" title="VI编辑器"></a>VI编辑器</h1><p>VI是一款全凭的文本编辑器，在Linux系统中用VI文本编辑器编辑的文本保存之后，默认是utif-8格式，其中1个字母要开辟一个字节的内存空间，1个汉字要开辟3个字节的空间。最基础的编码格式是ascii编码，但是由于ascii编码包含的内容少，所有后来又有了扩展字符集。接下来简单介绍一下用VI编辑器编辑的文件模式以及模式之间的相互转换</p>
 <h2 id="文件模式"><a href="#文件模式" class="headerlink" title="文件模式"></a>文件模式</h2><h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><p>按键具有编辑文本功能，默认打开进入编辑模式</p>
 <ol>
-<li>移动光标<br>1）字符：<code>h</code>（左），<code>j</code>（下），<code>k</code>（上），<code>l</code>（右）<br>2）单词：<code>w</code>（移至下一个单词的词首），<code>e</code>（跳至当前或下一个单词的词尾），<code>b</code>（跳至当前或前一个单词的词首）<br>3）行内：<code>0</code>（绝对行首），<code>^</code>（行首的第一个非空白字符），<code>$</code>（绝对行尾）<br>4）行间：G（文章末尾），3G（第3行），gg（文章开头）</li>
-<li>删除&amp;替换单个字符<br>1）<code>x</code>：删除光标位置字符<br>2）<code>3x</code>：删除光标开始的3个字符<br>3）<code>r</code>：替换光标位置字符<br>4）<code>dd</code>：删除光标所在行<br>5）<code>dw</code>：删除光标所在的单词</li>
-<li>剪切&amp;粘贴<br>1）<code>vw</code>：剪切<br>2）<code>p</code>：粘贴</li>
-<li>撤销&amp;重做<br>1）<code>u</code>：撤销<br>2）<code>ctrl + r</code>：恢复撤销的内容<br>3）<code>.</code>：重复上一步的操作<h3 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h3></li>
+<li><p>移动光标<br>1）字符：<code>h</code>（左），<code>j</code>（下），<code>k</code>（上），<code>l</code>（右）<br>2）单词：<code>w</code>（移至下一个单词的词首），<code>e</code>（跳至当前或下一个单词的词尾），<code>b</code>（跳至当前或前一个单词的词首）<br>3）行内：<code>0</code>（绝对行首），<code>^</code>（行首的第一个非空白字符），<code>$</code>（绝对行尾）<br>4）行间：G（文章末尾），3G（第3行），gg（文章开头）</p>
+</li>
+<li><p>常用指令<br>1）<code>x</code>：删除光标位置字符，比如<code>3x</code>表示删除光标开始的3个字符<br>2）<code>r</code>：替换光标位置字符<br>3）<code>dd</code>：删除/剪切光标所在行，比如<code>3dd</code>表示删除/剪切包括光标所在行的下三行<br>4）<code>yy</code>：复制光标所在行，比如<code>ydd</code>表示复制包括光标所在行的下三行<br>5)  <code>p</code>：粘贴<br>6）<code>u</code>：撤销</p>
+</li>
 </ol>
-<p>就是正常的输入按键内容</p>
-<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>接受用户命令输入，比如可以通过set（设置）决定是否展示文本行数</p>
+<h3 id="输入模式"><a href="#输入模式" class="headerlink" title="输入模式"></a>输入模式</h3><p>就是正常输入按键内容的模式</p>
+<h3 id="末行模式"><a href="#末行模式" class="headerlink" title="末行模式"></a>末行模式</h3><p>接受用户命令输入，比如可以通过set决定是否展示文本行数</p>
 <p>1）set nu：展示行数<br>2）set nonu：不展示行数</p>
-<h2 id="文件模式转换"><a href="#文件模式转换" class="headerlink" title="文件模式转换"></a>文件模式转换</h2><ol>
+<h2 id="模式转换"><a href="#模式转换" class="headerlink" title="模式转换"></a>模式转换</h2><ol>
 <li><p>编辑模式转输入模式</p>
 <p>1）i: 在当前光标所在字符的前面，转为输入模式<br>2）a: 在当前光标所在字符的后面，转为输入模式<br>3）o: 在当前光标所在行的下方新建一行，并转为输入模式<br>4）O：在当前光标所在行的上方，新建一行，并转为输入模式<br>5）I：在当前光标所在行的行首，转换为输入模式<br>6）A：在当前光标所在行的行尾，转换为输入模式</p>
 </li>
@@ -395,19 +381,18 @@
 <p><code>ESC</code></p>
 </li>
 </ol>
-<h2 id="打开文件"><a href="#打开文件" class="headerlink" title="打开文件"></a>打开文件</h2><ol>
+<h2 id="文件打开"><a href="#文件打开" class="headerlink" title="文件打开"></a>文件打开</h2><ol>
 <li><code>vim /path/xxx.txt</code>：打开path路径下的xxx.txt</li>
-<li><code>vim +# xxx.txt</code>：打开xxx.txt，并定位于第#行 </li>
 <li><code>vim + xxx.txt</code>：打开xxx.txt，定位至最后一行</li>
+<li><code>vim +n xxx.txt</code>：打开xxx.txt，并定位于第n行 </li>
 <li><code>vim +/PATTERN xxx.txt</code>：打开xxx.txt，定位至第一次被PATTERN匹配到的行的行首</li>
 </ol>
-<h2 id="关闭文件"><a href="#关闭文件" class="headerlink" title="关闭文件"></a>关闭文件</h2><p>进入末行模式<code>：</code></p>
-<ol>
+<h2 id="文件关闭"><a href="#文件关闭" class="headerlink" title="文件关闭"></a>文件关闭</h2><ol>
 <li><code>:q</code>： 退出，没有动过文件</li>
 <li><code>:wq</code>：保存并退出 ，动过了不后悔</li>
-<li><code>q!</code>：不保存并退出 动过了，后悔了</li>
-<li><code>w</code> ：保存</li>
-<li><code>w!</code>：强行保存</li>
+<li><code>q!</code>：退出不保存，用于动过但后悔了</li>
+<li><code>:w</code> ：保存</li>
+<li><code>:w!</code>：强行保存</li>
 <li><code>shit+ZZ</code>：在编辑模式中直接保存并退出，不需要冒号（末行模式）</li>
 </ol>
 <h1 id="字符匹配"><a href="#字符匹配" class="headerlink" title="字符匹配"></a>字符匹配</h1><p>在终端我们可以通过通配符进行匹配文件或者文件名，比如<code>*</code>表示任意长的任意字符，<code>?</code>表示任意一个字符。在这一部分主要介绍一下字符匹配，字符匹配分为静态匹配和动态匹配，静态匹配也叫绝对匹配，比如匹配一个具体的字符串，动态匹配也就是用正则表达式进行匹配，其中正则表达式的操作符分为以下两种</p>
@@ -552,7 +537,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux特点"><span class="nav-number">1.</span> <span class="nav-text">Linux特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux启动"><span class="nav-number">2.</span> <span class="nav-text">Linux启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bash命令"><span class="nav-number">3.</span> <span class="nav-text">bash命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-number">4.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ls-l的介绍"><span class="nav-number">4.1.</span> <span class="nav-text">ls -l的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件系统层次化标准"><span class="nav-number">4.2.</span> <span class="nav-text">文件系统层次化标准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作命令"><span class="nav-number">4.3.</span> <span class="nav-text">文件操作命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本操作"><span class="nav-number">5.</span> <span class="nav-text">文本操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VI编辑器"><span class="nav-number">6.</span> <span class="nav-text">VI编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模式"><span class="nav-number">6.1.</span> <span class="nav-text">文件模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑模式"><span class="nav-number">6.1.1.</span> <span class="nav-text">编辑模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入模式"><span class="nav-number">6.1.2.</span> <span class="nav-text">输入模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#末行模式"><span class="nav-number">6.1.3.</span> <span class="nav-text">末行模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模式转换"><span class="nav-number">6.2.</span> <span class="nav-text">文件模式转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打开文件"><span class="nav-number">6.3.</span> <span class="nav-text">打开文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关闭文件"><span class="nav-number">6.4.</span> <span class="nav-text">关闭文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符匹配"><span class="nav-number">7.</span> <span class="nav-text">字符匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配操作符"><span class="nav-number">7.1.</span> <span class="nav-text">匹配操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复操作符"><span class="nav-number">7.2.</span> <span class="nav-text">重复操作符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户资源与权限"><span class="nav-number">8.</span> <span class="nav-text">用户资源与权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加用户"><span class="nav-number">8.1.</span> <span class="nav-text">添加用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户共享文件夹"><span class="nav-number">8.2.</span> <span class="nav-text">用户共享文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制不同用户的权限"><span class="nav-number">8.3.</span> <span class="nav-text">控制不同用户的权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装"><span class="nav-number">9.</span> <span class="nav-text">软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">9.1.</span> <span class="nav-text">编译安装</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux特点"><span class="nav-number">1.</span> <span class="nav-text">Linux特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux启动"><span class="nav-number">2.</span> <span class="nav-text">Linux启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#bash命令"><span class="nav-number">3.</span> <span class="nav-text">bash命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件系统"><span class="nav-number">4.</span> <span class="nav-text">文件系统</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根目录下文件内容"><span class="nav-number">4.1.</span> <span class="nav-text">根目录下文件内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件操作命令"><span class="nav-number">4.2.</span> <span class="nav-text">文件操作命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文本操作"><span class="nav-number">5.</span> <span class="nav-text">文本操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#VI编辑器"><span class="nav-number">6.</span> <span class="nav-text">VI编辑器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#文件模式"><span class="nav-number">6.1.</span> <span class="nav-text">文件模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编辑模式"><span class="nav-number">6.1.1.</span> <span class="nav-text">编辑模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入模式"><span class="nav-number">6.1.2.</span> <span class="nav-text">输入模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#末行模式"><span class="nav-number">6.1.3.</span> <span class="nav-text">末行模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模式转换"><span class="nav-number">6.2.</span> <span class="nav-text">模式转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件打开"><span class="nav-number">6.3.</span> <span class="nav-text">文件打开</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件关闭"><span class="nav-number">6.4.</span> <span class="nav-text">文件关闭</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#字符匹配"><span class="nav-number">7.</span> <span class="nav-text">字符匹配</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#匹配操作符"><span class="nav-number">7.1.</span> <span class="nav-text">匹配操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重复操作符"><span class="nav-number">7.2.</span> <span class="nav-text">重复操作符</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户资源与权限"><span class="nav-number">8.</span> <span class="nav-text">用户资源与权限</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#添加用户"><span class="nav-number">8.1.</span> <span class="nav-text">添加用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户共享文件夹"><span class="nav-number">8.2.</span> <span class="nav-text">用户共享文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制不同用户的权限"><span class="nav-number">8.3.</span> <span class="nav-text">控制不同用户的权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#软件安装"><span class="nav-number">9.</span> <span class="nav-text">软件安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#编译安装"><span class="nav-number">9.1.</span> <span class="nav-text">编译安装</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -569,18 +554,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-count">20</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -622,12 +607,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">118k</span>
+    <span title="站点总字数">122k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:48</span>
+    <span title="站点阅读时长">1:51</span>
 </div>
 
         
