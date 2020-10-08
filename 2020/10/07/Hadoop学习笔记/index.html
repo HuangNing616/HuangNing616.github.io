@@ -66,7 +66,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Offset.png">
 <meta property="og:image" content="http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/fedration.png">
 <meta property="article:published_time" content="2020-10-07T07:50:54.000Z">
-<meta property="article:modified_time" content="2020-10-07T11:23:31.062Z">
+<meta property="article:modified_time" content="2020-10-08T04:01:35.122Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Hadoop学习笔记｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
@@ -214,10 +214,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-10-07 15:50:54 / 修改时间：19:23:31" itemprop="dateCreated datePublished" datetime="2020-10-07T15:50:54+08:00">2020-10-07</time>
+              <time title="创建时间：2020-10-07 15:50:54" itemprop="dateCreated datePublished" datetime="2020-10-07T15:50:54+08:00">2020-10-07</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-08 12:01:35" itemprop="dateModified" datetime="2020-10-08T12:01:35+08:00">2020-10-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -254,14 +260,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>5.4k</span>
+              <span>10k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>5 分钟</span>
+              <span>9 分钟</span>
             </span>
 
         </div>
@@ -307,11 +313,11 @@
 </ol>
 <h1 id="3-x与2-x的区别"><a href="#3-x与2-x的区别" class="headerlink" title="3.x与2.x的区别"></a>3.x与2.x的区别</h1><ol>
 <li>classpath隔离，不会造成不同版本的jar包冲突</li>
-<li>erasure擦除编码，节省空间</li>
-<li>datanode负载均衡，比如新增datenode之后，其余datenode会将部分数据导入新增的datenode之中</li>
+<li>支持hdfs的擦除编码（erasure encoding），进而节省了50%的空间</li>
+<li>datanode内部新增负载均衡，比如新增datenode之后，其余datenode会将部分数据导入新增的datenode之中</li>
 <li>shell重写，3.x与2.x有三分之一的区别，并且大部分区别都在shell重写</li>
 <li>mr支持内内存参数推断</li>
-<li>cgroup将内存和磁盘隔离</li>
+<li>cgroup将内存和磁盘隔离（dock就是cgroup和namespace的二次开发）</li>
 </ol>
 <h1 id="集群搭建"><a href="#集群搭建" class="headerlink" title="集群搭建"></a>集群搭建</h1><h2 id="伪分布式"><a href="#伪分布式" class="headerlink" title="伪分布式"></a>伪分布式</h2><p><strong>Step1.</strong> 安装jdk1.8</p>
 <p><strong>Step2.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hadoop-env.sh</code>的末尾新增环境变量以及节点启动用户</p>
@@ -365,12 +371,12 @@
 </tbody>
 </table>
 </div>
-<p><strong>Step1.</strong> 安装jdk1.8</p>
+<p><strong>Step1.</strong> 在4个节点上安装jdk1.8</p>
 <p><strong>Step2.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hadoop-env.sh</code>的末尾新增环境变量以及节点启动用户</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 集群启动之后会从该脚本下寻找java环境变量，而不是/etc/profile</span></span><br><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line">export HDFS_NAMENODE_USER=root</span><br><span class="line">export HDFS_DATANODE_USER=root</span><br><span class="line">export HDFS_SECONDARYNAMENODE_USER=root</span><br></pre></td></tr></table></figure>
-<p><strong>Step3.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/core-site.sh</code>中配置NameNode节点，元数据以及Block数据保存路径</p>
+<p><strong>Step3.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/core-site.sh</code>中配置namenode节点，元数据以及Block数据保存路径</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://node:9820<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    		<span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    		<span class="tag">&lt;<span class="name">value</span>&gt;</span>/var/hadoop/full<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p><strong>Step4.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hdfs-site.sh</code>中配置SecondaryNameNode以及副本信息，其中SecondaryNameNode的作用是负责文件合并以及持久化，并不是NameNode的备用节点</p>
+<p><strong>Step4.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hdfs-site.sh</code>中配置SecondaryNameNode以及副本信息，其中SecondaryNameNode的作用是负责文件合并以及持久化，并不是namenode的备用节点</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    		<span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.secondary.http-address	<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    		<span class="tag">&lt;<span class="name">value</span>&gt;</span>node02:9868<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p><strong>Step5.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/workers</code>中配置从节点信息，相当于Hadoop2.x中的slaves</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">node02</span><br><span class="line">node03</span><br><span class="line">node04</span><br></pre></td></tr></table></figure>
@@ -380,14 +386,96 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp /usr/hadoop-3.1.4 node02:`<span class="built_in">pwd</span>`</span><br><span class="line">scp /usr/hadoop-3.1.4 node03:`<span class="built_in">pwd</span>`</span><br><span class="line">scp /usr/hadoop-3.1.4 node04:`<span class="built_in">pwd</span>`</span><br><span class="line"></span><br><span class="line"><span class="comment"># 并在/etc下将环境变量配置发送到其他节点</span></span><br><span class="line">scp /etc/profile node02:`<span class="built_in">pwd</span>`</span><br><span class="line">scp /etc/profile node03:`<span class="built_in">pwd</span>`</span><br><span class="line">scp /etc/profile node04:`<span class="built_in">pwd</span>`</span><br></pre></td></tr></table></figure>
 <p><strong>Step8.</strong> 在所有节点执行环境变量</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-<p><strong>Step9.</strong> 在node01（NameNode）格式化namenode并启动集群</p>
+<p><strong>Step9.</strong> 在node01上格式化namenode并启动集群</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hdfs namenode -format</span><br><span class="line"></span><br><span class="line">start-dfs</span><br></pre></td></tr></table></figure>
-<p><strong>Step10.</strong> 在本地浏览器通过<code>node01:9870</code>访问NameNode信息</p>
+<p><strong>Step10.</strong> 在本地浏览器通过<code>node01:9870</code>访问namenode信息</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果忘记端口号，可以通过下述命令查看监听的端口信息</span></span><br><span class="line">ss -nal</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过浏览器访问之前需要关闭防火墙</span></span><br><span class="line">systemctl stop firewalld.service  		<span class="comment"># 关闭防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld.service   <span class="comment"># 开机不启动防火墙</span></span><br><span class="line">systemctl status firewalld.service    <span class="comment"># 查看防火墙状态</span></span><br></pre></td></tr></table></figure>
-<h2 id="联邦"><a href="#联邦" class="headerlink" title="联邦"></a>联邦</h2><p>为了解决NameNode存储瓶颈问题，提出了联邦（Fedration）的思想，即多个NameNode之间相互独立，底层共用一套DataNode集群</p>
-<p>但是从某个指定NameNode进行数据存储，后期只能从该NameNode进行数据查询，因此会造成NameNode指定错误的问题，大公司为了解决该问题一般会在上方搭建一个文件系统（目录树），每个目录/接口都与底层的指定的NameNode或HBSE（当数据仅仅用来存储）对应</p>
+<h2 id="联邦"><a href="#联邦" class="headerlink" title="联邦"></a>联邦</h2><p>为了解决NameNode存储瓶颈问题，提出了联邦（Fedration）的思想，即多个NameNode之间相互独立，底层共用一套DataNode集。但通过指定NameNode进行了数据存储，后期只能从该NameNode进行数据查询，因此会造成NameNode指定错误的问题，大公司为了解决该问题一般会在上方搭建一个文件系统（目录树），每个目录/接口都与底层的指定的NameNode或HBSE（当数据仅仅用来存储）对应</p>
 <p><img src="/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/fedration.png" style="zoom:57%;"></p>
-<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>联邦虽然解决了NameNode存储瓶颈问题并实现了扩展性，但仍然无法解决NameNode单点故障转移的问题，即其中一个NameNode挂掉了，就无法找到相应DataNode信息的问题</p>
+<p>联邦虽然解决了NameNode存储瓶颈问题并实现了扩展性，但仍然无法解决NameNode单点故障转移的问题，即其中一个NameNode挂掉了，就无法找到相应DataNode信息的问题</p>
+<h2 id="高可用"><a href="#高可用" class="headerlink" title="高可用"></a>高可用</h2><p>假设现在有4个节点，每个节点的角色如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">NN-1</th>
+<th style="text-align:center">NN-2</th>
+<th style="text-align:center">DN</th>
+<th style="text-align:center">ZK</th>
+<th style="text-align:center">ZKFC</th>
+<th style="text-align:center">JNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>node01</strong></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node02</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node03</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node04</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Step1.</strong> 在4个节点上安装jdk1.8</p>
+<p><strong>Step2.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hadoop-env.sh</code>的末尾新增环境变量以及节点启动用户</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line">export HDFS_NAMENODE_USER=root</span><br><span class="line">export HDFS_DATANODE_USER=root</span><br><span class="line">export HDFS_ZKFC_USER=root</span><br><span class="line">export HDFS_JOURNALNODE_USER=root</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/hdfs-site.sh</code>配置其他节点的角色信息</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.replication<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.nameservices<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>mycluster<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.namenodes.mycluster<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>nn1,nn2<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.rpc-address.mycluster.nn1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>node01:8020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.rpc-address.mycluster.nn2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>node02:8020<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.http-address.mycluster.nn1<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>node01:9870<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.http-address.mycluster.nn2<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>node02:9870<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.shared.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>qjournal://node01:8485;node02:8485;node03:8485/mycluster<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.client.failover.proxy.provider.mycluster<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.methods<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>sshfence<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.ssh.private-key-files<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/.ssh/id_rsa<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.journalnode.edits.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>/var/hadoop/ha/journalnode<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.automatic-failover.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step4.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/core-site.sh</code>中配置NameNode节点，元数据，Block数据保存路径以及Zookeeper与客户端通信的节点信息</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>fs.defaultFS<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://mycluster<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>/var/hadoop/ha<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.http.staticuser.user<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>root<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>ha.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">value</span>&gt;</span>node02:2181,node03:2181,node04:2181<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step5.</strong> 假设之前在4个节点搭建过全分布式，那么直接在node01中<code>/usr/hadoop-3.1.4/etc/hadoop/</code>下将修改过的配置分发到其余3个节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp hadoop-env.sh core-site.xml hdfs-site.xml node02:`<span class="built_in">pwd</span>`</span><br><span class="line">scp hadoop-env.sh core-site.xml hdfs-site.xml node03:`<span class="built_in">pwd</span>`</span><br><span class="line">scp hadoop-env.sh core-site.xml hdfs-site.xml node04:`<span class="built_in">pwd</span>`</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.</strong> 在node02，node03，node04上搭建zookeeper集群，其中zookeeper集群与hadoop集群是相互独立的</p>
+<p><strong>Step6.1.</strong> 在node02上安装zookeeper3.4.6，并在<code>/etc/profile</code>配置环境变量</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">export JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line">export HADOOP_HOME=/usr/hadoop-3.1.4</span><br><span class="line">export ZOOKEEPER_HOME=/usr/zookeeper-3.4.6</span><br><span class="line">export PATH=$JAVA_HOME/bin:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$ZOOKEEPER_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.2.</strong> 将配置好的环境变量发送到其他节点上并执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp /etc/profile node02:/etc/profile</span><br><span class="line">scp /etc/profile node03:/etc/profile</span><br><span class="line">scp /etc/profile node03:/etc/profile</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送之后在每个节点上执行环境变量</span></span><br><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.3.</strong> 在node02上将<code>/usr/zookeeper-3.4.6/conf/zoo_sample.cfg</code>重命名为<code>/usr/zookeeper-3.4.6/conf/zoo.cfg</code>，并修改</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">dataDir=/var/zk</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在结尾添加</span></span><br><span class="line">server.1=node02:2888:3888</span><br><span class="line">server.2=node03:2888:3888</span><br><span class="line">server.3=node04:2888:3888</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.4.</strong> 在node02的<code>/usr/</code>下将配置好的zookeeper分发到其余节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp zookeeper-3.4.6 node03:`<span class="built_in">pwd</span>`</span><br><span class="line">scp zookeeper-3.4.6 node04:`<span class="built_in">pwd</span>`</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.5.</strong> 根据之前的<code>/usr/zookeeper-3.4.6/conf/zoo.cfg</code>的配置信息在搭建zookeeper的3个节点上分别增加服务器编号文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># node02</span></span><br><span class="line">mkdir -p /var/zk</span><br><span class="line"><span class="built_in">echo</span> 1 &gt; /var/zk/myid</span><br><span class="line">cat /var/zk/myid</span><br><span class="line"></span><br><span class="line"><span class="comment"># node03</span></span><br><span class="line">mkdir -p /var/zk</span><br><span class="line"><span class="built_in">echo</span> 2 &gt; /var/zk/myid</span><br><span class="line">cat /var/zk/myid</span><br><span class="line"></span><br><span class="line"><span class="comment"># node04</span></span><br><span class="line">mkdir -p /var/zk</span><br><span class="line"><span class="built_in">echo</span> 2 &gt; /var/zk/myid</span><br><span class="line">cat /var/zk/myid</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.6.</strong> 分别在node02，node03，node04上启动zookeeper集群</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 启动集群</span><br><span class="line">zkServer.sh start</span><br><span class="line"></span><br><span class="line"># 查看启动状态</span><br><span class="line">zkServer.sh status</span><br></pre></td></tr></table></figure>
+<p><strong>补充</strong></p>
+<p>1) zookeeper启动遵从过半机制，即启动zookeeper服务器个数超过搭建zookeeper服务器个数的一半才可以正常启动zookeeper集群<br>2) 可以通过zkCli.sh来启动客户端进而对zookeeper集群进行修改，但一般是在namenode在进行状态切换的时候会对zookeeper进行修改<br>3) zookeeperyou选举机制，一般是根据服务器编号或者启动顺序来决定搭建zookeeper的服务器是follower还是leader</p>
+<p><strong>Step7.</strong> 在node01，node02，node03上分别启动jounalnode</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可以通过jps查看node01，node02，node03的JNN是否启动</span></span><br><span class="line"><span class="comment"># hdfs --daemon stop journalnode是关闭journal</span></span><br><span class="line">hdfs --daemon start journalnode</span><br></pre></td></tr></table></figure>
+<p><strong>Step8.</strong> 在node01上格式化namenode并启动namenode</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 也可以在namenode2上格式化namenode，但只能格式化一个namenode，另一个namenode需要通过JNN同步透穿来作standby角色</span></span><br><span class="line">hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动namenode使得另外一个namenode进行同步工作</span></span><br><span class="line">hadoop-daemon.sh start namenode</span><br></pre></td></tr></table></figure>
+<p><strong>Step9.</strong> 在node02上同步node01上的namenode信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hdfs namenode -bootstrapStandby</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -409,7 +497,10 @@
     <a href="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="网络通信学习笔记">
       <i class="fa fa-chevron-left"></i> 网络通信学习笔记
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/08/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/" rel="next" title="虚拟机网卡配置">
+      虚拟机网卡配置 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -478,7 +569,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#存储模型"><span class="nav-number">1.</span> <span class="nav-text">存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-number">1.1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器"><span class="nav-number">1.2.</span> <span class="nav-text">服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#塔式服务器"><span class="nav-number">1.2.1.</span> <span class="nav-text">塔式服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#机架服务器"><span class="nav-number">1.2.2.</span> <span class="nav-text">机架服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刀片服务器"><span class="nav-number">1.2.3.</span> <span class="nav-text">刀片服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Block"><span class="nav-number">1.3.</span> <span class="nav-text">Block</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分割"><span class="nav-number">1.3.1.</span> <span class="nav-text">分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#副本"><span class="nav-number">1.3.2.</span> <span class="nav-text">副本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">1.3.3.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构模型"><span class="nav-number">2.</span> <span class="nav-text">架构模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-x与2-x的区别"><span class="nav-number">3.</span> <span class="nav-text">3.x与2.x的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集群搭建"><span class="nav-number">4.</span> <span class="nav-text">集群搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪分布式"><span class="nav-number">4.1.</span> <span class="nav-text">伪分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全分布式"><span class="nav-number">4.2.</span> <span class="nav-text">全分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联邦"><span class="nav-number">4.3.</span> <span class="nav-text">联邦</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点"><span class="nav-number">4.3.1.</span> <span class="nav-text">缺点</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#存储模型"><span class="nav-number">1.</span> <span class="nav-text">存储模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#HDFS"><span class="nav-number">1.1.</span> <span class="nav-text">HDFS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器"><span class="nav-number">1.2.</span> <span class="nav-text">服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#塔式服务器"><span class="nav-number">1.2.1.</span> <span class="nav-text">塔式服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#机架服务器"><span class="nav-number">1.2.2.</span> <span class="nav-text">机架服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刀片服务器"><span class="nav-number">1.2.3.</span> <span class="nav-text">刀片服务器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Block"><span class="nav-number">1.3.</span> <span class="nav-text">Block</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分割"><span class="nav-number">1.3.1.</span> <span class="nav-text">分割</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#副本"><span class="nav-number">1.3.2.</span> <span class="nav-text">副本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">1.3.3.</span> <span class="nav-text">补充</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#架构模型"><span class="nav-number">2.</span> <span class="nav-text">架构模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-x与2-x的区别"><span class="nav-number">3.</span> <span class="nav-text">3.x与2.x的区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#集群搭建"><span class="nav-number">4.</span> <span class="nav-text">集群搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪分布式"><span class="nav-number">4.1.</span> <span class="nav-text">伪分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全分布式"><span class="nav-number">4.2.</span> <span class="nav-text">全分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联邦"><span class="nav-number">4.3.</span> <span class="nav-text">联邦</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高可用"><span class="nav-number">4.4.</span> <span class="nav-text">高可用</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -495,14 +586,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">21</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -548,12 +639,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">122k</span>
+    <span title="站点总字数">128k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:51</span>
+    <span title="站点阅读时长">1:56</span>
 </div>
 
         
