@@ -53,30 +53,23 @@
   };
 </script>
 
-  <meta name="description" content="网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP&#x2F;IP通信协议，TCP&#x2F;IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍TCP&#x2F;IP协议，以及三种常用的网络通信模型">
+  <meta name="description" content="本文记录了小编在学习Python的过程中总结的知识点以及常用语法">
 <meta property="og:type" content="article">
-<meta property="og:title" content="网络通信学习笔记">
-<meta property="og:url" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:title" content="Python填坑笔记">
+<meta property="og:url" content="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP&#x2F;IP通信协议，TCP&#x2F;IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍TCP&#x2F;IP协议，以及三种常用的网络通信模型">
+<meta property="og:description" content="本文记录了小编在学习Python的过程中总结的知识点以及常用语法">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%8F%A1%E6%89%8B%E5%9B%BE.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%88%86%E6%89%8B%E5%9B%BE.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/route.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/arp.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/S_NAT.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/D_NAT.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/DR.png">
-<meta property="og:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/TUN.png">
-<meta property="article:published_time" content="2020-09-07T01:35:25.000Z">
-<meta property="article:modified_time" content="2020-09-19T09:03:40.916Z">
+<meta property="og:image" content="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/kernel.png">
+<meta property="og:image" content="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/rootsource.png">
+<meta property="article:published_time" content="2020-09-05T14:44:27.000Z">
+<meta property="article:modified_time" content="2020-10-17T07:59:49.796Z">
 <meta property="article:author" content="黄宁">
-<meta property="article:tag" content="网络通信快速入门｜计算机学习笔记">
+<meta property="article:tag" content="Python快速入门｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/kernel.png">
 
-<link rel="canonical" href="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+<link rel="canonical" href="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/">
 
 
 <script id="page-configurations">
@@ -88,7 +81,7 @@
   };
 </script>
 
-  <title>网络通信学习笔记 | 黄宁の博客</title>
+  <title>Python填坑笔记 | 黄宁の博客</title>
   
 
 
@@ -196,7 +189,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
@@ -209,7 +202,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          网络通信学习笔记
+          Python填坑笔记
         </h1>
 
         <div class="post-meta">
@@ -219,14 +212,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-09-07 09:35:25" itemprop="dateCreated datePublished" datetime="2020-09-07T09:35:25+08:00">2020-09-07</time>
+              <time title="创建时间：2020-09-05 22:44:27" itemprop="dateCreated datePublished" datetime="2020-09-05T22:44:27+08:00">2020-09-05</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-19 17:03:40" itemprop="dateModified" datetime="2020-09-19T17:03:40+08:00">2020-09-19</time>
+                <time title="修改时间：2020-10-17 15:59:49" itemprop="dateModified" datetime="2020-10-17T15:59:49+08:00">2020-10-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -240,14 +233,14 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
                   </a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%89%8D%E7%AB%AF/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
-                    <span itemprop="name">网络通信学习笔记</span>
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">Python学习笔记</span>
                   </a>
                 </span>
             </span>
@@ -264,7 +257,7 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>2.6k</span>
+              <span>1.8k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
@@ -283,73 +276,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>网络通信是基于域名解析的IP地址进行通信。计算机在网络上以发送数据包的形式进行网络通信并遵循TCP/IP通信协议，TCP/IP通信是寻找“最近点”进行跳跃，而不是寻找完整路径进行跳跃，因此整个互联网通信是建立在下一跳模式上。本文主要简单介绍<strong>TCP/IP协议</strong>，以及三种常用的网络通信模型</p>
+        <p>本文记录了小编在学习<strong>Python</strong>的过程中总结的知识点以及常用语法</p>
 <a id="more"></a>
-<h1 id="TCP-IP协议"><a href="#TCP-IP协议" class="headerlink" title="TCP/IP协议"></a>TCP/IP协议</h1><p>根据7层OSI（Open System Interconnect）参考模型得到了TCP/IP（Transmission Control Protocol/Internet Protocol）四层模型</p>
-<h2 id="TCP-IP四层模型"><a href="#TCP-IP四层模型" class="headerlink" title="TCP/IP四层模型"></a>TCP/IP四层模型</h2><p>下面介绍TCP/IP四层模型中每一层的作用以及相应的协议</p>
-<h3 id="7层应用层"><a href="#7层应用层" class="headerlink" title="7层应用层"></a>7层应用层</h3><p>应用层常用的协议有http协议，ssh协议等，其中http协议就是用来描述将数据如何格式化表示，应用层是负责使得交互的内容遵从某种表示格式，比如ssh在客户端排版的格式，server那边就能读懂，server回馈的客户端就能解析</p>
-<h3 id="4层传输控制层"><a href="#4层传输控制层" class="headerlink" title="4层传输控制层"></a>4层传输控制层</h3><p>传输控制层的主要工作是三次握手，数据传输以及四次分手，主要工作有两方面</p>
-<ol>
-<li><p>建立连接</p>
-<p>这里的连接不是物理连接，而是确认过眼神的连接（得到对方的确认）</p>
-</li>
-<li><p>申请端口号</p>
-<p>在客户端随机申请一个端口号来发送信息，端口号不等于进程号，但是二者有一定的映射关系，可以通过<code>netstat -natp</code>命令来查看客户端的IP和port，服务器的IP和port，其中natp的含义:</p>
-<p>1）n表示显示IP</p>
-<p>2）a表示all</p>
-<p>3）t表示tcp</p>
-<p>4）p表示进程</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/netstats.png" style="zoom:37%;"></p>
-</li>
-</ol>
-<p>传输控制层的握手流程图</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/握手图.png" style="zoom:50%;"></p>
-<p>其中第一步是发送sync数据包（握手包），服务器接收数据包之后返回sync+ack数据包表示确认接收，第三步就是发送ack数据包表示客户端确认接收了服务端的数据包；第1次和第2次握手是从客户端的角度确认了输出（被接收到）和输入，第2次和第3次从服务端的角度确认了确认了输出（被接收到）和输入</p>
-<p>传输控制层的握手流程图</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/分手图.png" style="zoom:50%;"></p>
-<p>其中第一步是发送分手包，第二步是确认分手包，第三步是我也分手包，第四步是返回同意</p>
-<h3 id="3层网络层"><a href="#3层网络层" class="headerlink" title="3层网络层"></a>3层网络层</h3><p>IP的构造是点分字节，为了读取方便将二进制转成了十进制，每一个点之间的范围在0～255，IP的构造采用了分治的思想（可以通过hash取模，然后线性遍历，或者优化后的红黑树遍历）进而可以快速定位。从IP可以读取以下两部分内容</p>
-<ol>
-<li>网络号地址：掩码与IP取与</li>
-<li>主机地址：IP最后一点的后面三位</li>
-</ol>
-<p>根据<code>route -n</code>命令可以查看路由表，显示网关（路由器）的IP地址，互联网就是小网拼成大网，路由表的第一列就是网络号，即IP与子网掩码做与运算得到的。如果匹配的网络号是本地网络号，对应的网关IP（也就是下一跳）就是0.0.0.0，并且那么就不需要进行下一跳而是直接在自己的网络中进行通信</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/route.png" style="zoom:37%;"></p>
-<h3 id="2层链路层"><a href="#2层链路层" class="headerlink" title="2层链路层"></a>2层链路层</h3><p>可以通过<code>arp - a</code>命令来查看网关的IP和硬件地址（网卡地址，MAC地址）的映射，这样就可以地址找到下一跳的硬件地址，在最开始提到的数据包中的MAC地址就是硬件地址（经典的传纸条例子）</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/arp.png" style="zoom:40%;"></p>
-<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>同一个网络中的计算机在最开始的时候是通过ARP协议偷偷获取网关的MAC地址。具体流程是最开始计算机A会先发一个小的数据包，里面封装了目标IP就是网关B的IP，然后通过交换机发给同一个网络中的所有计算机，然后同一个网络中除了路由器以外的其他计算机拆开数据包发现不是发给自己的都会直接丢掉，而只有网关B收到数据包之后根据计算机A的IP地址通过交换机直接回复数据包给计算机A，这个时候机器A就拥有了网关B的MAC地址</p>
-<h2 id="通信流程"><a href="#通信流程" class="headerlink" title="通信流程"></a>通信流程</h2><ol>
-<li>7层建立表达格式的限制</li>
-<li>4层建立握手包，但不发送</li>
-<li>3层IP确认网络号</li>
-<li>2层确认吓一跳</li>
-<li>4层发送握手包建立通信</li>
-<li>7层发送请求</li>
-</ol>
-<h1 id="3种通信模型"><a href="#3种通信模型" class="headerlink" title="3种通信模型"></a>3种通信模型</h1><p>IP是逻辑上的两个端点（客户端和服务端），端点间的TCP传输有三个特点，确认机制，状态机制（根据状态分析数据包）以及不可分割（比如3次握手，4次分手都不可分割），IP分成私有IP和公有IP，其中私有IP不能发送到互联网中（因为私有IP不唯一）；MAC（硬件的网卡地址）是物理上的两个节点（每一条都更换MAC地址）。下面简单介绍家里的网络通信原理</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/S_NAT.png" style="zoom:30%;"></p>
-<p>从上述图片看出可能存在一些问题，假设家里的两台设备将数据包经过路由器发送到外部，如果发送的数据包申请的端口号都一样，经过路由器转换之后变成了相同的IP以及端口号，那么接收数据包的时候就不知道将数据包返回给哪一台设备，这个时候需要借助路由器内部存储的路由表，它是记录路由器给每发送出去的数据包随机申请一个端口号，将其与设备的私有ip+端口号建立映射关系，这样等返回数据包的时候根据路由表的映射关系就可以判断出来将其返回给哪一台设备。</p>
-<p>在介绍三种通信模型之前需要介绍4个名词</p>
-<ol>
-<li><p>CIP：客户端IP地址</p>
-</li>
-<li><p>VIP：虚拟服务器地址，也就是客户端访问网站域名解析完的IP</p>
-</li>
-<li><p>DIP：负责转发的IP地址</p>
-<p>1）和RIP通信：遵循ARP协议，获取Real Server的RIP（MAC地址）</p>
-</li>
-<li><p>RIP（Real）：后端真实主机（后端服务器）的IP</p>
-</li>
-</ol>
-<h2 id="D-NAT"><a href="#D-NAT" class="headerlink" title="D-NAT"></a>D-NAT</h2><p>后端的各个服务器必须是镜像的，不要出现从不同服务器接受的网页信息是不一致的</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/D_NAT.png" style="zoom:30%;"></p>
-<p>有一个细节就是将数据包发送到real server的时候socket对应关系（TCP关系）是CIP的端口号对应RIP的端口号，如果和VIP没有任何关系，发送的返回数据包是RIP_CIP，如果直接发送给客户端的话，客户端直接就会丢弃，所以解决办法就是通过负载均衡服务器，然后负载均衡服务器将RIP_CIP恢复成VIP_CIP就可以了，为了让Real Server将数据包发送给负载均衡服务器，需要将默认网关（掩码是4个0）指向负载均衡服务器，这样以后无论客户端的IP地址无论怎么变换，只要和4个0做与运算，就会指向默认网关，即下一跳一定是负载均衡服务器。</p>
-<p>局限性在于发送需要做一次D_NAT，返回也需要做一次D_NAT，压力有点过大，在互联网中请求是小量的，请求的东西是大量的，所以IO实际上是不对称的。比如在同一个带宽可能由5万个请求，可能恢复1个请求的东西，所以运营商会将网络传输设计成上传的带宽（波段）压低，下载的的带宽提高。</p>
-<h2 id="四层DR"><a href="#四层DR" class="headerlink" title="四层DR"></a>四层DR</h2><p>为了减缓接受压力，将RIP接收的数据包通过网络直接传输回客户端，由于需要遵循TCP协议即一台机器只能暴露一个IP，所以需要将VIP隐藏起来，即对外隐藏对内可见</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/DR.png" style="zoom:30%;"></p>
-<p>局限性在于服务器和负载均衡要在同一个局域网（交换机）中，应用场景就是互联网的<strong>数据中心</strong>。</p>
-<h2 id="隧道"><a href="#隧道" class="headerlink" title="隧道"></a>隧道</h2><p>IP背着IP，允许负载和服务器离的远一点</p>
-<p><img src="/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/TUN.png" style="zoom:30%;"></p>
+<h1 id="创建kernel"><a href="#创建kernel" class="headerlink" title="创建kernel"></a>创建kernel</h1><p>如果用 jupyter lab来编辑 python 脚本那么一定会用到 kernel，下面通过创建 python 3.8 的 kernel 为例简单介绍一下如何基于 conda 创建自定义的 kernel</p>
+<p>Step1. 创建python环境</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在-p后面指定python环境的安装路径，之后要制定python的版本</span></span><br><span class="line">conda -p /Users/huangning/.../python3.8 python=3.8</span><br></pre></td></tr></table></figure>
+<p>Step2. 创建kernel的json</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/share/jupyter/kernels</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建文件夹用来存放即将新建的kernel和python环境信息</span></span><br><span class="line">mkdir python3.8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置python环境对应kernel的json文件</span></span><br><span class="line"><span class="built_in">cd</span> python3.8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编辑json文件</span></span><br><span class="line">vi kernel.json</span><br><span class="line"></span><br><span class="line"><span class="comment">############################</span></span><br><span class="line">&#123;</span><br><span class="line"> <span class="string">"argv"</span>: [</span><br><span class="line">  <span class="string">"/Users/huangning/.../python3.8/bin/python3"</span>, <span class="comment">#python的可执行文件路径</span></span><br><span class="line">  <span class="string">"-m"</span>,</span><br><span class="line">  <span class="string">"ipykernel_launcher"</span>,</span><br><span class="line">  <span class="string">"-f"</span>,</span><br><span class="line">  <span class="string">"&#123;connection_file&#125;"</span></span><br><span class="line"> ],</span><br><span class="line"> <span class="string">"display_name"</span>: <span class="string">"huangpy3.8"</span>,  <span class="comment"># 创建的kernel名称</span></span><br><span class="line"> <span class="string">"language"</span>: <span class="string">"python"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Step3. 启动kernel</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 为了使新创建的huangpy38的kernel正常启动，需要切换成新安装的python黄酱，用pip下载ipykernel</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1) 激活虚拟的conda环境，会自动跳到base环境</span></span><br><span class="line"><span class="built_in">source</span> activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2) 列出conda已有的python环境</span></span><br><span class="line">conda env list / conda info -e </span><br><span class="line"></span><br><span class="line"><span class="comment"># 3) 切换到指定的python环境</span></span><br><span class="line">conda activate /Users/huangning/.../python3.8</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4) 安装ipykernel，用conda创建环境的时候可以在末尾直接加ipykernel参数，就可以省略这一步</span></span><br><span class="line">pip install ipykernel</span><br></pre></td></tr></table></figure>
+<p>这样就完成了自定义 kernel 的创建</p>
+<p><img src="/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/kernel.png" style="zoom:40%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># conda用法补充</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 删除某个conda环境</span></span><br><span class="line"><span class="comment"># 1）按照指定路径删除环境</span></span><br><span class="line">conda remove -p /Users/huangning/.../python3.8 --all</span><br><span class="line"><span class="comment"># 2) 按照指定名称山删除环境</span></span><br><span class="line">conda remove -n python3.8 --all</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 删除某个conda环境下的某个包</span></span><br><span class="line"><span class="comment"># 1) 按照指定路径删除环境</span></span><br><span class="line">conda remove -p /Users/huangning/.../python3.8 pandas</span><br><span class="line"><span class="comment">#	2) 按照指定名称删除环境</span></span><br><span class="line">conda remove -n python3.8 pandas</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 退出当前虚拟环境(默认返回base)</span></span><br><span class="line">conda deactivate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 查看当前python环境下安装了哪些python包</span></span><br><span class="line">conda list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 查看conda版本</span></span><br><span class="line">conda -v</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 查找可供安装的python</span></span><br><span class="line"><span class="comment"># 1) 精确查找</span></span><br><span class="line">conda search --full-name python</span><br><span class="line"><span class="comment"># 2）模糊查找</span></span><br><span class="line">conda search py</span><br><span class="line"></span><br><span class="line"><span class="comment"># 7. 关闭自动启动的conda</span></span><br><span class="line">conda config --<span class="built_in">set</span> auto_activate_base <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<h1 id="自定义模块导入"><a href="#自定义模块导入" class="headerlink" title="自定义模块导入"></a>自定义模块导入</h1><p>使用IDEA有时会碰到想要导入自定义模块但是找不到路径的问题，针对该问题的解决办法首先要指定<code>Source Root</code>，这样系统就会从<code>Source Root</code>还有python的包路径<code>site-packages</code>下面搜索指定模块的路径，因此需要导入模块的顶级目录的的上级目录设置为<code>Source Root</code>，这样导入指定模块的时候会从<code>Source Root</code>下面开始寻找</p>
+<p><img src="/2020/09/05/Python%E5%A1%AB%E5%9D%91%E7%AC%94%E8%AE%B0/rootsource.png" style="zoom:30%;"></p>
+<p>如果打包的python项目中也含有导入自定义模块的语法，那么需要针对语法中顶级目录的上级目录来打包，这样之后如果安装它（撕毁打包的项目）可以保证<code>site-packages</code>留下的是顶级目录而不是顶级目录的上级目录，之后也可以通过<code>from xxxx.xxx import xxx</code>语句就可以从<code>site-packages</code>中搜索到之前安装的顶级目录了；如果安装的python包里面有自定义模块导入的语法也不会报错，因为会顺利地从<code>site-packages</code>下面找到自身包的顶级目录</p>
 
     </div>
 
@@ -359,7 +300,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tagstag/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># 网络通信快速入门｜计算机学习笔记</a>
+              <a href="/tagstag/Python%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># Python快速入门｜计算机学习笔记</a>
           </div>
 
         
@@ -368,12 +309,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/09/05/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="Python填坑笔记">
-      <i class="fa fa-chevron-left"></i> Python填坑笔记
+    <a href="/2020/09/05/SparkML%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="SparkML学习笔记">
+      <i class="fa fa-chevron-left"></i> SparkML学习笔记
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Hadoop学习笔记">
-      Hadoop学习笔记 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/09/05/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Python填坑笔记">
+      Python填坑笔记 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -443,7 +384,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP-IP协议"><span class="nav-number">1.</span> <span class="nav-text">TCP&#x2F;IP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP四层模型"><span class="nav-number">1.1.</span> <span class="nav-text">TCP&#x2F;IP四层模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7层应用层"><span class="nav-number">1.1.1.</span> <span class="nav-text">7层应用层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4层传输控制层"><span class="nav-number">1.1.2.</span> <span class="nav-text">4层传输控制层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3层网络层"><span class="nav-number">1.1.3.</span> <span class="nav-text">3层网络层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2层链路层"><span class="nav-number">1.1.4.</span> <span class="nav-text">2层链路层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#补充"><span class="nav-number">1.1.5.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通信流程"><span class="nav-number">1.2.</span> <span class="nav-text">通信流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3种通信模型"><span class="nav-number">2.</span> <span class="nav-text">3种通信模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#D-NAT"><span class="nav-number">2.1.</span> <span class="nav-text">D-NAT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四层DR"><span class="nav-number">2.2.</span> <span class="nav-text">四层DR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#隧道"><span class="nav-number">2.3.</span> <span class="nav-text">隧道</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#创建kernel"><span class="nav-number">1.</span> <span class="nav-text">创建kernel</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#自定义模块导入"><span class="nav-number">2.</span> <span class="nav-text">自定义模块导入</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
