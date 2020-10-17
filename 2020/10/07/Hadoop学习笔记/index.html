@@ -66,7 +66,7 @@
 <meta property="og:image" content="http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Offset.png">
 <meta property="og:image" content="http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/fedration.png">
 <meta property="article:published_time" content="2020-10-07T07:50:54.000Z">
-<meta property="article:modified_time" content="2020-10-08T04:01:35.122Z">
+<meta property="article:modified_time" content="2020-10-17T04:30:13.134Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Hadoop学习笔记｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
@@ -222,7 +222,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-08 12:01:35" itemprop="dateModified" datetime="2020-10-08T12:01:35+08:00">2020-10-08</time>
+                <time title="修改时间：2020-10-17 12:30:13" itemprop="dateModified" datetime="2020-10-17T12:30:13+08:00">2020-10-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -260,14 +260,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
+              <span>11k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>9 分钟</span>
+              <span>10 分钟</span>
             </span>
 
         </div>
@@ -329,7 +329,7 @@
 <p><strong>Step5.</strong> 在<code>/usr/hadoop-3.1.4/etc/hadoop/workers</code>中配置从节点信息，相当于Hadoop2.x中的slaves</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">node01</span><br></pre></td></tr></table></figure>
 <p><strong>Step6.</strong> 在<code>/usr/hadoop-3.1.4</code>格式化namenode并启动</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 格式化namenode之后会在 hadoop.tmp.dir/dfs/name/current下面产生四个文件，其中有两个image文件以及1个VERSION文件，VERSION里面包含了集群的唯一编号clusterID</span></span><br><span class="line">./bin/hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以通过jps查看NameNode，DataNode以及SecondaryNameNode节点是否启动成功</span></span><br><span class="line">./sbin/start-dfs</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 格式化namenode之后会在 hadoop.tmp.dir/dfs/name/current下面产生四个文件，其中有两个image文件以及1个VERSION文件，VERSION里面包含了集群的唯一编号clusterID</span></span><br><span class="line">./bin/hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可以通过jps查看NameNode，DataNode以及SecondaryNameNode节点是否启动成功</span></span><br><span class="line">./sbin/start-dfs.sh</span><br></pre></td></tr></table></figure>
 <p><strong>Step7.</strong> 在本地浏览器通过<code>node01:9870</code>访问NameNode信息</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 如果忘记端口号，可以通过下述命令查看监听的端口信息</span></span><br><span class="line">ss -nal</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过浏览器访问之前需要关闭防火墙</span></span><br><span class="line">systemctl stop firewalld.service  		<span class="comment"># 关闭防火墙</span></span><br><span class="line">systemctl <span class="built_in">disable</span> firewalld.service   <span class="comment"># 开机不启动防火墙</span></span><br><span class="line">systemctl status firewalld.service    <span class="comment"># 查看防火墙状态</span></span><br></pre></td></tr></table></figure>
 <h2 id="全分布式"><a href="#全分布式" class="headerlink" title="全分布式"></a>全分布式</h2><p>假设现在有4个节点，每个节点的角色如下</p>
@@ -472,10 +472,34 @@
 <p>1) zookeeper启动遵从过半机制，即启动zookeeper服务器个数超过搭建zookeeper服务器个数的一半才可以正常启动zookeeper集群<br>2) 可以通过zkCli.sh来启动客户端进而对zookeeper集群进行修改，但一般是在namenode在进行状态切换的时候会对zookeeper进行修改<br>3) zookeeperyou选举机制，一般是根据服务器编号或者启动顺序来决定搭建zookeeper的服务器是follower还是leader</p>
 <p><strong>Step7.</strong> 在node01，node02，node03上分别启动jounalnode</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可以通过jps查看node01，node02，node03的JNN是否启动</span></span><br><span class="line"><span class="comment"># hdfs --daemon stop journalnode是关闭journal</span></span><br><span class="line">hdfs --daemon start journalnode</span><br></pre></td></tr></table></figure>
-<p><strong>Step8.</strong> 在node01上格式化namenode并启动namenode</p>
+<p><strong>Step8.</strong> namenode同步透穿</p>
+<p><strong>Step8.1.</strong> 在node01上格式化namenode并启动namenode</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 也可以在namenode2上格式化namenode，但只能格式化一个namenode，另一个namenode需要通过JNN同步透穿来作standby角色</span></span><br><span class="line">hdfs namenode -format</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动namenode使得另外一个namenode进行同步工作</span></span><br><span class="line">hadoop-daemon.sh start namenode</span><br></pre></td></tr></table></figure>
-<p><strong>Step9.</strong> 在node02上同步node01上的namenode信息</p>
+<p><strong>Step8.2.</strong> 在node02上同步node01上的namenode信息</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hdfs namenode -bootstrapStandby</span><br></pre></td></tr></table></figure>
+<p><strong>Step9.</strong> 格式化zookeeper</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在zookeeper创建一个2级的注册目录/mycluster/hadoop-ha，将要保存各个nanmenode节点信息</span></span><br><span class="line"><span class="comment"># 之后所有的namenode都会抢着想注册目录中写active或者standby状态</span></span><br><span class="line">hdfs zkfc -format zk</span><br></pre></td></tr></table></figure>
+<p><strong>Step10.</strong> 测试主备namenode节点切换</p>
+<p><strong>Step10.1.</strong> 在node01关闭active状态的namenode</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hdfs --daemon stop namenode</span><br></pre></td></tr></table></figure>
+<p>通过node01:9870查看node01挂掉，通过node02:9870查看node02的状态变成active，通过zkCli.sh进入客户端，查询<code>mycluster/hadoop-ha</code>可以查看到两个节点的状态</p>
+<p>在node01上重启namenode</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hdfs --daemon start namenode</span><br></pre></td></tr></table></figure>
+<p>通过node01:9870查看node01变成了<strong>standby</strong>，通过node02:9870查看node02的状态变成<strong>active</strong></p>
+<p><strong>Step10.2.</strong> 关闭node02的zkfc进程</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hdfs -daemon stop zkfc</span><br></pre></td></tr></table></figure>
+<p>通过node01:9870查看node01变成了<strong>active</strong>，通过node02:9870查看node02的状态变成<strong>standby</strong></p>
+<p><strong>补充</strong></p>
+<ol>
+<li><p><strong>脑裂（brain-split）</strong>：处于active状态的namenode挂掉/假死状态的时候，另外一个那么node启动，过段时间挂掉/假死状态的namenode重新启动导致两个active状态的namenode同时工作的现象较脑裂</p>
+</li>
+<li><p>解决<strong>脑裂</strong>方法</p>
+<p>使用<strong>sshfence</strong>隔离机制，即active的namenode假死之后，zkfc进程向zookeeper写入异常，standby的namenode上zkfc从zookeeper读入异常后就会通过ssh连接挂掉的active状态的namenode并将其kill掉（但显然如果真挂掉的话是连接不上的），如果收到成功kill的信息，当前standby的namenode状态就会切换到active，如果经过一段时间都没有收到kill执行成功的信息，那么当前standby的namenode就会执行自定义脚本，但是该方法导致了<strong>active的namenode挂掉之后，standby状态的namenode没有马上升级为active状态</strong>，解决该问题的办法就是在在<code>/usr/hadoop-3.1.4/etc/hadoop/hdfs-site.sh</code>中修改<code>dfs.ha.fencing.methods</code></p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.ha.fencing.methods<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span></span><br><span class="line">    sshfence</span><br><span class="line">    shell(/bin/true)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>Step11.</strong> 在node01上启动HA集群</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -639,12 +663,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">128k</span>
+    <span title="站点总字数">129k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">1:56</span>
+    <span title="站点阅读时长">1:57</span>
 </div>
 
         
