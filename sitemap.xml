@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2020/10/17/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://yoursite.com/2020/10/17/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%85%A5%E9%97%A8/</loc>
     
-    <lastmod>2020-10-17T08:05:05.643Z</lastmod>
+    <lastmod>2020-10-18T14:12:01.262Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/17/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%85%A5%E9%97%A8/</loc>
+    <loc>http://yoursite.com/2020/10/17/Go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     
-    <lastmod>2020-10-17T07:55:19.839Z</lastmod>
+    <lastmod>2020-10-18T13:00:33.741Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/10/17/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2020-10-17T08:05:05.643Z</lastmod>
     
   </url>
   
