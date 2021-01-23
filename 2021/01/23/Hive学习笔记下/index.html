@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从分区，分桶，函数，参数配置，视图以及练习对Hive进行介绍">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive学习笔记下">
+<meta property="og:url" content="http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从分区，分桶，函数，参数配置，视图以及练习对Hive进行介绍">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-23T06:48:07.000Z">
+<meta property="article:modified_time" content="2021-01-23T08:47:06.225Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="Hive学习笔记下｜计算机学习笔记">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>Hive学习笔记下 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="务实敢为 追求极致">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hive学习笔记下
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-23 14:48:07 / 修改时间：16:47:06" itemprop="dateCreated datePublished" datetime="2021-01-23T14:48:07+08:00">2021-01-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式计算</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/" itemprop="url" rel="index">
+                    <span itemprop="name">Hive学习笔记下</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.9k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从<strong>分区</strong>，<strong>分桶</strong>，<strong>函数</strong>，<strong>参数配置</strong>，<strong>视图</strong>以及<strong>练习</strong>对Hive进行介绍</p>
+<a id="more"></a>
+<h1 id="Hive分区"><a href="#Hive分区" class="headerlink" title="Hive分区"></a>Hive分区</h1><p>为了提高查询效率，因此将不同数据文件存到不同的目录。分区数量虽然没有限制，但是要结合具体的业务需求来建立，分区粒度细会造成文件的多次IO导致查询效率低，分区粒度粗也会造成大表扫描进而导致查询效率同样低，比如创建年月日时分秒分区的数据，针对只查询日级别分区的需求，那么最好的创建分区的方式就是只创建日分区的数据表。所以<strong>分区粒度的选择不能过粗也不能过细哦～</strong>🥳</p>
+<h2 id="分区表创建"><a href="#分区表创建" class="headerlink" title="分区表创建"></a>分区表创建</h2><p>我们首先创建带一个分区的Hive表，<strong>记住分区字段绝对不能出现在创建表的列中哦！！！</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE TABLE psn4 (</span><br><span class="line">id int,</span><br><span class="line">name string,</span><br><span class="line">-- age int, </span><br><span class="line">likes array&lt;string&gt;,</span><br><span class="line">address map&lt;string, string&gt;</span><br><span class="line">)</span><br><span class="line">PARTITIONED BY (age int)</span><br><span class="line">ROW FORMAT DELIMITED </span><br><span class="line">FIELDS TERMINATED BY &#39;,&#39;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &#39;-&#39;</span><br><span class="line">MAP KEYS TERMINATED BY &#39;:&#39;</span><br><span class="line">LINES TERMINATED BY &#39;\n&#39;;</span><br></pre></td></tr></table></figure>
+<p>然后再试试创建带两个分区的Hive表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE TABLE psn5 (</span><br><span class="line">id int,</span><br><span class="line">name string,</span><br><span class="line">likes array&lt;string&gt;,</span><br><span class="line">address map&lt;string, string&gt;</span><br><span class="line">)</span><br><span class="line">PARTITIONED BY (age int, sex string)</span><br><span class="line">ROW FORMAT DELIMITED </span><br><span class="line">FIELDS TERMINATED BY &#39;,&#39;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &#39;-&#39;</span><br><span class="line">MAP KEYS TERMINATED BY &#39;:&#39;</span><br><span class="line">LINES TERMINATED BY &#39;\n&#39;;</span><br></pre></td></tr></table></figure>
+<h2 id="数据导入"><a href="#数据导入" class="headerlink" title="数据导入"></a>数据导入</h2><p>首先将数据导入一个分区的分区表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; LOAD DATA LOCAL INPATH &#39;&#x2F;root&#x2F;data&#39;  INTO TABLE psn4 PARTITION (age&#x3D;10);</span><br></pre></td></tr></table></figure>
+<p>将数据导入两个分区表，记住导入数据的时候需要将分区写完整</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; LOAD DATA LOCAL INPATH &#39;&#x2F;root&#x2F;data&#39;  INTO TABLE psn5 PARTITION (age&#x3D;10, sex&#x3D;&#39;boy&#39;);</span><br></pre></td></tr></table></figure>
+<h2 id="添加分区"><a href="#添加分区" class="headerlink" title="添加分区"></a>添加分区</h2><p> 添加分区的字段必须是<strong>在创建表的时候定义的</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; ALTER TABLE psn4 ADD PARTITION (age&#x3D;10);</span><br><span class="line">hive&gt; ALTER TABLE psn5 ADD PARTITION (age&#x3D;20, sex&#x3D;&#39;boy&#39;);</span><br><span class="line">hive&gt; ALTER TABLE psn5 ADD PARTITION (age&#x3D;30, sex&#x3D;&#39;girl&#39;);</span><br></pre></td></tr></table></figure>
+<p>下面这句话会报错，因为<strong>额外增加了分区的种类</strong>！！！</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; ALTER TABLE psn4 ADD PARTITION (age&#x3D;10, height&#x3D;112);</span><br></pre></td></tr></table></figure>
+<h2 id="删除分区"><a href="#删除分区" class="headerlink" title="删除分区"></a>删除分区</h2><p>通过下面语句可以将所有分区值包含sex=’boy’的分区删除掉，假设age=10的分区中只有sex=’boy’的一个分区，那么age=10这个分区也会被删除</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; ALTER TABLE psn5 DROP partition (sex&#x3D;&#39;boy&#39;)</span><br></pre></td></tr></table></figure>
+<h2 id="动态分区"><a href="#动态分区" class="headerlink" title="动态分区"></a>动态分区</h2><p>Hive支持两种类型的分区表，分别是<strong>静态分区表和</strong>和<strong>动态分区表</strong>，二者区别在于导入数据时，静态分区表需要手动指定分区来进行数据导入，而动态分区通过判断位置进行数据导入</p>
+<p><strong>Step1.</strong> 创建原始表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE psn(</span><br><span class="line">id int,</span><br><span class="line">name string,</span><br><span class="line">age int,</span><br><span class="line">sex string,</span><br><span class="line">likes array&lt;string&gt;,</span><br><span class="line">address map&lt;string, string&gt;</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED </span><br><span class="line">FIELDS TERMINATED BY &#39;,&#39;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &#39;-&#39;</span><br><span class="line">MAP KEYS TERMINATED BY &#39;:&#39;</span><br><span class="line">LINES TERMINATED BY &#39;\n&#39;;</span><br></pre></td></tr></table></figure>
+<p><strong>Step2.</strong> 创建分区表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE TABLE partipsn(</span><br><span class="line">id int,</span><br><span class="line">name string,</span><br><span class="line">likes array&lt;string&gt;,</span><br><span class="line">address map&lt;string, string&gt;</span><br><span class="line">)</span><br><span class="line">partitioned by(age int, sex string)</span><br><span class="line">ROW FORMAT DELIMITED </span><br><span class="line">FIELDS TERMINATED BY &#39;,&#39;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &#39;-&#39;</span><br><span class="line">MAP KEYS TERMINATED BY &#39;:&#39;</span><br><span class="line">LINES TERMINATED BY &#39;\n&#39;;</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 启动动态分区</p>
+<p>将mode设置成<code>nostrict</code>, 如果是<code>strict</code>必须满足有一个分区是静态的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set hive.exec.dynamic.partition&#x3D;true;</span><br><span class="line">set hive.exec.dynamic.partition.mode&#x3D;nostrict</span><br></pre></td></tr></table></figure>
+<p><strong>Step4.</strong> 导入数据</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 使用静态分区时，需要指定分区的值</span><br><span class="line">insert table partipsn partition (age&#x3D;12, sex&#x3D;&#39;man&#39;) </span><br><span class="line">select name, ip from psn where age&#x3D; 12 and sex&#x3D;&#39;man&#39;;</span><br><span class="line"></span><br><span class="line"># 使用动态分区</span><br><span class="line">insert table partipsn partition(age, sex)</span><br><span class="line">select id,name,likes,address,age,sex distribute by age, sex;</span><br></pre></td></tr></table></figure>
+<h1 id="Hive分桶"><a href="#Hive分桶" class="headerlink" title="Hive分桶"></a>Hive分桶</h1><p>分桶表是对列值取哈希值的方式，将不同数据放到不同文件中存储。一般用在两个场景，第一是<strong>数据抽样</strong>，因为分桶操作本质就是对数据进行了一次抽样，对桶内数据再抽样可以保证数据足够随机，第二是<strong>map-join</strong>，一般MapReduce根据bucket来分配reduce，指定了分桶之后，join过程可以减缓<strong>shuffle</strong>。本文只通过数据抽样来介绍分桶</p>
+<p><strong>Step1.</strong> 开启分桶</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; set hive.enforce.bucketing&#x3D;true;</span><br><span class="line"># step5 通过分桶表进行抽样</span><br><span class="line">hive&gt; select * from psnbucket tablesample(bucket 1 outof 4 on columns);</span><br><span class="line"></span><br><span class="line"># tablesample(bucket x out of y)语法说明</span><br><span class="line"># 假设共有32个桶</span><br><span class="line"># tablesample(bucket 2 out of 4)</span><br><span class="line"># x&#x3D;2表示从第2个桶开始取数据, y&#x3D;4是桶的因子或者倍数</span><br><span class="line"># 抽取的数据量为32&#x2F;y&#x3D;8, 即分别从2,6, 10, 14, 18, 22, 26, 30桶中取数据</span><br><span class="line"></span><br><span class="line"># tablesample(bucket 3 out of 256)</span><br><span class="line"># 从第3个桶开始取数据</span><br><span class="line"># 抽取的数据量为32&#x2F;256&#x3D;0.125, 接下来从3号桶中取1&#x2F;8个数据，即取1条数据</span><br></pre></td></tr></table></figure>
+<p><strong>step2.</strong> 创建原始表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; create table psn(id int, name string, age int)</span><br><span class="line">			row format delimited </span><br><span class="line">			fields terminated by &#39;,&#39;;</span><br><span class="line">			</span><br><span class="line"># 将数据数据导入原始表</span><br><span class="line">hive&gt; load data local inpath &#39;&#x2F;root&#x2F;data&#39; into table psn;</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 创建分桶表并指定分桶</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; create table psnbucket(id int, name string, age int)</span><br><span class="line">			clustered by (age) into 4 buckets</span><br><span class="line">			row format delimited</span><br><span class="line">			fields terminated by &#39;,&#39;;</span><br></pre></td></tr></table></figure>
+<p>Step4. 将数据导入到分桶表</p>
+<p>将原始表数据导入到分桶表要经过MapReduce，执行流程就是从HDFS取出数据，然后按照规则进行分桶，最后导入到psnpucket表中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; insert into table psnbucket </span><br><span class="line">			select id, name, age from psn;</span><br></pre></td></tr></table></figure>
+<p>其中测试数据<code>data</code>为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">1,tom,11</span><br><span class="line">2,cat,22</span><br><span class="line">3,dog,33</span><br><span class="line">4,hive,44</span><br><span class="line">5,hbase,55</span><br><span class="line">6,mr,66</span><br><span class="line">7,alice,77</span><br><span class="line">8,scala,88</span><br></pre></td></tr></table></figure>
+<p>在处理大量小文件的场景下，执行任务的时间大部分都消耗在资源分配和任务调度，所以<strong>分桶表使用场景很少</strong></p>
+<h1 id="Hive函数"><a href="#Hive函数" class="headerlink" title="Hive函数"></a>Hive函数</h1><p>Hive中的内置函数比较多，本文只列举部分的函数</p>
+<h2 id="内置运算符"><a href="#内置运算符" class="headerlink" title="内置运算符"></a>内置运算符</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 获取名叫A的array中index&#x3D;n的值</span><br><span class="line">hive&gt; A[n]</span><br><span class="line"></span><br><span class="line"># 获取名叫M的map中ke&#x3D;name的值</span><br><span class="line">hive&gt; M[name]</span><br><span class="line"></span><br><span class="line"># 获取名叫S的结构体中字段为x的值</span><br><span class="line">hive&gt; S.x</span><br></pre></td></tr></table></figure>
+<h2 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h2><h3 id="数学函数"><a href="#数学函数" class="headerlink" title="数学函数"></a>数学函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 四舍五入</span><br><span class="line">hive&gt; round</span><br><span class="line"></span><br><span class="line"># 向下取整</span><br><span class="line">hive&gt; floor</span><br><span class="line"></span><br><span class="line"># 向上取整</span><br><span class="line">hive&gt; ceil</span><br><span class="line"></span><br><span class="line"># 取随机数，seed表示随机种子</span><br><span class="line">hive&gt; rand(int seed)  </span><br><span class="line"></span><br><span class="line"># 指数函数</span><br><span class="line">hive&gt; exp(double a)</span><br><span class="line"></span><br><span class="line"># 对数函数</span><br><span class="line">hive&gt; ln(double b)</span><br><span class="line">hive&gt; log(double a, double b)</span><br><span class="line"></span><br><span class="line"># 幂函数</span><br><span class="line">hive&gt; pow</span><br><span class="line"></span><br><span class="line"># 开方</span><br><span class="line">hive&gt; sqrt</span><br><span class="line"></span><br><span class="line"># 三角函数</span><br><span class="line">hive&gt; sin</span><br><span class="line">hive&gt; cos</span><br></pre></td></tr></table></figure>
+<h3 id="收集函数"><a href="#收集函数" class="headerlink" title="收集函数"></a>收集函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 获取集合的大小</span><br><span class="line">hive&gt; size(Map&lt;K,V&gt;)</span><br></pre></td></tr></table></figure>
+<h3 id="类型转换函数"><a href="#类型转换函数" class="headerlink" title="类型转换函数"></a>类型转换函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 将某个字段转成指定类型</span><br><span class="line">hive&gt; cast(expr as &lt;type&gt;)</span><br></pre></td></tr></table></figure>
+<h3 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 将字符串格式的时间戳转成年月日</span><br><span class="line">hive&gt; to date(string timestamp)</span><br><span class="line"></span><br><span class="line"># 获取日期中的月</span><br><span class="line">hive&gt; moonth(string date)</span><br><span class="line"></span><br><span class="line"># 获取日期</span><br><span class="line">hive&gt; day</span><br><span class="line"></span><br><span class="line"># 获取当前月的第几天</span><br><span class="line">hive&gt; dayofmonth</span><br><span class="line"></span><br><span class="line"># 获取小时</span><br><span class="line">hive&gt; hour</span><br><span class="line"></span><br><span class="line"># 获取分钟</span><br><span class="line">hive&gt; minute</span><br><span class="line"></span><br><span class="line"># 获取秒</span><br><span class="line">hive&gt; second</span><br></pre></td></tr></table></figure>
+<h3 id="条件函数"><a href="#条件函数" class="headerlink" title="条件函数"></a>条件函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 如果testCondition为true，则返回v1，否则返回v2或者空值</span><br><span class="line">hive&gt; if(boolean testCondition, T v1, T v2)</span><br><span class="line"></span><br><span class="line"># 返回一组数据中，第一个不为null的值</span><br><span class="line">hive&gt; coalesce(T v1, T v2, ...) </span><br><span class="line"></span><br><span class="line"># 当a&#x3D;b时,返回c 当a&#x3D;d的时，返回e 否则返回f</span><br><span class="line">hive&gt; case a when b then c when d then e else f </span><br><span class="line"></span><br><span class="line"># 当a成立时返回b 当c成立时返回d 否则给f</span><br><span class="line">hive&gt; case when a then b when c then d else f</span><br></pre></td></tr></table></figure>
+<h3 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 获取字符串长度</span><br><span class="line">hive&gt; length</span><br><span class="line"></span><br><span class="line"># 颠倒字符串</span><br><span class="line">hive&gt; reverse</span><br><span class="line"></span><br><span class="line"># 合并字符串</span><br><span class="line">hive&gt; concat</span><br><span class="line"></span><br><span class="line"># 以指定连接符合并字符串</span><br><span class="line">hive&gt; concat_ws(string sep,string a)</span><br><span class="line"></span><br><span class="line"># 取子串</span><br><span class="line">hive&gt; substr  </span><br><span class="line"></span><br><span class="line"># 变大写</span><br><span class="line">hive&gt; upper</span><br><span class="line"></span><br><span class="line"># 变小写</span><br><span class="line">hive&gt; lower</span><br><span class="line"></span><br><span class="line"># 去除左右空格</span><br><span class="line">hive&gt; trim</span><br><span class="line"></span><br><span class="line"># 去除左侧空格</span><br><span class="line">hive&gt; ltrim</span><br><span class="line"></span><br><span class="line"># 去除右侧空格</span><br><span class="line">hive&gt; rtrim</span><br><span class="line"></span><br><span class="line"># 将字符串转成正则表达式</span><br><span class="line">hive&gt; regexp</span><br></pre></td></tr></table></figure>
+<h3 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 取最小值</span><br><span class="line">hive&gt; min</span><br><span class="line"></span><br><span class="line"># 取最大值</span><br><span class="line">hive&gt; max</span><br><span class="line"></span><br><span class="line"># 无偏方差和对应的标准差</span><br><span class="line">hive&gt; var_pop</span><br><span class="line">hive&gt; stddev_samp</span><br><span class="line"></span><br><span class="line"># 有偏方差和对应的标准差</span><br><span class="line">hive&gt; var_samp</span><br><span class="line">hive&gt; var_sample</span><br></pre></td></tr></table></figure>
+<h3 id="表生成函数"><a href="#表生成函数" class="headerlink" title="表生成函数"></a>表生成函数</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># explode </span><br><span class="line"># 可以将map或者array拆成多行生成一列</span><br><span class="line">hive&gt; explode()</span><br><span class="line"></span><br><span class="line"># get_json_object</span><br><span class="line"># 获取单层值</span><br><span class="line">hive&gt; select get_json_object(data, &#39;$.owner&#39;) from test;</span><br><span class="line"></span><br><span class="line"># 获取多层值</span><br><span class="line">hive&gt; select get_json_object(data,&#39;$.store.bicycle.price&#39;) from test;</span><br><span class="line"></span><br><span class="line"># 获取数组值</span><br><span class="line">hive&gt; select get_json_object(data, &#39;$.store.fruit[0]&#39;) from test;</span><br></pre></td></tr></table></figure>
+<p>其中test表中data字段的数据为</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> <span class="attr">"store"</span>:</span><br><span class="line">        &#123;</span><br><span class="line">         <span class="attr">"fruit"</span>:[&#123;<span class="attr">"weight"</span>:<span class="number">8</span>,<span class="attr">"type"</span>:<span class="string">"apple"</span>&#125;, &#123;<span class="attr">"weight"</span>:<span class="number">9</span>,<span class="attr">"type"</span>:<span class="string">"pear"</span>&#125;],  </span><br><span class="line">         <span class="attr">"bicycle"</span>:&#123;<span class="attr">"price"</span>:<span class="number">19.95</span>,<span class="attr">"color"</span>:<span class="string">"red"</span>&#125;</span><br><span class="line">         &#125;, </span><br><span class="line"> <span class="attr">"email"</span>:<span class="string">"amy@only_for_json_udf_test.net"</span>, </span><br><span class="line"> <span class="attr">"owner"</span>:<span class="string">"amy"</span> </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="自定义函数"><a href="#自定义函数" class="headerlink" title="自定义函数"></a>自定义函数</h2><p>自定义函数包含UDF，UDAF，UDTF，其中UDF是一进一出，UDAF多进一出，UDTF是一进多出</p>
+<h3 id="UDF开发"><a href="#UDF开发" class="headerlink" title="UDF开发"></a>UDF开发</h3><p>假设我们想将数据中的姓名进行脱敏</p>
+<p><strong>step1.</strong> 构建UDF，重写evaluate</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.hadoop.hive.ql.exec.UDF;</span><br><span class="line"><span class="keyword">import</span> org.apache.hadoop.io.Text;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TuoMin</span> <span class="keyword">extends</span> <span class="title">UDF</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Text <span class="title">evaluate</span><span class="params">(<span class="keyword">final</span> Text s)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (s == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String str = s.toString().substring(<span class="number">0</span>, <span class="number">3</span>) + <span class="string">"***"</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Text(str);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>step2.</strong> 将程序打jar包发送到服务器</p>
+<p><strong>step3.</strong> 添加jar包</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; add jar &#x2F;root&#x2F;tumin.jar;</span><br></pre></td></tr></table></figure>
+<p><strong>step4.</strong> 创建临时函数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE TEMPORARY FUNCTION tm as &#39;hive.udf.ADD&#39;;</span><br></pre></td></tr></table></figure>
+<p><strong>step5.</strong> 用开发的临时函数进行查询</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; select tm(name) from psn;</span><br></pre></td></tr></table></figure>
+<h1 id="Hive参数配置"><a href="#Hive参数配置" class="headerlink" title="Hive参数配置"></a>Hive参数配置</h1><p>假设我们想执行Hive查询操作的时候需要打印表头，Hive参数配置共有以下四种方法</p>
+<ol>
+<li><p><strong>配置hive-site</strong></p>
+<p>通过配置<code>hive-site.xml</code>，使得配置信息<strong>永久生效</strong></p>
+</li>
+<li><p><strong>配置.hiverc</strong></p>
+<p>可以配置家目录下的<code>.hiverc</code>，因为在启动hive客户端的时候，会执行家目录下的.hiverc配置</p>
+</li>
+<li><p><strong>命令行</strong></p>
+<p>在命令行配置hive参数，局部改变配置，即当进入Hive后，退出再登录就失效</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># Hive中的参数，变量都是以命名空间开头，比如hiveconf</span><br><span class="line">hive --hiveconf hive.cli.print.header&#x3D;true</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>客户端</strong></p>
+<p>登录Hive客户端后进行配置，局部改变配置，即当退出Hive再登录就失效</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; set hive.cli.print.header&#x3D;true</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果想查看Hive历史命令，可以通过<code>.hivehistory</code>来查询，如果没有该文件，就需要创建</p>
+<h1 id="Hive视图"><a href="#Hive视图" class="headerlink" title="Hive视图"></a>Hive视图</h1><h2 id="Lateral-View"><a href="#Lateral-View" class="headerlink" title="Lateral View"></a>Lateral View</h2><p>通过UDTF函数拆分成多行，但是通过select查询只能存在单个UDTF，不能包含多个UDTF以及其他字段，Lateral View可以解决该问题，解决方法是将多行结果构成一个有别名的虚拟表。假设我们想要统计人员表中爱好以及城市种类数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; select count(distinct(col1)), count(distinct(col2)) from psn</span><br><span class="line">lateral view explode(likes) psn as col1</span><br><span class="line">lateral view explode(address) psn as col2, col3;</span><br></pre></td></tr></table></figure>
+<p>其中人员表<code>psn</code>为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">psn.id	psn.name	psn.age	psn.sex	psn.likes	psn.address</span><br><span class="line">1	小明1	10	man	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">2	小明2	20	boy	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">3	小明3	10	man	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">4	小明4	20	man	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">5	小明5	10	boy	[<span class="string">"lol"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">6	小明6	20	boy	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">7	小明7	10	man	[<span class="string">"lol"</span>,<span class="string">"book"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">8	小明8	10	man	[<span class="string">"lol"</span>,<span class="string">"book"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br><span class="line">9	小明9	20	boy	[<span class="string">"lol"</span>,<span class="string">"book"</span>,<span class="string">"movie"</span>]	&#123;<span class="string">"beijing"</span>:<span class="string">"\"shangxuetang\""</span>,<span class="string">"shanghai"</span>:<span class="string">"pudong"</span>&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h2><p>和关系型数据库一样，Hive也支持视图，有以下三个特点</p>
+<ol>
+<li>不支持物化视图，即视图不可持久化</li>
+<li>只能做查询操作，不能做load数据操作</li>
+<li>视图也是表，所以会保留元信息在MySQL，但是Hive中是不存数据的</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> # 创建视图</span><br><span class="line"> # 视图也是表，即在mysql里面可以查到，但在HDFS里面没有数据</span><br><span class="line">hive&gt;  create view v_psn as select id, name from psn;</span><br></pre></td></tr></table></figure>
+<h1 id="Hive练习"><a href="#Hive练习" class="headerlink" title="Hive练习"></a>Hive练习</h1><h2 id="掉话率统计"><a href="#掉话率统计" class="headerlink" title="掉话率统计"></a>掉话率统计</h2><p>统计基站掉线率最高的<strong>前10个基站</strong></p>
+<p><strong>Step1.</strong> 创建原始表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; create table call_monitor(</span><br><span class="line">imei string,   # 基站编号</span><br><span class="line">drop_num int,  # 掉话量</span><br><span class="line">duration int   # 通话量</span><br><span class="line">)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &#39;,&#39;;</span><br><span class="line"></span><br><span class="line"># 导入数据</span><br><span class="line">load data local inpath &#39;&#x2F;root&#x2F;calldata&#39; into table wc;</span><br></pre></td></tr></table></figure>
+<p><strong>Step2.</strong> 创建结果表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; create table call_result(</span><br><span class="line">imei string,</span><br><span class="line">drop_num int,</span><br><span class="line">duration int,</span><br><span class="line">drop_rate double</span><br><span class="line">)</span><br><span class="line">row format delimited</span><br><span class="line">fields terminated by &#39;,&#39;;</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 原始表数据导入结果表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; from call_monitor cm;</span><br><span class="line">insert into call_result</span><br><span class="line">select cm.imei, sum(cm.drop_num) sdrop,  sum(cm.duration) sdura, sum(cm.drop_num)&#x2F;sum(cm.duration) s_rate group by cm.imei order by s_rate desc limit 10</span><br></pre></td></tr></table></figure>
+<p>其中排序命令<code>orderby</code>放到一个reduce里进行全排序，而<code>sortby</code>放到不同的reduce里进行局部排序</p>
+<h2 id="WordCount"><a href="#WordCount" class="headerlink" title="WordCount"></a>WordCount</h2><p><strong>Step1.</strong> 创建原始表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建原始表</span><br><span class="line">hive&gt; create table wc(</span><br><span class="line">word string</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"># 导入数据</span><br><span class="line">load data local inpath &#39;&#x2F;root&#x2F;wcdata&#39; into table wc;</span><br></pre></td></tr></table></figure>
+<p><strong>Step2.</strong> 创建结果表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建结果表</span><br><span class="line">hive&gt; create table wc_result(</span><br><span class="line">word string,</span><br><span class="line">count int</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 原始表数据导入结果表</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 将结果导入结果表</span><br><span class="line">from (select explode(split(word, &#39; &#39;)) word from wc) t1</span><br><span class="line">insert into wc_result</span><br><span class="line">select t1.word, count(t1.word) group by t1.word;</span><br></pre></td></tr></table></figure>
+<p>其中<code>wcdata</code>数据为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hello world hive</span><br><span class="line">hadoop hello hive</span><br><span class="line">hello go hadoop</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># Hive学习笔记下｜计算机学习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/" rel="prev" title="Hive学习笔记上">
+      <i class="fa fa-chevron-left"></i> Hive学习笔记上
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话"><span class="nav-number">1.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive分区"><span class="nav-number">2.</span> <span class="nav-text">Hive分区</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#分区表创建"><span class="nav-number">2.1.</span> <span class="nav-text">分区表创建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据导入"><span class="nav-number">2.2.</span> <span class="nav-text">数据导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加分区"><span class="nav-number">2.3.</span> <span class="nav-text">添加分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除分区"><span class="nav-number">2.4.</span> <span class="nav-text">删除分区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#动态分区"><span class="nav-number">2.5.</span> <span class="nav-text">动态分区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive分桶"><span class="nav-number">3.</span> <span class="nav-text">Hive分桶</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive函数"><span class="nav-number">4.</span> <span class="nav-text">Hive函数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#内置运算符"><span class="nav-number">4.1.</span> <span class="nav-text">内置运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置函数"><span class="nav-number">4.2.</span> <span class="nav-text">内置函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数学函数"><span class="nav-number">4.2.1.</span> <span class="nav-text">数学函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#收集函数"><span class="nav-number">4.2.2.</span> <span class="nav-text">收集函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型转换函数"><span class="nav-number">4.2.3.</span> <span class="nav-text">类型转换函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日期函数"><span class="nav-number">4.2.4.</span> <span class="nav-text">日期函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件函数"><span class="nav-number">4.2.5.</span> <span class="nav-text">条件函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串函数"><span class="nav-number">4.2.6.</span> <span class="nav-text">字符串函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚合函数"><span class="nav-number">4.2.7.</span> <span class="nav-text">聚合函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#表生成函数"><span class="nav-number">4.2.8.</span> <span class="nav-text">表生成函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义函数"><span class="nav-number">4.3.</span> <span class="nav-text">自定义函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UDF开发"><span class="nav-number">4.3.1.</span> <span class="nav-text">UDF开发</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive参数配置"><span class="nav-number">5.</span> <span class="nav-text">Hive参数配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive视图"><span class="nav-number">6.</span> <span class="nav-text">Hive视图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Lateral-View"><span class="nav-number">6.1.</span> <span class="nav-text">Lateral View</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#视图"><span class="nav-number">6.2.</span> <span class="nav-text">视图</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hive练习"><span class="nav-number">7.</span> <span class="nav-text">Hive练习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#掉话率统计"><span class="nav-number">7.1.</span> <span class="nav-text">掉话率统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WordCount"><span class="nav-number">7.2.</span> <span class="nav-text">WordCount</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">务实敢为 追求极致</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">149k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:15</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>

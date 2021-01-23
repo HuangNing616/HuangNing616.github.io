@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yoursite.com/2020/10/17/%E6%8E%A8%E8%8D%90%E7%B3%BB%E7%BB%9F%E5%85%A5%E9%97%A8/</loc>
+    <loc>http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     
-    <lastmod>2020-10-18T14:12:01.262Z</lastmod>
+    <lastmod>2021-01-23T08:55:19.543Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://yoursite.com/2020/10/17/Go%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <loc>http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/</loc>
     
-    <lastmod>2020-10-18T13:00:33.741Z</lastmod>
+    <lastmod>2021-01-23T08:47:06.225Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</loc>
+    
+    <lastmod>2021-01-23T08:13:21.610Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yoursite.com/2020/10/08/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/</loc>
+    
+    <lastmod>2021-01-17T13:30:58.508Z</lastmod>
     
   </url>
   
@@ -19,20 +33,6 @@
     <loc>http://yoursite.com/2020/10/17/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     
     <lastmod>2020-10-17T08:05:05.643Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    
-    <lastmod>2020-10-17T04:30:13.134Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://yoursite.com/2020/10/08/%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%BD%91%E5%8D%A1%E9%85%8D%E7%BD%AE/</loc>
-    
-    <lastmod>2020-10-08T06:00:09.414Z</lastmod>
     
   </url>
   
