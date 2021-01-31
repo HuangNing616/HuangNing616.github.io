@@ -53,16 +53,16 @@
   };
 </script>
 
-  <meta name="description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从简介，架构，搭建，运行方式以及HiveSQL对Hive进行介绍">
+  <meta name="description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从简介，架构，搭建，运行方式以及HiveSQL来介绍Hive">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hive学习笔记上">
 <meta property="og:url" content="http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从简介，架构，搭建，运行方式以及HiveSQL对Hive进行介绍">
+<meta property="og:description" content="说在前面的话由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从简介，架构，搭建，运行方式以及HiveSQL来介绍Hive">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/hive%E6%9E%B6%E6%9E%84.png">
 <meta property="article:published_time" content="2021-01-23T06:47:58.000Z">
-<meta property="article:modified_time" content="2021-01-23T08:13:21.610Z">
+<meta property="article:modified_time" content="2021-01-31T03:59:51.602Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Hive学习笔记上｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
@@ -210,10 +210,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-23 14:47:58 / 修改时间：16:13:21" itemprop="dateCreated datePublished" datetime="2021-01-23T14:47:58+08:00">2021-01-23</time>
+              <time title="创建时间：2021-01-23 14:47:58" itemprop="dateCreated datePublished" datetime="2021-01-23T14:47:58+08:00">2021-01-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-01-31 11:59:51" itemprop="dateModified" datetime="2021-01-31T11:59:51+08:00">2021-01-31</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -269,12 +275,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从<strong>简介</strong>，<strong>架构</strong>，<strong>搭建</strong>，<strong>运行方式</strong>以及<strong>HiveSQL</strong>对Hive进行介绍</p>
+        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>由于Hadoop开发难度较高，并且非Java程序员有对HDFS的数据做MapReduce操作的需求，Hive应运而生。本文主要从<strong>简介</strong>，<strong>架构</strong>，<strong>搭建</strong>，<strong>运行方式</strong>以及<strong>HiveSQL</strong>来介绍<strong>Hive</strong></p>
 <a id="more"></a>
 <h1 id="Hive简介"><a href="#Hive简介" class="headerlink" title="Hive简介"></a>Hive简介</h1><p>Hive是数据仓库，<strong>数据仓库不等于数据库</strong>，数据仓库是用来对历史数据进行分析但不支持实时查询，而数据库主要是用来实时查询但不支持不支持大数据分析</p>
 <h1 id="Hive架构"><a href="#Hive架构" class="headerlink" title="Hive架构"></a>Hive架构</h1><ol>
-<li>基于HDFS存储数据</li>
-<li>基于MySQL存储元数据<br>因为HDFS中的文件没有格式信息，所以将元数据单独存在MySQL中</li>
+<li>基于<strong>HDFS</strong>存储数据</li>
+<li>基于<strong>MySQL</strong>存储元数据<br>因为HDFS中的文件没有格式信息，所以将元数据单独存在MySQL中</li>
 <li>支持<strong>客户端访问</strong>并且将SQL语句转成<strong>HDFS操作</strong>或者<strong>MapReduce作业</strong></li>
 </ol>
 <p><img src="/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/hive架构.png" style="zoom:50%;"></p>
@@ -412,8 +418,7 @@
 <p><strong>Step2.</strong> 编写 Java 连接 Hive</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.sql.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HiveJdbcClient</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 声明驱动类</span></span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            String driverName = <span class="string">"org.apache.hive.jdbc.HiveDriver"</span>;</span><br><span class="line">            Class.forName(driverName);</span><br><span class="line">        &#125;<span class="keyword">catch</span> (ClassNotFoundException e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 创建与node03的连接</span></span><br><span class="line">        Connection conn = DriverManager.getConnection(<span class="string">"jdbc:hive2://node03:10000/default"</span>, <span class="string">"root"</span>, <span class="string">""</span>);</span><br><span class="line">        Statement stmt = conn.createStatement();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 执行SQL查询</span></span><br><span class="line">        String sql = <span class="string">"select * from psn limit 5"</span>;</span><br><span class="line">        ResultSet res = stmt.executeQuery(sql);</span><br><span class="line">      </span><br><span class="line">      	<span class="comment">// 4. 打印查询结果</span></span><br><span class="line">        <span class="keyword">while</span> (res.next())&#123;</span><br><span class="line">            System.out.println(res.getString(<span class="number">1</span>) + <span class="string">"-"</span> + res.getString(<span class="string">"name"</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h1 id="HiveSQL"><a href="#HiveSQL" class="headerlink" title="HiveSQL"></a>HiveSQL</h1><p>HiveSQL分成DDL，DML以及DCL，对应的用法可以参考<a href="https://hive.apache.org/" target="_blank" rel="noopener">Hive官网</a> 的Documentation —&gt; Language Manaual</p>
-<h2 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h2><p>Data Definition Language：数据定义语言</p>
-<h3 id="创建-删除库"><a href="#创建-删除库" class="headerlink" title="创建/删除库"></a>创建/删除库</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建表</span><br><span class="line">hive&gt; CREATE DATABASE test;</span><br><span class="line"></span><br><span class="line"># 删除表</span><br><span class="line">hive&gt; DROP DATABASE test;</span><br></pre></td></tr></table></figure>
+<h2 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h2><h3 id="创建-删除库"><a href="#创建-删除库" class="headerlink" title="创建/删除库"></a>创建/删除库</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 创建表</span><br><span class="line">hive&gt; CREATE DATABASE test;</span><br><span class="line"></span><br><span class="line"># 删除表</span><br><span class="line">hive&gt; DROP DATABASE test;</span><br></pre></td></tr></table></figure>
 <h3 id="创建-删除表"><a href="#创建-删除表" class="headerlink" title="创建/删除表"></a>创建/删除表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE TABLE psn(</span><br><span class="line">id int,</span><br><span class="line">name string,</span><br><span class="line">likes array&lt;string&gt;,</span><br><span class="line">address map&lt;string, string&gt;,</span><br><span class="line">info struct&lt;height: int, weight:int, sex:string&gt;</span><br><span class="line">)</span><br><span class="line">ROW FORMAT DELIMITED </span><br><span class="line">FIELDS TERMINATED BY &#39;,&#39;</span><br><span class="line">COLLECTION ITEMS TERMINATED BY &#39;-&#39;</span><br><span class="line">MAP KEYS TERMINATED BY &#39;:&#39;</span><br><span class="line">LINES TERMINATED BY &#39;\n&#39;;</span><br><span class="line"></span><br><span class="line"># ps: like 可以快速建表</span><br><span class="line">CREATE TABLE psncp like psn;</span><br></pre></td></tr></table></figure>
 <p>其中 MySQL 中 CREATE TABLE TABEL_NAME 已经完成了创建表操作，而 Hive 还需要声明数据输出格式，因为Hive的数据存在HDFS上，存在HDFS上的都是文件是没有格式，所以用HIVE创建表的时候需要写好解析模式（类似正则化规则匹配），使得查询数据时有格式的输出</p>
 <h3 id="Serde建表"><a href="#Serde建表" class="headerlink" title="Serde建表"></a>Serde建表</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE TABLE logtbl(</span><br><span class="line">	host STRING,</span><br><span class="line">	identity STRING,</span><br><span class="line">	t_user STRING,</span><br><span class="line">	time STRING,</span><br><span class="line">	request STRING,</span><br><span class="line">	referer STRING,</span><br><span class="line">	agent STRING)</span><br><span class="line">ROW FORMAT SERDE &#39;org.apache.hadoop.hive.serde2.RegexSerDe&#39;</span><br><span class="line">WITH SERDEPROPERTIES </span><br><span class="line">(</span><br><span class="line">&quot;input.regex&quot; &#x3D; &quot;([^ ]*) ([^ ]*) ([^ ]*) \\[(.*)\\] \&quot;(.*)\&quot; (-|[0-9]*) (-|[0-9]*)&quot;</span><br><span class="line">)</span><br><span class="line">STORED AS TEXTFILE;</span><br><span class="line"></span><br><span class="line"># 导入的测试样本集</span><br><span class="line">hive&gt; load data local inpath &#39;root&#x2F;log.txt&#39; into table logtbl;</span><br></pre></td></tr></table></figure>
@@ -426,8 +431,7 @@
 <li>外部表需要给定 HDFS 路径，即需要手动维护，而内部表不需要，因为Hive自动维护表</li>
 <li>删除表时外部表只将元数据删除而不删除存储数据，内部表将元数据和存储数据全部删除</li>
 </ol>
-<h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><p>Data Manipulation Language：数据操作语言</p>
-<h3 id="数据导入表"><a href="#数据导入表" class="headerlink" title="数据导入表"></a>数据导入表</h3><p>将数据导入Hive表有<strong>4种方法</strong></p>
+<h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><h3 id="数据导入表"><a href="#数据导入表" class="headerlink" title="数据导入表"></a>数据导入表</h3><p>将数据导入Hive表有<strong>4种方法</strong></p>
 <h4 id="Load方法"><a href="#Load方法" class="headerlink" title="Load方法"></a>Load方法</h4><p>将文件Load方法进表格，相比于传统的insert的优点是可以批量插入数据，如果导入时加<code>LOCAL</code>，此时的LOAD是将本地文件copy并上传到HDFS指定目录，如果不加<code>LOCAL</code>，此时的LOAD是将HDFS上的某个文件直接mv到HDFS指定目录</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hive&gt; LOAD DATA LOCAL INPATH &#39;&#x2F;root&#x2F;data&#39; INTO TABLE psn;</span><br></pre></td></tr></table></figure>
 <h4 id="HDFS上传"><a href="#HDFS上传" class="headerlink" title="HDFS上传"></a>HDFS上传</h4><p>通过HDFS将数据直接上传到指定路径</p>
@@ -554,18 +558,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">19</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -607,12 +611,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">149k</span>
+    <span title="站点总字数">155k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:15</span>
+    <span title="站点阅读时长">2:21</span>
 </div>
 
         

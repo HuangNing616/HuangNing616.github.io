@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="说在前面的话HBase源于Google发表的论文BigTable，它与另外两篇GFS以及MapReduce并称为“三驾马车”。本文从简介，架构，数据模型，架构，搭建以及应用来介绍HBase">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HBase学习笔记">
+<meta property="og:url" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="说在前面的话HBase源于Google发表的论文BigTable，它与另外两篇GFS以及MapReduce并称为“三驾马车”。本文从简介，架构，数据模型，架构，搭建以及应用来介绍HBase">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hbase%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HBase%E5%AD%98%E5%82%A8%E6%9E%B6%E6%9E%84.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HBase%E5%90%AF%E5%8A%A8.jpeg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hbase%E5%85%A8%E5%88%86%E5%B8%83.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/general.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%9F%A5%E7%9C%8B%E5%88%97%E6%97%8F%E4%BF%A1%E6%81%AF.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E6%9F%A5%E7%9C%8Bflush%E5%88%B0%E7%A3%81%E7%9B%98%E7%9A%84%E6%95%B0%E6%8D%AE.png">
+<meta property="article:published_time" content="2021-01-31T02:49:28.000Z">
+<meta property="article:modified_time" content="2021-01-31T04:06:41.712Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="HBase学习笔记｜计算机学习笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hbase%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png">
+
+<link rel="canonical" href="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>HBase学习笔记 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="务实敢为 追求极致">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HBase学习笔记
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-31 10:49:28 / 修改时间：12:06:41" itemprop="dateCreated datePublished" datetime="2021-01-31T10:49:28+08:00">2021-01-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">计算机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/" itemprop="url" rel="index">
+                    <span itemprop="name">分布式计算</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA/%E5%88%86%E5%B8%83%E5%BC%8F%E8%AE%A1%E7%AE%97/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">HBase学习笔记</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>6.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p><strong>HBase</strong>源于Google发表的论文<strong>BigTable</strong>，它与另外两篇<strong>GFS</strong>以及<strong>MapReduce</strong>并称为“三驾马车”。本文从<strong>简介</strong>，<strong>架构</strong>，<strong>数据模型</strong>，<strong>架构</strong>，<strong>搭建</strong>以及<strong>应用</strong>来介绍<strong>HBase</strong></p>
+<a id="more"></a>
+<h1 id="Hbase简介"><a href="#Hbase简介" class="headerlink" title="Hbase简介"></a>Hbase简介</h1><p>HBase是利用HDFS作为文件存储系统，利用MapReduce处理海量数据，利用Zookeeper作为分布式协同服务的非关系型数据库，它主要用来存储<strong>非结构化和半结构化</strong>的松散数据。HBase是具有<strong>高可靠</strong>（依托于Hadoop），<strong>高性能</strong>（MapReduce可以处理海量数据），<strong>面向列</strong>（列数据库是按列存储，即不用预先声明字段，而是添加数据的时候再定义字段，而MySQL是列都定义好的以行为单位的数据库，有数据缺失时就用Null占内存），<strong>可伸缩</strong>（Hadoop集群可以扩展节点）以及<strong>实时读写</strong>（将数据实时读写到内存里）的<strong>分布式数据库</strong></p>
+<h1 id="HBase数据模型"><a href="#HBase数据模型" class="headerlink" title="HBase数据模型"></a>HBase数据模型</h1><p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/Hbase数据模型.png" style="zoom:50%;"></p>
+<p>上图代表了HBase的某条数据。可以通过<code>Row key</code>+ <code>列族</code> + <code>列名</code>确定某个单元格，每个单元格都有对应的时间戳，单元格内部是未解析的字节数组。在更新数据方面，MySQL是新数据直接覆盖旧数据，而HBase是插入新数据，老数据保留并标记失效，在merge阶段进行删除，老数据可通过时间戳读取，比如：在<code>CF2</code>里更新了<code>q1=val2</code>，那么之前的<code>q1=val1</code>会标记失效</p>
+<h1 id="HBase架构"><a href="#HBase架构" class="headerlink" title="HBase架构"></a>HBase架构</h1><p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HBase存储架构.png" style="zoom:30%;"></p>
+<h2 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h2><p>Client负责访问HBase并维护加快对HBase的访问的memcache。访问Hbase数据的顺序是一级缓存，二级缓存数据库。HBase中的MemStore，除了用来写缓存，也可以分担部分读缓存的压力，比如当查询数据时，先在<strong>MemStore</strong>寻找，找不到再在<strong>StoreFile</strong>里寻找</p>
+<h2 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h2><p>Zookeeper主要起到了<strong>高可用</strong>以及<strong>记录数据</strong>的作用，高可用体现在它保证任何时候集群中只有一个HMaster，实时监控RegionServer的上线和下线信息，并实时通知HMaster，比如：心跳检测时，有个RegionServer宕掉了可以及时通知HMaster，记录数据体现在它存储Hbase的schema和table的元数据，除此之外它还存储所有Region的寻址入口</p>
+<h2 id="RegionServer"><a href="#RegionServer" class="headerlink" title="RegionServer"></a>RegionServer</h2><p>RegionServer负责维护HRegion，比如：对Region IO请求的处理、切分逐渐变大的Region</p>
+<h2 id="Region"><a href="#Region" class="headerlink" title="Region"></a>Region</h2><p>每张表初始只有一个Region，随着数据的不断插入，Region会不断增大，当达到阈值时HBase自动将其等分成两个新的Region，以此类推，最后一张表就会被存储到多个Region上，其中每个Region保存表里某段<strong>连续</strong>的数据</p>
+<h2 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h2><p>一个Region由多个Store组成，一个Store对应一个列族。Store包含位于内存的<strong>MemStore</strong>和位于磁盘的<strong>StoreFile</strong>。Hbase进行写操作时先写入MemStore，当达到阈值时HRegionServer启动flashcache进程将MemStore中的数据刷入StoreFile，每次自动刷入都会形成大小相同的StoreFile；当StoreFile数量达到阈值时，系统会进行minor合并，比如每次合并两个StoreFile，在合并过程中会进行版本合并以及删除工作，其中合并方式还有major，即将所有文件合并成一个大文件，该机制不会自动触发，通常是写个脚本让其凌晨执行；当Region里StoreFile的大小以及数量超过阈值后，比如Region存储大小超过128M后会把当前的Region均匀分割为两个，并由HMaster分配到指定的Regionserver来实现负载均衡</p>
+<h2 id="HLog"><a href="#HLog" class="headerlink" title="HLog"></a>HLog</h2><p>HLog是WAL，原始日志只有保存操作，而HLog不仅可以保存日志，还可以保存数据。Hlog文件是普通的Hadoop Sequence File，其中Key是HlogKey对象，它记录了写入数据的归属信息，比如table名，region名以及timestamp等</p>
+<p>该架构还存在一些问题，比如StoreFile小文件的产生会导致资源分配和任务调度耗时长，再比如数据倾斜导致HRegionServer1特别忙，HRegionServer2特别闲进而造成负载不均衡</p>
+<h1 id="HBase搭建"><a href="#HBase搭建" class="headerlink" title="HBase搭建"></a>HBase搭建</h1><h2 id="伪分布式"><a href="#伪分布式" class="headerlink" title="伪分布式"></a>伪分布式</h2><p><strong>Step1.</strong> 安装jdk1.8</p>
+<p><strong>Step2.</strong> 下载<code>hbase-0.98.12-hadoop2-bin.tar.gz</code>, 发送到节点node04并进行解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf hbase-0.98.12-hadoop2-bin.tar.gz -C /usr/</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 配置环境变量<code>/etc/profile</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line"><span class="built_in">export</span> HBASE_HOME=/usr/hbase-0.98.12-hadoop2</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$HBASE_HOME</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step4.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/hbase-env.sh</code>中新增配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line"></span><br><span class="line"><span class="comment"># HBase安装包里面的zookeeper会默认启动，因此伪分布式搭建不需要额外搭建zookeeper</span></span><br><span class="line"><span class="comment"># export HBASE_MANAGES_ZK=true</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step5.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/hbase-site.xml</code>添加HBase以及ZooKeeper数据的存储路径</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/var/hbase<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.unsafe.stream.capability.enforce<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>false<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.rootdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>file:///home/testuser/hbase<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.property.dataDir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>/root/testuser/zookeeper<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step6.</strong> 启动HBase服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 启动之前最好关闭其他的Java进程</span></span><br><span class="line">start-hbase.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过jps查看HMaster是否启动</span></span><br><span class="line">jps</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果想要关闭Hbase，使用下述命令</span></span><br><span class="line">stop-hbase.sh</span><br></pre></td></tr></table></figure>
+<p>出现下图就表示HBase启动成功啦 🥳</p>
+<p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/HBase启动.jpeg" style="zoom:30%;"></p>
+<p><strong>Step7.</strong> 进入Hbase客户端</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+<h2 id="全分布式"><a href="#全分布式" class="headerlink" title="全分布式"></a>全分布式</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">NameNode</th>
+<th style="text-align:center">DataNode</th>
+<th style="text-align:center">ZK</th>
+<th style="text-align:center">HMaster</th>
+<th style="text-align:center">HRegionServer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>node01</strong></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node02</strong></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node03</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node04</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center">✔︎</td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>node05</strong></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td style="text-align:center">✔︎</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Step1.</strong> 安装jdk1.8</p>
+<p><strong>Step2.</strong> 时间同步</p>
+<p>通过<code>date</code>查看各个节点的时间是否相同，如果不相同需要下载<strong>时间服务器插件</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install -y ntp</span><br></pre></td></tr></table></figure>
+<p>然后在各个节点上同步时间</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ntpdate ntp1.aliyun.com</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 配置<strong>node05</strong>的密钥登录</p>
+<p>相比Hadoop高可用搭建的节点而言，这里需要额外增加一台节点node05并需要彼此免密钥登录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 在node05上通过下述快捷命令产生密钥</span></span><br><span class="line">ssh-keygen</span><br><span class="line"></span><br><span class="line"><span class="comment"># 然后将公钥用快捷方式发送给各个节点</span></span><br><span class="line">ssh-copy-id -i  /root/.ssh/id_rsa.pub node01</span><br><span class="line">ssh-copy-id -i  /root/.ssh/id_rsa.pub node02</span><br><span class="line">ssh-copy-id -i  /root/.ssh/id_rsa.pub node03</span><br><span class="line">ssh-copy-id -i  /root/.ssh/id_rsa.pub node04</span><br><span class="line">ssh-copy-id -i  /root/.ssh/id_rsa.pub node05</span><br><span class="line"></span><br><span class="line"><span class="comment"># 同理也需要在其他节点将公钥发送到node05上</span></span><br><span class="line">ssh-copy-id -i id_rsa.pub node05</span><br></pre></td></tr></table></figure>
+<p><strong>Step4.</strong> 启动HDFS</p>
+<p>HBase的数据文件需要保存到HDFS上</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p><strong>Step5.</strong>下载<code>hbase-0.98.12-hadoop2-bin.tar.gz</code>，发送到node01并解压</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar -zxvf hbase-0.98.12-hadoop2-bin.tar.gz -C /usr/</span><br></pre></td></tr></table></figure>
+<p><strong>Step6.</strong> 配置环境变量<code>/etc/profile</code>，发送到node02，node03，node04，node05并<code>source</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line"><span class="built_in">export</span> HADOOP_HOME=/usr/hadoop-3.1.4</span><br><span class="line"><span class="built_in">export</span> ZOOKEEPER_HOME=/usr/zookeeper-3.4.6</span><br><span class="line"><span class="built_in">export</span> HBASE_HOME=/usr/hbase-0.98.12-hadoop2</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$ZOOKEEPER_HOME</span>/bin:<span class="variable">$HBASE_HOME</span>/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p>其中，从<strong><a href="https://huangning616.github.io/2020/10/07/Hadoop%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" target="_blank" rel="noopener">Hadoop高可用搭建</a></strong>过程可知<code>ZOOKEEPER_HOME</code>配置只在node02，node03，node04存在，node01不需要该配置</p>
+<p><strong>Step7.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/hbase-env.sh</code>中新增配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.8.0_261</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不启动HBase自己的Zookeeper实例</span></span><br><span class="line"><span class="built_in">export</span> HBASE_MANAGES_ZK=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p><strong>Step8.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/hbase-site.xml</code>添加HBase数据以及ZooKeeper数据的存储路径</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.rootdir<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>hdfs://mycluster:8020/hbase<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.cluster.distributed<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">property</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>hbase.zookeeper.quorum<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>node02,node03,node04<span class="tag">&lt;/<span class="name">value</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其中<code>hbase.rootdir</code>中<code>mycluster</code>来自于Hadoop配置文件<code>hdfs-site.xml</code>中的<code>dfs.nameservices</code>名</p>
+<p><strong>Step9.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/regionservers</code>添加HRegionServer节点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">node02</span><br><span class="line">node03</span><br><span class="line">node04</span><br></pre></td></tr></table></figure>
+<p><strong>Step10.</strong> 在<code>/usr/hbase-0.98.12-hadoop2/conf/backup-masters</code>配置备用节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">node05</span><br></pre></td></tr></table></figure>
+<p><strong>Step11.</strong> 将hadoop的配置文件<code>hdfs-site.xml</code>拷贝到HBase的配置文件中</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;usr&#x2F;hadoop-3.1.4&#x2F;etc&#x2F;hadoop&#x2F;hdfs-site.xml &#x2F;usr&#x2F;hbase-0.98.12-hadoop2&#x2F;conf</span><br></pre></td></tr></table></figure>
+<p><strong>Step12.</strong> 将配置信息分发到其他节点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp -r hbase-0.98.12-hadoop2/ root@node01:/usr</span><br><span class="line">scp -r hbase-0.98.12-hadoop2/ root@node02:/usr</span><br><span class="line">scp -r hbase-0.98.12-hadoop2/ root@node03:/usr</span><br><span class="line">scp -r hbase-0.98.12-hadoop2/ root@node04:/usr</span><br><span class="line">scp -r hbase-0.98.12-hadoop2/ root@node05:/usr</span><br></pre></td></tr></table></figure>
+<p><strong>Step12.</strong> 启动HBase</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">start-hbase.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/hbase全分布.png" style="zoom:30%;"></p>
+<p>查看各个节点的HBase角色是否启动，如果通过<code>jps</code>查看node02, node03，node04的HRregionserver没有启动，可能是因为主从节点时间不一致，需要回到<strong>Step2</strong>将时间统一然后再次启动HBase</p>
+<p><strong>Step14.</strong> 测试主备切换</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 可以查当前HMaster的pid并kill掉</span></span><br><span class="line"><span class="built_in">kill</span> -9 xxxxx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过网页访问，发现node05已经切换到主节点</span></span><br><span class="line">node05:60010</span><br></pre></td></tr></table></figure>
+<p><strong>Step13.</strong> 访问HBase</p>
+<p>1）通过网页<code>node01:60010</code>以及<code>node05:60010</code>进行访问<br>2）通过命令行访问</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbase shell</span><br></pre></td></tr></table></figure>
+<p>其中伪分布式创建的表在全分布式中查不到，因为伪分布式创建的文件是在本地，而全分布式创建的文件是在HDFS</p>
+<h1 id="HBase应用"><a href="#HBase应用" class="headerlink" title="HBase应用"></a>HBase应用</h1><p>通过<code>help</code>可以查看HBase的使用命令，下面介绍HBase几种常用的命令</p>
+<h2 id="General"><a href="#General" class="headerlink" title="General"></a>General</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看节点状态命令</span></span><br><span class="line">status</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看用户身份</span></span><br><span class="line">whoami</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看版本信息</span></span><br><span class="line">version</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/general.png" style="zoom:30%;"></p>
+<h2 id="DDL"><a href="#DDL" class="headerlink" title="DDL"></a>DDL</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建表</span></span><br><span class="line">create <span class="string">'psn'</span>, <span class="string">'cf1'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看列族描述</span></span><br><span class="line">describe <span class="string">'psn'</span></span><br><span class="line"><span class="comment"># 比如：TTL（time to live）过期时间</span></span><br><span class="line"><span class="comment"># BLOCKCACHE =&gt; 'true' 读缓存</span></span><br><span class="line"><span class="comment"># IN_MEMORY =&gt; 'false' 缓存是否在内存</span></span><br><span class="line"><span class="comment"># BLOCKSIZE =&gt; '65536' 缓存块大小</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建两个列族的表</span></span><br><span class="line">create <span class="string">'tbl'</span>, <span class="string">'cf1'</span>, <span class="string">'cf2'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看列族信息</span></span><br><span class="line">describe <span class="string">'tbl'</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/查看列族信息.png" style="zoom:40%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 禁用表</span></span><br><span class="line"><span class="built_in">disable</span> <span class="string">'psn'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除表</span></span><br><span class="line">drop <span class="string">'psn'</span></span><br></pre></td></tr></table></figure>
+<h2 id="DML"><a href="#DML" class="headerlink" title="DML"></a>DML</h2><h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 通过表名，rowkey，列族，列名以及value来插入数据</span></span><br><span class="line">put <span class="string">'psn'</span>, <span class="string">'1111'</span>, <span class="string">'cf:name'</span>, <span class="string">'xiaoming'</span></span><br><span class="line">put <span class="string">'psn'</span>, <span class="string">'1111'</span>, <span class="string">'cf:age'</span>, <span class="string">'8'</span></span><br><span class="line">put <span class="string">'psn'</span>, <span class="string">'2222'</span>, <span class="string">'cf:name'</span>, <span class="string">'xiaohong'</span></span><br><span class="line">put <span class="string">'psn'</span>, <span class="string">'2222'</span>, <span class="string">'cf:age'</span>, <span class="string">'12'</span></span><br></pre></td></tr></table></figure>
+<h3 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 通过表名，rowkey以及列族来删除数据</span></span><br><span class="line">delete <span class="string">'psn'</span>, <span class="string">'2222'</span>, <span class="string">'cf:name'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除整张表</span></span><br><span class="line">truncate <span class="string">'psn'</span></span><br></pre></td></tr></table></figure>
+<h3 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将rowkey=2222中name=xiaohong的数据改成zhiling</span></span><br><span class="line">put <span class="string">'psn'</span>, <span class="string">'2222'</span>, <span class="string">'cf:name'</span>, <span class="string">'zhiling'</span></span><br></pre></td></tr></table></figure>
+<p>修改数据后，虽然<code>xiaohong</code>数据不显示但还存在，只是标记了失效且无法回滚，后续merge的时候会自动删除xiaohong的数据</p>
+<h3 id="查询数据"><a href="#查询数据" class="headerlink" title="查询数据"></a>查询数据</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看指定rowkey下的数据</span></span><br><span class="line">get <span class="string">'psn'</span>, <span class="string">'1111'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看整张表</span></span><br><span class="line">scan <span class="string">'psn'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h2><p>HBase表<code>psn</code>的HDFS存储路径<code>/home/testuser/hbase/data/default/psn/</code>下存在一串英文编码的文件名，该名就是表<code>psn</code>对应的R Region名，可以通过<code>主节点IP:60010</code>来确定。如果<code>psn</code>表只插入少量数据，那么Region文件夹中的列族文件夹可能为空，因此还没有进行<strong>merge</strong>操作，即数据还在内存的<strong>MemStore</strong>中，这时可以手动将其<code>flush</code>进磁盘</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">flush <span class="string">'psn'</span></span><br></pre></td></tr></table></figure>
+<p>然后在命令行查看<code>flush</code>后列族文件下的文件内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hbase hfile -p -f /hbase/data/default/psn/...</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/查看flush到磁盘的数据.png" style="zoom:40%;"></p>
+<p>修改数据后再次手动<code>flush</code>，相应列族下新增一个仅用来存储<strong>修改数据</strong>的文件，第三次修改数据后再次手动flush，相应列族将最新修改数据以及其他未修改数据文件merge成一个文件</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tagstag/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%EF%BD%9C%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="tag"># HBase学习笔记｜计算机学习笔记</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/" rel="prev" title="Hive学习笔记下">
+      <i class="fa fa-chevron-left"></i> Hive学习笔记下
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话"><span class="nav-number">1.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hbase简介"><span class="nav-number">2.</span> <span class="nav-text">Hbase简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase数据模型"><span class="nav-number">3.</span> <span class="nav-text">HBase数据模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase架构"><span class="nav-number">4.</span> <span class="nav-text">HBase架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Client"><span class="nav-number">4.1.</span> <span class="nav-text">Client</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zookeeper"><span class="nav-number">4.2.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RegionServer"><span class="nav-number">4.3.</span> <span class="nav-text">RegionServer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Region"><span class="nav-number">4.4.</span> <span class="nav-text">Region</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Store"><span class="nav-number">4.5.</span> <span class="nav-text">Store</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HLog"><span class="nav-number">4.6.</span> <span class="nav-text">HLog</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase搭建"><span class="nav-number">5.</span> <span class="nav-text">HBase搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#伪分布式"><span class="nav-number">5.1.</span> <span class="nav-text">伪分布式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全分布式"><span class="nav-number">5.2.</span> <span class="nav-text">全分布式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HBase应用"><span class="nav-number">6.</span> <span class="nav-text">HBase应用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General"><span class="nav-number">6.1.</span> <span class="nav-text">General</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDL"><span class="nav-number">6.2.</span> <span class="nav-text">DDL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DML"><span class="nav-number">6.3.</span> <span class="nav-text">DML</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入数据"><span class="nav-number">6.3.1.</span> <span class="nav-text">插入数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除数据"><span class="nav-number">6.3.2.</span> <span class="nav-text">删除数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改数据"><span class="nav-number">6.3.3.</span> <span class="nav-text">修改数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询数据"><span class="nav-number">6.3.4.</span> <span class="nav-text">查询数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tools"><span class="nav-number">6.4.</span> <span class="nav-text">Tools</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">务实敢为 追求极致</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">155k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:21</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>
