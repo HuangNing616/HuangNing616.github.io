@@ -53,27 +53,24 @@
   };
 </script>
 
-  <meta name="description" content="说在前面的话本文主要从从架构，数据模型的角度介绍Redis">
+  <meta name="description" content="说在前面的话Redis是基于key-value格式存储的高性能NoSQL数据库。本文主要从从架构，数据模型的角度介绍Redis～">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis学习笔记">
 <meta property="og:url" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="黄宁の博客">
-<meta property="og:description" content="说在前面的话本文主要从从架构，数据模型的角度介绍Redis">
+<meta property="og:description" content="说在前面的话Redis是基于key-value格式存储的高性能NoSQL数据库。本文主要从从架构，数据模型的角度介绍Redis～">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210204235424264.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210204235656236.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210205000729370.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210205094453919.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210205100037816.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210205225537604.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210206112142276.png">
-<meta property="og:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210206110917260.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/mysql%E6%95%B0%E6%8D%AE%E5%BA%93.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/redis%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/helpcommand.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%88%87%E6%8D%A2%E7%BC%96%E7%A0%81%E9%9B%86.png">
+<meta property="og:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/%E5%AD%97%E8%8A%82%E6%95%B0%E7%BB%84.png">
 <meta property="article:published_time" content="2021-02-06T05:55:54.000Z">
-<meta property="article:modified_time" content="2021-02-06T06:13:06.667Z">
+<meta property="article:modified_time" content="2021-02-06T09:36:52.808Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="｜统计学|机器学习|python|">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/Users/huangning/Library/Application%20Support/typora-user-images/image-20210204235424264.png">
+<meta name="twitter:image" content="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/mysql%E6%95%B0%E6%8D%AE%E5%BA%93.png">
 
 <link rel="canonical" href="http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
@@ -219,7 +216,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-02-06 13:55:54 / 修改时间：14:13:06" itemprop="dateCreated datePublished" datetime="2021-02-06T13:55:54+08:00">2021-02-06</time>
+              <time title="创建时间：2021-02-06 13:55:54 / 修改时间：17:36:52" itemprop="dateCreated datePublished" datetime="2021-02-06T13:55:54+08:00">2021-02-06</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -257,14 +254,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4.4k</span>
+              <span>3.7k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>3 分钟</span>
             </span>
 
         </div>
@@ -276,90 +273,49 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>本文主要从从<strong>架构，数据模型</strong>的角度介绍Redis</p>
+        <h1 id="说在前面的话"><a href="#说在前面的话" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p><strong>Redis</strong>是基于<code>key-value</code>格式存储的高性能NoSQL数据库。本文主要从从<strong>架构，数据模型</strong>的角度介绍Redis～</p>
 <a id="more"></a>
-<h1 id="说在前面的话-1"><a href="#说在前面的话-1" class="headerlink" title="说在前面的话"></a>说在前面的话</h1><p>本文主要从从<strong>架构，数据模型</strong>的角度介绍Redis</p>
-<p>很久以前没有关系型数据库的时候用磁盘上的csv，记事本等介质来存储，如果查找某个3k文件中sxt这个字符串</p>
-<p>grep set /etc/filename 用全量IO匹配，一行一行查</p>
-<h1 id="Redis背景介绍"><a href="#Redis背景介绍" class="headerlink" title="Redis背景介绍"></a>Redis背景介绍</h1><p>随着科技信息的发展，现在有个10T大小的数据，还是找到sxt这个字符串，还是全量IO匹配，因此发展出来新的存储技术，叫DataBase，后来发展了经典的数据库关系性数据库，CRUD来操作 大大提升了效率，为什么会提升这么高的效率呢？？</p>
-<p>因为关系型数据库中有DataPage（4k）磁道存储数据 最小执行单位，扇区（字节数据）的存储大小512Byte，所以读取数据的时候 至少要把一个扇区的数据拿出来，写操作也是一样的，也是把扇区都拿出来，因此磁盘上扔数据的时候规划特别重要，所以需要磁盘文件的管理系统，梳理文件大小和搜索索引，一次读取4k，所以数据库先将10t数据打散，分割成大小相同的4k大小的DataPage，里面存储了10t里面不同部分内容，有点像hdfs中的block，可是为什么切成块？？？查找方便？？关系型数据库的维度为2，row和column，一列对应一个field/属性，row是对象，orm（对象关系映射），底层映射成对象，创建一张表，必备的条件：数据类型，一共有多少个字段，因为关系型数据库是行数据库，这样就可以算一行所占的字节数，根据DataPage大小4k，我就可以算出一共有多少行</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create table xxx(</span><br><span class="line">	varchar(12) a</span><br><span class="line">	int32 b</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>但是有datapage会提升查询速度么？？？</p>
-<p>引出第二个支撑概念index索引</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">create index</span><br></pre></td></tr></table></figure>
-<p>把name搬到索引中，index大小也是4k，也是datapage形式，每个datapage都有一个id，就是快速中在某个datapage中快速查找到指定id的datapage，这样就可以快速查到了么？sxt怎么找到指定的id呢？？跟据对应的关联关系</p>
-<p>需要对索引进行维护</p>
-<p>B+树结构 在内存中创建，只是一个索引的指向，</p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210204235424264.png" alt="image-20210204235424264"></p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210204235656236.png" alt="image-20210204235656236"></p>
-<p>是否可以在所有字段上建索引</p>
-<p>从查询角度是有好处的，但是CR（read）UD中Update会变慢，因为索引也要维护。所以就在经常查找的字段上建立索引，</p>
-<p>DataPage和index解决了海量数据的查询问题，但是没有从根本上解决问题，比如又可能不是一个客户，而是几百万客户登录验证，小并发起来之后IO还是达到瓶颈问题，从架构无力解决，因为从上图左侧代表磁盘，右侧代表内存，两次IO先从index，第二次再从datapage，磁盘都要和内存交互，这样磁盘处理速度太慢，就像图书馆管理员一样，所以关系型数据框没有解决关键性问题，用一个index假装解决了</p>
-<p>所以为了解决磁盘交互，所以直接把所有数据仍内存里面，这种东西就叫关系型内存数据库（支持sql查询语句），HANA</p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210205000729370.png" alt="image-20210205000729370"></p>
-<p>但是没有人用，因为穷，太贵了买不起</p>
-<p>经验最重要，而不是会ERP这种没有用的技术，上述软件2，3亿</p>
-<p>关系型数据库（第一代）</p>
-<p>HANA（第三代）</p>
-<p>Redis属于夹缝中的数据库，因为它不可能把所有数据放到内存，但是可以达到相同的效果，并且降低了成本（之前讲过memcached，也是内存数据库，还有namenode存metadata）</p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210205094453919.png" alt="image-20210205094453919"></p>
-<p>比如QQ，每个人都有很多账号，但是并不是都经常用，比如到长大到一定程度，很多号都不再使用了，所以redis把数据分成热数据和冷数据，比如活跃的账号放在内存数据库中，不活跃的放到磁盘里面，比如第一次登录访问服务器，但是在内存中没有账号数据，所以需要到磁盘里面吧账号数据拿出来，但是第二次直接就在内存里面找数据。但是有些冷数据会再次使用，所以会被放到内存里面，但是也会存在内存撑爆，所以需要设置过期的方式，这样就做到了提升效率并且减少成本</p>
-<h1 id="Redis和Memcached区别"><a href="#Redis和Memcached区别" class="headerlink" title="Redis和Memcached区别"></a>Redis和Memcached区别</h1><p>memcached只支持字符串类型，Redis遵循开源的BSD协议，所以基于Redis开发的东西可以作为商品，（但是GANU开发的东西也必须开源）占用6/7MB，基于内存的持久化（因为凡涉及内存掉机易失），高性能的Key-Value的NoSQL数据库，存的数据形式只有一种，就是（k，v）这种格式，无论是存值，修改值，删除值，都离不开key</p>
-<p>Redis支持数据类型丰富（强语言类型），但是针对的是value（string，hashes，lists，sets，zset，bitmaps，hyperloglogs和地理空间），key只能是string</p>
-<p>世界上所有数据都有三种表现形式</p>
-<p>a=1 a=k</p>
-<p>{a,5,1,x} 序列</p>
-<p>k,v。键值对</p>
-<p>可以互相组合构成json字符串，json特点封装复杂，但是解析简单</p>
-<p>如果想要字符串数组直接存到memcached是不行的，需要转成字符串的数据，如果再拿出来的话需要把整个字符串拿出来，然后split</p>
-<p>但是redis有丰富的类型</p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210205100037816.png" alt="image-20210205100037816"></p>
-<p>比如搜索引擎el search 谷歌用的就是这种技术</p>
-<p>Redis是内存数据库</p>
-<!--more-->
-<h1 id="Redis搭建"><a href="#Redis搭建" class="headerlink" title="Redis搭建"></a>Redis搭建</h1><h2 id="单节点安装"><a href="#单节点安装" class="headerlink" title="单节点安装"></a>单节点安装</h2><p>版本2.8.18</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装编译环境</span></span><br><span class="line">yum -y install gcc tcl</span><br><span class="line"></span><br><span class="line">whereis tcl </span><br><span class="line">whereis gcc</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 编译,创建当前的目录并且执行拷贝</span></span><br><span class="line">make &amp;&amp; make PREFIX=/usr/redis install</span><br></pre></td></tr></table></figure>
-<p>查看</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;redis&#x2F;bin</span><br></pre></td></tr></table></figure>
-<p>配置环境变量</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> REDIS_HOME=/usr/redis</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$ZOOKEEPER_HOME</span>/bin:<span class="variable">$HIVE_HOME</span>/bin:<span class="variable">$HBASE_HOME</span>/bin:<span class="variable">$REDIS_HOME</span>:bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
-<p>并且执行以下环境变量</p>
+<h1 id="Redis发展史"><a href="#Redis发展史" class="headerlink" title="Redis发展史"></a>Redis发展史</h1><p>曾经在没有数据库的时代只能用记事本，<code>.csv</code>等文件作为存储数据的介质，如果需要查找某个小文件中的某个字符串要用<code>grep</code>进行全量IO匹配，后来伴随着科技的进步产生的数据量也越来越大，如果还用全量IO匹配显得有些吃力，因此出现了新的技术DataBase，后来就有了将CRUD效率大大提升的关系型数据库</p>
+<p>关系型数据库是如何提升CRUD效率的呢？首先将数据打散成4k大小并有独立id的<strong>datapage</strong>，接下来针对某字段创建4k大小的<strong>index表</strong>，这样就可以根据index表中的字段对应的datapage的id，快速定位到指定的datapage进行查找，最后内存中的B+树负责定位到<strong>index表</strong>来进行快速查询，这样关系型数据库就做到了提升CRUD效率的目的啦～ 其中在行数据库创建表的时候需要指明<strong>数据类型</strong>以及<strong>字段个数</strong>，这样就可以计算每行的字节数，进而可以根据datapage的大小计算datapage中包含多少行数据，还有index表虽然创建的越多对查询越有好处，但针对更新操作的复杂度就会变高，所以需要针对常用的字段来建立index表。</p>
+<p><img src="/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/mysql数据库.png" style="zoom:43%;"></p>
+<p>随着用户高并发连接磁盘数据库的请求仍然会使IO达到瓶颈，所以有了将数据直接放到内存中的想法并出现了内存数据库memcached以及HANA，但HANA的问题是太贵了买不起，后来<strong>非关系型数据库Redis</strong>诞生了。Redis把数据分成热数据和冷数据，将热数据放到内存并将冷数据放到磁盘。比如每个人都有很多QQ账号但并不是都经常用，Redis将活跃的账号放到内存数据库并且将不活跃的账号放到磁盘数据库，当用户第一次登录QQ服务器时如果在内存中没有账号数据，这时Redis会到磁盘里把账号数据取出放到内存中，等第二次登陆服务器时就直接使用内存里的账号数据。由于存在冷数据会被再次使用并放到内存的情况，因此也会存在内存撑爆的问题，Redis通过设置过期的方式解决了该问题，这样Redis就实现了不占用很高的内存也能做到加速查询的效果</p>
+<h1 id="Redis搭建"><a href="#Redis搭建" class="headerlink" title="Redis搭建"></a>Redis搭建</h1><h2 id="单节点安装"><a href="#单节点安装" class="headerlink" title="单节点安装"></a>单节点安装</h2><p><strong>Step1.</strong> 安装<code>gcc</code>以及<code>tcl</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum -y install gcc tcl</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装过后可以查询安装路径</span></span><br><span class="line">whereis tcl </span><br><span class="line">whereis gcc</span><br></pre></td></tr></table></figure>
+<p><strong>Step2.</strong> 下载<code>redis-2.18.8.tar.gz</code>并解压到<code>/usr/</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf redis-2.18.8.tar.gz -C &#x2F;usr&#x2F;</span><br></pre></td></tr></table></figure>
+<p><strong>Step3.</strong> 在<code>/usr/redis-2.8.18</code>目录下编译，创建指定目录并进行拷贝</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make &amp;&amp; make PREFIX=/usr/redis install</span><br></pre></td></tr></table></figure>
+<p>执行过后可以在<code>/usr/redis/</code>下面查到生成了<code>bin文件</code></p>
+<p><strong>Step4.</strong> 在<code>/etc/profile</code>配置环境变量</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> REDIS_HOME=/usr/redis</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$JAVA_HOME</span>/bin:<span class="variable">$REDIS_HOME</span>:bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p>配置保存后执行</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> /etc/profile</span><br></pre></td></tr></table></figure>
-<p>再次进入安装包</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;redis-2.18.8</span><br><span class="line"></span><br><span class="line">执行</span><br><span class="line">redis-server </span><br><span class="line">但是每次执行都很麻烦</span><br></pre></td></tr></table></figure>
-<p>所以直接搭建服务</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">/usr/redis-2.18.8/utils/</span><br><span class="line"></span><br><span class="line">./install_server.sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个redis服务可以有多个实例，每个实例就是一个服务</span></span><br><span class="line"><span class="comment"># 当前实例的配置信息的所在目录</span></span><br><span class="line"><span class="comment"># 日志信息炉具</span></span><br><span class="line"><span class="comment"># 数据路径</span></span><br></pre></td></tr></table></figure>
-<p>接下来直接执行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis-cli</span><br></pre></td></tr></table></figure>
-<p>另起一个客户端，启动server</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis-server -h</span><br></pre></td></tr></table></figure>
-<h1 id="全分布式安装"><a href="#全分布式安装" class="headerlink" title="全分布式安装"></a>全分布式安装</h1><p>版本3.x</p>
-<h1 id="Redis数据模型"><a href="#Redis数据模型" class="headerlink" title="Redis数据模型"></a>Redis数据模型</h1><p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210205225537604.png" alt="image-20210205225537604"></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 将类型下面的所有命令全部列出来，每个类型之间是独立</span><br><span class="line">help @string</span><br><span class="line"></span><br><span class="line"># 可以用tab补全</span><br><span class="line">help @set</span><br><span class="line"></span><br><span class="line"># 不加@表示直接查某个命令</span><br><span class="line">help set</span><br></pre></td></tr></table></figure>
-<p>退出命令</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">quit</span><br><span class="line">exit</span><br><span class="line">ctrl+c</span><br></pre></td></tr></table></figure>
-<h2 id="string类型"><a href="#string类型" class="headerlink" title="string类型"></a>string类型</h2><p>Redis key值是二进制安全的（底层用二进制字节数组存储的，这样任何格式的数据都可以存储），这意味着可以用任何二进制序列作为key值，从形如“foo”的简单字符串到一个JPEG文件的内容都可以。空字符串也是有效的key值</p>
-<p>Key值取之原则</p>
-<p>不要太长也不要太短</p>
-<p>基本操作</p>
-<p>set，get，append</p>
-<p>数值类型计算</p>
-<p>位图</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">127.0.0.1:6379&gt;<span class="built_in">set</span> k1 abc</span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k2 5</span><br><span class="line">get k2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将所有键列出来</span></span><br><span class="line">keys *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 执行失败</span></span><br><span class="line">SETNX k1 dww</span><br><span class="line"></span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k1 dww xx</span><br><span class="line"></span><br><span class="line">nx ：not exist 不存在的时候才能创建，只能进行创建</span><br><span class="line">xx ：exist 只有存在的时候才可以创建, 也就是只能进行修改</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k2 dsfdsf xx</span><br><span class="line">get</span><br><span class="line">OK</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k3 dsfdsf xx</span><br><span class="line">get k3</span><br><span class="line">空</span><br><span class="line"></span><br><span class="line"><span class="comment"># 全是字符串</span></span><br><span class="line"><span class="built_in">type</span> k1 </span><br><span class="line"><span class="built_in">type</span> k2</span><br><span class="line"><span class="built_in">type</span> k3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将存储值做了一个是否可以参与运算的类型标识，为了 算数运算 的操作</span></span><br><span class="line">127.0.0.1:6379&gt; Object encoding k2</span><br><span class="line"><span class="string">"raw"</span> 就是字符串</span><br><span class="line">127.0.0.1:6379&gt; Object encoding k3</span><br><span class="line"><span class="string">"int"</span></span><br><span class="line"><span class="comment"># 在大数据场景下会进行数据类型转换来参与运算，但是转换错误会耽误时间，所以直接就加一个类型标识节省时间</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置多个键的字符串的值</span></span><br><span class="line">MSET k4 5 k5 abc k6 huangning</span><br><span class="line"></span><br><span class="line"><span class="comment"># 失败，会有事务的原子性，只要有一个失败就失败</span></span><br><span class="line">MSETNX k4 5 k5 abc k6 huangning</span><br><span class="line"></span><br><span class="line"><span class="comment"># 匹配一个字符</span></span><br><span class="line">keys ?</span><br><span class="line"></span><br><span class="line">keys ??</span><br><span class="line">keys???</span><br></pre></td></tr></table></figure>
-<p>键的类型</p>
-<p>可以将kv理解成java中的object，key本身会带有一些属性，比如object encoding key</p>
-<p>key:</p>
-<p>v:</p>
-<p>type:</p>
-<p>Encoding(row/int)</p>
-<p>Strlen</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将所有数据库的keys都冲刷掉</span></span><br><span class="line">FLUSHALL</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将当前数据库冲刷掉</span></span><br><span class="line">FLUSHDB</span><br><span class="line"></span><br><span class="line">keys *</span><br></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">redis-cli -h</span><br></pre></td></tr></table></figure>
-<p>每个redis实例（对应一个独立的端口）可以拥有多个数据库，一个端口可以有16个数据库</p>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210206112142276.png" alt="image-20210206112142276"></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">redis-cli (默认是零号数据库)</span><br><span class="line"><span class="comment"># 创建一个key退出，再进入一个新的数据库</span></span><br><span class="line"></span><br><span class="line">redis-cli -n 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 找到之前的数据库的key值</span></span><br><span class="line">redis-cli -n 0 </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">red 中</span><br><span class="line">strlen k4 (当前终端是UTF-8编码集，主要是映射认为的字符到计算机的语言的映射，最开始美国人发明的，所以英文加数字符号 128位的ASCII就够了，后来引入中文，6种造字法，象形文字，金文，铭文，大篆，小篆，)两个字节6w多个，后来又扩充的GBK映射，UTF-8将所有问题兼容，万国码，变成GBK之后就是国标码</span><br><span class="line"></span><br><span class="line"><span class="comment"># 怎么修改终端的编码格式</span></span><br><span class="line"><span class="built_in">set</span> k5 中</span><br><span class="line">strlen k5 变成了2   0到65535</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拿到了16进制的数据，因为redis底层不管编码格式，所以用原始客户端拿不到想要的谁</span></span><br><span class="line">get k4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 退出</span></span><br><span class="line"><span class="comment"># 然后执行,raw是为了get的时候可以得到正确编码的值,进入之后只要再配置中改成指定的编码，就能get到指定的值</span></span><br><span class="line">redis-cli --raw</span><br><span class="line">get k4</span><br><span class="line"></span><br><span class="line">但是GBK之后,对应了不同的编码，所以只需要将终端改成相应的编码</span><br><span class="line">get k5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断是否存在某个ke</span></span><br><span class="line">EXISTS k4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">rename key newkey</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取多个键值</span></span><br><span class="line">MGET </span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回旧值设置新值,也就是将两个原语(命令)合并来节省空间</span></span><br><span class="line">GETSET k1 b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取长度</span></span><br><span class="line">STRLEN</span><br><span class="line"></span><br><span class="line"><span class="comment"># 追加字符串(Java里面的StringBuffer和StringBuilder经常使用)</span></span><br><span class="line">APPEND k1 bd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取子字符串左闭右闭</span></span><br><span class="line">getrange k1 3 -1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 只想取一个值,-1是最后一位的起始下标，先列出左侧，再列出右侧</span></span><br><span class="line">getrange k1 -2 -2</span><br><span class="line"></span><br><span class="line"><span class="comment">#步长1的增减</span></span><br><span class="line">flushall </span><br><span class="line"><span class="built_in">set</span> k1 99</span><br><span class="line">INCR k1</span><br><span class="line">DECR k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定增加的数值</span></span><br><span class="line">INCRBY k1 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 增加float</span></span><br><span class="line">INCRBYFLOAT k1 5.5</span><br><span class="line"></span><br><span class="line"><span class="comment"># redis开发代码不需要很多，可能就几百行</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 位图bitmap操作key offset value</span></span><br><span class="line"><span class="comment"># 绘制一个字节图</span></span><br><span class="line"></span><br><span class="line">setbit k1 1 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回k1的值</span></span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下图中计算后64，</span></span><br></pre></td></tr></table></figure>
-<p><img src="/Users/huangning/Library/Application Support/typora-user-images/image-20210206110917260.png" alt="image-20210206110917260"></p>
+<p><strong>Step5.</strong> 进入<code>/usr/redis-2.18.8</code>启动<code>redis-server</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./redis-server</span><br></pre></td></tr></table></figure>
+<p>每次都到指定目录手动启动服务很麻烦，所以可以直接在<code>/usr/redis-2.18.8/utils/</code>安装服务</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">./install_server.sh</span><br></pre></td></tr></table></figure>
+<p>在安装过程中会出现当前实例的配置信息，日志信息以及数据信息所在的存储路径，其中Redis在一台节点上可以存在多个实例，每个实例就是一个服务，每个服务都有一个独立的端口号</p>
+<p><strong>Step6.</strong> 运行Redis</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入Redis客户端</span></span><br><span class="line">redis-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询redis-cli的帮助命令</span></span><br><span class="line">redis-cli -h</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询redis-server的帮助命令</span></span><br><span class="line">redis-server -h</span><br></pre></td></tr></table></figure>
+<p><strong>Step7.</strong> 退出Redis</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 法1</span></span><br><span class="line">quit</span><br><span class="line"></span><br><span class="line"><span class="comment"># 法2</span></span><br><span class="line"><span class="built_in">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 法3</span></span><br><span class="line">control+c</span><br></pre></td></tr></table></figure>
+<h1 id="Redis数据类型"><a href="#Redis数据类型" class="headerlink" title="Redis数据类型"></a>Redis数据类型</h1><p>Memcached只支持字符串类型，如果将数组存到Memcached是不可行的，需要转成数组形式的字符串才能存入，而且读的时候也需要将整个字符串取出并通过<code>split</code>转成数组，但是<strong>Redis支持丰富的数据类型</strong>，比如string，hashes，lists，sets，zset，bitmaps，hyperloglogs和地理空间等，即Redis是强语言类型，其中丰富的数据类型指的是value，而key只能是string。Redis的key是二进制安全的，即底层是用二进制字节数组存储的，这意味着任何格式的二进制序列数据都可以作为key值，比如从简单的字符串到<code>.jpeg</code>格式的图片内容都可以作为key，其中空字符串也是有效的key值。key本身会带有一些属性，比如<strong>strlen, object encoding</strong>等。Redis中只存在<code>(key,value)</code>这种数据形式，无论存储值，修改值以及删除值，都离不开key，key的取值一般不要太长也不要太短，太长会占用内存，太短可读性会差。</p>
+<p><img src="/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/redis数据模型.png" style="zoom:43%;"></p>
+<h2 id="帮助命令"><a href="#帮助命令" class="headerlink" title="帮助命令"></a>帮助命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 帮助命令</span></span><br><span class="line"><span class="built_in">help</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/helpcommand.png" style="zoom:43%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将指定数据类型下的全部命令列出来</span></span><br><span class="line"><span class="built_in">help</span> @string</span><br><span class="line"></span><br><span class="line"><span class="comment"># 每个类型之间的命令是独立的 </span></span><br><span class="line"><span class="built_in">help</span> @<span class="built_in">set</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不加@表示直接查某个类型下的命令，命令可以用tab补全</span></span><br><span class="line"><span class="built_in">help</span> <span class="built_in">set</span></span><br></pre></td></tr></table></figure>
+<h2 id="string类型"><a href="#string类型" class="headerlink" title="string类型"></a>string类型</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># set操作</span></span><br><span class="line"><span class="built_in">set</span> k1 abc</span><br><span class="line"><span class="built_in">set</span> k2 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># get操作</span></span><br><span class="line">get k1</span><br><span class="line">get k2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将所有键列出来</span></span><br><span class="line">keys *</span><br><span class="line"></span><br><span class="line"><span class="comment"># 针对不存在的键进行创建，可以发现下述语句会报错</span></span><br><span class="line">SETNX k1 ddd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上述语句等价于</span></span><br><span class="line"><span class="built_in">set</span> k1 ddd nx</span><br><span class="line"></span><br><span class="line"><span class="comment"># nx表示not exist，即不存在的时候才能创建，只能进行创建</span></span><br><span class="line"><span class="comment"># xx表示exist，即只有存在的时候才可以创建, 也就是只能进行修改</span></span><br><span class="line"><span class="built_in">set</span> k1 aaa xx  </span><br><span class="line"><span class="built_in">set</span> k2 dsfdsf xx</span><br><span class="line"><span class="comment"># 如果不存在k3这个key，下述语句会报错</span></span><br><span class="line"><span class="built_in">set</span> k3 dsfdsf xx</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k3 99 </span><br><span class="line"><span class="comment"># 查询数据类型，发现都是string</span></span><br><span class="line"><span class="built_in">type</span> k1 </span><br><span class="line"><span class="built_in">type</span> k2</span><br><span class="line"><span class="built_in">type</span> k3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 针对存储的值插入了是否可以参与数值运算的类型标识</span></span><br><span class="line"><span class="comment"># 如果不加类型标识，大数据场景下会进行数据类型转换来参与运算, 但是转换错误会耽误时间，所以这里直接加类型标识来节省计算时间</span></span><br><span class="line">Object encoding k2</span><br><span class="line">Object encoding k3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置多个键的字符串的值</span></span><br><span class="line">MSET k4 5 k5 abc k6 huangning</span><br><span class="line"></span><br><span class="line"><span class="comment"># 失败，其中命令存在事物的原子性，即有一个失败就全失败</span></span><br><span class="line">MSETNX k4 5 k5 abc k6 huangning</span><br><span class="line"></span><br><span class="line"><span class="comment"># 判断是否存在某个key</span></span><br><span class="line">EXISTS k4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重命名某个key</span></span><br><span class="line">rename k1 kk1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取多个键的值</span></span><br><span class="line">MGET k1 k2 k3</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回旧值设置新值</span></span><br><span class="line">GETSET k1 b</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取键对应的值长度</span></span><br><span class="line">STRLEN k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给指定key的value后面追加字符串</span></span><br><span class="line">APPEND k1 bd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取子字符串，其中端点对应的区间为左闭右闭</span></span><br><span class="line"><span class="comment"># 书写顺序是左区间值，右区间值</span></span><br><span class="line">getrange k1 3 -1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果只想取一个值, 那两个端点的值取同一个</span></span><br><span class="line"><span class="comment"># -1表示最后一位的起始下标</span></span><br><span class="line">getrange k1 -2 -2</span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> k1 99</span><br><span class="line"><span class="comment"># 将底层是数值类型的value增加1</span></span><br><span class="line">INCR k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将底层是数值类型的value减少1</span></span><br><span class="line">DECR k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将底层是数值类型的value增加指定的整数</span></span><br><span class="line">INCRBY k1 5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将底层是数值类型的value增加指定的float值</span></span><br><span class="line">INCRBYFLOAT k1 5.5</span><br></pre></td></tr></table></figure>
+<h3 id="匹配keys"><a href="#匹配keys" class="headerlink" title="匹配keys"></a>匹配keys</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 分别匹配1个，2个以及3个字符的key</span><br><span class="line">keys ?</span><br><span class="line">keys ??</span><br><span class="line">keys ???</span><br></pre></td></tr></table></figure>
+<h3 id="Flush"><a href="#Flush" class="headerlink" title="Flush"></a>Flush</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将所有数据库的keys都刷掉</span></span><br><span class="line">FLUSHALL</span><br><span class="line"></span><br><span class="line"><span class="comment"># 只将当前数据库的所有keys刷掉</span></span><br><span class="line">FLUSHDB</span><br></pre></td></tr></table></figure>
+<h3 id="多数据库切换"><a href="#多数据库切换" class="headerlink" title="多数据库切换"></a>多数据库切换</h3><p><strong>每个redis实例可以拥有多个数据库，一个端口可以有16个数据库</strong></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认进入的是0号数据库</span></span><br><span class="line"><span class="comment"># 创建一个key后退出</span></span><br><span class="line">redis-cli</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再进入1号数据库，发现之前的0号数据库的key都不存在</span></span><br><span class="line">redis-cli -n 1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次回到0号数据库，发现之前的key都存在</span></span><br><span class="line">redis-cli -n 0</span><br></pre></td></tr></table></figure>
+<h3 id="中文编码"><a href="#中文编码" class="headerlink" title="中文编码"></a>中文编码</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 终端默认是utf-8编码集，其中编码集是字符到计算机语言的映射，最开始是美国人发明的包含128个字符的ASCII码，后来出现了国标码GBK以及万国码utf-8</span></span><br><span class="line"><span class="built_in">set</span> k4 中</span><br><span class="line"><span class="comment"># 长度为3，编码格式为GBK的长度为2</span></span><br><span class="line">strlen k4</span><br><span class="line"><span class="comment"># redis不会记录编码集，所以下述操作会出现乱码</span></span><br><span class="line">get k4</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入客户端时输入下述命令就可以解决上述问题</span></span><br><span class="line">redis-cli --raw</span><br><span class="line"></span><br><span class="line"><span class="comment"># 再次执行get就会按照当前终端的编码集获取对应的值</span></span><br><span class="line">get k4</span><br></pre></td></tr></table></figure>
+<p>我们可以通过终端的设置直接切换编码集</p>
+<p><img src="/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/切换编码集.png" style="zoom:33%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 切换成GBK编码之后设置一个新的值</span></span><br><span class="line"><span class="built_in">set</span> k5 中</span><br><span class="line">get k5 </span><br><span class="line"></span><br><span class="line"><span class="comment"># 在GBK编码集环境下获取utf-8编码集环境下创建的key也会乱码</span></span><br><span class="line">get k4</span><br></pre></td></tr></table></figure>
+<h3 id="BitMap"><a href="#BitMap" class="headerlink" title="BitMap"></a>BitMap</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># key后面第1个参数是offset，第2个参数value</span></span><br><span class="line">setbit k1 1 1</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/字节数组.png" style="zoom:33%;"></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 返回k1的值是ASCII码第64位对应的@</span></span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果继续设置</span></span><br><span class="line">setbit k1 7 1</span><br><span class="line"><span class="comment"># 可以得到ASCII码第65位对应的A</span></span><br><span class="line">get k1</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置超出一个字节数组的长度的偏移</span></span><br><span class="line">setbit k1 9 1</span><br><span class="line"><span class="comment"># 就会将之前的结果和新结果合并，即A@</span></span><br><span class="line">get k1</span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -447,7 +403,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话"><span class="nav-number">1.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话-1"><span class="nav-number">2.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis背景介绍"><span class="nav-number">3.</span> <span class="nav-text">Redis背景介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis和Memcached区别"><span class="nav-number">4.</span> <span class="nav-text">Redis和Memcached区别</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis搭建"><span class="nav-number">5.</span> <span class="nav-text">Redis搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单节点安装"><span class="nav-number">5.1.</span> <span class="nav-text">单节点安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#全分布式安装"><span class="nav-number">6.</span> <span class="nav-text">全分布式安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis数据模型"><span class="nav-number">7.</span> <span class="nav-text">Redis数据模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#string类型"><span class="nav-number">7.1.</span> <span class="nav-text">string类型</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#说在前面的话"><span class="nav-number">1.</span> <span class="nav-text">说在前面的话</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis发展史"><span class="nav-number">2.</span> <span class="nav-text">Redis发展史</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis搭建"><span class="nav-number">3.</span> <span class="nav-text">Redis搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#单节点安装"><span class="nav-number">3.1.</span> <span class="nav-text">单节点安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis数据类型"><span class="nav-number">4.</span> <span class="nav-text">Redis数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#帮助命令"><span class="nav-number">4.1.</span> <span class="nav-text">帮助命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#string类型"><span class="nav-number">4.2.</span> <span class="nav-text">string类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">4.2.1.</span> <span class="nav-text">基本操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匹配keys"><span class="nav-number">4.2.2.</span> <span class="nav-text">匹配keys</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Flush"><span class="nav-number">4.2.3.</span> <span class="nav-text">Flush</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多数据库切换"><span class="nav-number">4.2.4.</span> <span class="nav-text">多数据库切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#中文编码"><span class="nav-number">4.2.5.</span> <span class="nav-text">中文编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BitMap"><span class="nav-number">4.2.6.</span> <span class="nav-text">BitMap</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -517,12 +473,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">166k</span>
+    <span title="站点总字数">165k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:31</span>
+    <span title="站点阅读时长">2:30</span>
 </div>
 
         
