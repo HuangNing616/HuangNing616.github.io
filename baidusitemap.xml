@@ -1,15 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://yoursite.com/2021/02/06/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
+    <loc>http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
+    <loc>http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
+    <loc>http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
+    <loc>http://yoursite.com/2021/02/06/Yarn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
+    <loc>http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/</loc>
+    <lastmod>2021-02-06</lastmod>
+  </url>
+  <url>
     <loc>http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/</loc>
     <lastmod>2021-01-31</lastmod>
   </url>
   <url>
     <loc>http://yoursite.com/2021/01/23/Hive%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/</loc>
-    <lastmod>2021-01-31</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2021-01-31</lastmod>
   </url>
   <url>
@@ -23,14 +43,6 @@
   <url>
     <loc>http://yoursite.com/2020/10/17/Python%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     <lastmod>2020-10-17</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/2020/08/16/Linux%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2020-10-08</lastmod>
-  </url>
-  <url>
-    <loc>http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8B/</loc>
-    <lastmod>2020-10-08</lastmod>
   </url>
   <url>
     <loc>http://yoursite.com/2020/09/07/%E7%BD%91%E7%BB%9C%E9%80%9A%E4%BF%A1%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>

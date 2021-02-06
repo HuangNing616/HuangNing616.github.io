@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="安装PSP游戏如果PSV破解后想玩儿PSP游戏，首先需要确认Adrenaline（PSP模拟器）是不支持3.7x版本的PSV（会碰到错误代码：C1-2758-2的提示），所以如果PSV版本过高，请参考PSV 3.73 降级3.65图文教程对系统降级后再继续 Step1. 确认已经执行h-encore，选设定中的第二项HENkaku设置  Step2. 在HENkaku设置中勾选启用不安全自制软件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PSV破解攻略">
+<meta property="og:url" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="安装PSP游戏如果PSV破解后想玩儿PSP游戏，首先需要确认Adrenaline（PSP模拟器）是不支持3.7x版本的PSV（会碰到错误代码：C1-2758-2的提示），所以如果PSV版本过高，请参考PSV 3.73 降级3.65图文教程对系统降级后再继续 Step1. 确认已经执行h-encore，选设定中的第二项HENkaku设置  Step2. 在HENkaku设置中勾选启用不安全自制软件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/HENkaku%E8%AE%BE%E7%BD%AE.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/%E4%B8%8D%E5%AE%89%E5%85%A8%E8%87%AA%E5%88%B6%E8%BD%AF%E4%BB%B6.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130521.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130445.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130345.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130409.jpg">
+<meta property="og:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130449.jpg">
+<meta property="article:published_time" content="2021-01-31T05:29:38.000Z">
+<meta property="article:modified_time" content="2021-02-06T05:53:06.685Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="｜统计学|机器学习|python|">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/HENkaku%E8%AE%BE%E7%BD%AE.jpg">
+
+<link rel="canonical" href="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>PSV破解攻略 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="务实敢为 追求极致">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PSV破解攻略
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-01-31 13:29:38" itemprop="dateCreated datePublished" datetime="2021-01-31T13:29:38+08:00">2021-01-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-06 13:53:06" itemprop="dateModified" datetime="2021-02-06T13:53:06+08:00">2021-02-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%BB%E6%9C%BA/" itemprop="url" rel="index">
+                    <span itemprop="name">主机</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E4%B8%BB%E6%9C%BA/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/" itemprop="url" rel="index">
+                    <span itemprop="name">PSV破解攻略</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>1.1k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>1 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="安装PSP游戏"><a href="#安装PSP游戏" class="headerlink" title="安装PSP游戏"></a>安装PSP游戏</h1><p>如果PSV破解后想玩儿PSP游戏，首先需要确认<strong>Adrenaline</strong>（PSP模拟器）是不支持3.7x版本的PSV（会碰到错误代码：C1-2758-2的提示），所以如果PSV版本过高，请参考<a href="https://shipengliang.com/games/psv-3-73-降级3-65图文教程.html" target="_blank" rel="noopener">PSV 3.73 降级3.65图文教程</a>对<strong>系统降级</strong>后再继续</p>
+<p><strong>Step1.</strong> 确认已经执行<strong>h-encore</strong>，选<code>设定</code>中的第二项<code>HENkaku设置</code></p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/HENkaku设置.jpg" style="zoom:50%;"></p>
+<p><strong>Step2.</strong> 在HENkaku设置中勾选<code>启用不安全自制软件</code></p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/不安全自制软件.jpg" style="zoom:50%;"></p>
+<p><strong>Step3.</strong> 下载PSP模拟器</p>
+<p>通过密码为6o87的百度链接: <a href="https://pan.baidu.com/s/1mG23f7BhGqJouHn00gcQ8g下载PSP模拟器，并传输到USB模式下的PSV盘符根目录" target="_blank" rel="noopener">https://pan.baidu.com/s/1mG23f7BhGqJouHn00gcQ8g下载PSP模拟器，并传输到USB模式下的PSV盘符根目录</a></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ux0/</span><br></pre></td></tr></table></figure>
+<p><strong>Step4.</strong> 下载PSP游戏镜像</p>
+<p>游戏镜像文件都是以<strong>ISO</strong>或<strong>CSO</strong>为后缀的文件，其中PSP游戏镜像可以通过：<a href="https://shipengliang.com/download/psp/psp-中文游戏列表.html" target="_blank" rel="noopener">PSP 中文游戏列表</a>下载</p>
+<p><strong>Step5.</strong> 传输PSP游戏镜像文件</p>
+<p>将下载好的镜像文件如果是中文名请<strong>务必改为英文</strong>，然后将其传输到PSV的如下目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ux0/pspemu/iso/</span><br></pre></td></tr></table></figure>
+<p>如果是PS1转换的游戏，则将其传输到PSV的如下目录</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ux0/pspmenu/psp/game/</span><br></pre></td></tr></table></figure>
+<p><strong>如需了解如何将PSP镜像通过USB方式上传到PSV，可参考：<a href="https://shipengliang.com/games/psv破解后开启usb连接电脑接收文件教程.html" target="_blank" rel="noopener">PSV破解后开启USB连接电脑接收文件教程</a><br>如需了解如何将PSP镜像通过FTP方式上传到PSV，可参考：<a href="https://shipengliang.com/games/psv破解后开启ftp接收文件教程.html" target="_blank" rel="noopener">PSV破解后开启FTP接收文件教程</a></strong></p>
+<p><strong>Step6.</strong> 激活PSP模式并启动</p>
+<p>将游戏镜像传输到PSV后，从PSV桌面进入Adrenaline(PSP模拟器)会自动跳回桌面，此时系统激活了PSP模式</p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130521.jpg" style="zoom:50%;"></p>
+<p>这时需再次点击Adrenaline才可真正进入PSP模式。在PSP模式下的<code>Memory Stick</code>就可以找到之前传输的游戏啦 🥳🥳</p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130445.jpg" style="zoom:50%;"></p>
+<p><strong>Step8.</strong> 免二次重启</p>
+<p>如果之前安装了<strong>VITA工具箱</strong>的话，可以进入<strong>常用插件大全</strong></p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130345.jpg" style="zoom:50%;"></p>
+<p>安装<strong>Adrenaline免二次重启</strong>插件</p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130409.jpg" style="zoom:50%;"></p>
+<p>装好后就不需要每次都启动两次PSP模拟器啦～</p>
+<p><strong>Step9.</strong> 退出PSP模式</p>
+<p>长按左下的PSV键，可以调出菜单来退出PSP模拟模式</p>
+<p><img src="/2021/01/31/PSV%E7%A0%B4%E8%A7%A3%E6%94%BB%E7%95%A5/2021-02-01-130449.jpg" style="zoom:50%;"></p>
+<h1 id="PSV-如何使用卡套配合TF卡-图文教程"><a href="#PSV-如何使用卡套配合TF卡-图文教程" class="headerlink" title="PSV 如何使用卡套配合TF卡 图文教程"></a>PSV 如何使用卡套配合TF卡 图文教程</h1><p><a href="https://shipengliang.com/games/psv-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%A1%E5%A5%97%E9%85%8D%E5%90%88tf%E5%8D%A1-%E5%9B%BE%E6%96%87%E6%95%99%E7%A8%8B.html" target="_blank" rel="noopener">https://shipengliang.com/games/psv-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%8D%A1%E5%A5%97%E9%85%8D%E5%90%88tf%E5%8D%A1-%E5%9B%BE%E6%96%87%E6%95%99%E7%A8%8B.html</a></p>
+<p><a href="https://shipengliang.com/games/psv-3-70-3-72-%e5%a6%82%e4%bd%95%e4%b8%80%e9%94%ae%e7%a0%b4%e8%a7%a3.html" target="_blank" rel="noopener">https://shipengliang.com/games/psv-3-70-3-72-%e5%a6%82%e4%bd%95%e4%b8%80%e9%94%ae%e7%a0%b4%e8%a7%a3.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/31/HBase%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="HBase学习笔记">
+      <i class="fa fa-chevron-left"></i> HBase学习笔记
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/02/06/Yarn%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="Yarn学习笔记">
+      Yarn学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#安装PSP游戏"><span class="nav-number">1.</span> <span class="nav-text">安装PSP游戏</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PSV-如何使用卡套配合TF卡-图文教程"><span class="nav-number">2.</span> <span class="nav-text">PSV 如何使用卡套配合TF卡 图文教程</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">务实敢为 追求极致</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">162k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">2:27</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>
