@@ -1170,7 +1170,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #ffe31c;
+  background: #ff95ff;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
@@ -1510,6 +1510,27 @@ pre .javascript .function {
     opacity: 0.8;
   }
 }
+.use-motion .post-block {
+  opacity: 0;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  padding: 15px;
+  -webkit-box-shadow: 0 0 5px rgba(202,203,203,0.5);
+  -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
+}
+.use-motion .pagination,
+.use-motion .comments {
+  opacity: 0;
+}
+.use-motion .post-header {
+  opacity: 0;
+}
+.use-motion .post-body {
+  opacity: 0;
+}
+.use-motion .collection-header {
+  opacity: 0;
+}
 .post-body {
   font-family: 'Times New Roman', 'Noto Serif SC', "PingFang SC", "Microsoft YaHei", sans-serif;
   overflow-wrap: break-word;
@@ -1540,20 +1561,6 @@ pre .javascript .function {
 .post-button {
   margin-top: 40px;
   text-align: center;
-}
-.use-motion .post-block,
-.use-motion .pagination,
-.use-motion .comments {
-  opacity: 0;
-}
-.use-motion .post-header {
-  opacity: 0;
-}
-.use-motion .post-body {
-  opacity: 0;
-}
-.use-motion .collection-header {
-  opacity: 0;
 }
 .posts-collapse {
   margin-left: 55px;
@@ -1669,15 +1676,13 @@ pre .javascript .function {
   font-size: 0.875em;
   margin-left: 5px;
 }
-.post-eof {
+.posts-expand .post-eof {
+  display: block;
+  margin: 30px auto 50px;
+  width: 0%;
+  height: 0px;
   background: #ccc;
-  height: 1px;
-  margin: 80px auto 60px;
   text-align: center;
-  width: 8%;
-}
-.post-block:last-child .post-eof {
-  display: none;
 }
 .posts-expand {
   padding-top: 40px;
@@ -2260,6 +2265,15 @@ ul.breadcrumb li + li:last-child {
     padding-right: 0;
     width: auto;
   }
+}
+.header {
+  width: 80%;
+}
+.container .main-inner {
+  width: 80%;
+}
+.content-wrap {
+  width: calc(100% - 260px);
 }
 .site-brand-container {
   position: relative;
