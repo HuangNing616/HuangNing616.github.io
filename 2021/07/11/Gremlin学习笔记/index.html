@@ -61,13 +61,13 @@
 <meta property="og:description" content="Gremlin简介Gremlin 是 Apache TinkerPop 框架下的图遍历语言，是目前图数据库领域主流的查询语言，Gremlin支持实时性高的OLTP以及多方面观察信息的OLAP。对于图数据库的Gremlin类似于针对关系型数据库的SQL">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/startserver.png">
-<meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/jsp.png">
+<meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/jps.png">
 <meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/startserver2.png">
 <meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/studio-log.png">
 <meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/studio-ui.png">
 <meta property="og:image" content="http://yoursite.com/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/graph_total.png">
 <meta property="article:published_time" content="2021-07-11T02:15:37.000Z">
-<meta property="article:modified_time" content="2021-07-11T15:36:24.041Z">
+<meta property="article:modified_time" content="2021-07-12T02:02:26.357Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="｜统计学|机器学习|python|">
 <meta name="twitter:card" content="summary">
@@ -215,10 +215,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-07-11 10:15:37 / 修改时间：23:36:24" itemprop="dateCreated datePublished" datetime="2021-07-11T10:15:37+08:00">2021-07-11</time>
+              <time title="创建时间：2021-07-11 10:15:37" itemprop="dateCreated datePublished" datetime="2021-07-11T10:15:37+08:00">2021-07-11</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-07-12 10:02:26" itemprop="dateModified" datetime="2021-07-12T10:02:26+08:00">2021-07-12</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -262,7 +268,7 @@
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>14 分钟</span>
+              <span>13 分钟</span>
             </span>
 
         </div>
@@ -292,7 +298,7 @@
 <p>HugeGraphServer启动之前需要初始化后端，我们需要在<code>hugegraph-x.x.x</code>的目录下执行</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/init-store.sh</span><br></pre></td></tr></table></figure>
 <p>从执行结果中可以看到hugegraph初始化了rocksdb后端，那为什么是rocksdb而不是别的呢？我们回到上一步说的<code>conf/hugegraph.properties</code>中的配置信息</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ vim conf/hugegraph.properties</span><br><span class="line"><span class="comment"># gremlin entrence to create graph</span></span><br><span class="line">gremlin.graph=com.baidu.hugegraph.HugeFactory</span><br><span class="line"></span><br><span class="line"><span class="comment"># cache config</span></span><br><span class="line"><span class="comment">#schema.cache_capacity=1048576</span></span><br><span class="line"><span class="comment">#graph.cache_capacity=10485760</span></span><br><span class="line"><span class="comment">#graph.cache_expire=600</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># schema illegal name template</span></span><br><span class="line"><span class="comment">#schema.illegal_name_regex=\s+|~.*</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#vertex.default_label=vertex</span></span><br><span class="line"></span><br><span class="line">backend=rocksdb</span><br><span class="line">serializer=binary</span><br><span class="line"></span><br><span class="line">store=hugegraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># rocksdb backend config</span></span><br><span class="line"><span class="comment">#rocksdb.data_path=/path/to/disk</span></span><br><span class="line"><span class="comment">#rocksdb.wal_path=/path/to/disk</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># gremlin entrence to create graph</span></span><br><span class="line">gremlin.graph=com.baidu.hugegraph.HugeFactory</span><br><span class="line"></span><br><span class="line"><span class="comment"># cache config</span></span><br><span class="line"><span class="comment">#schema.cache_capacity=1048576</span></span><br><span class="line"><span class="comment">#graph.cache_capacity=10485760</span></span><br><span class="line"><span class="comment">#graph.cache_expire=600</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># schema illegal name template</span></span><br><span class="line"><span class="comment">#schema.illegal_name_regex=\s+|~.*</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#vertex.default_label=vertex</span></span><br><span class="line"></span><br><span class="line">backend=rocksdb</span><br><span class="line">serializer=binary</span><br><span class="line"></span><br><span class="line">store=hugegraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># rocksdb backend config</span></span><br><span class="line"><span class="comment">#rocksdb.data_path=/path/to/disk</span></span><br><span class="line"><span class="comment">#rocksdb.wal_path=/path/to/disk</span></span><br></pre></td></tr></table></figure>
 <p>其中<code>backend=rocksdb</code>就是设置后端为rocksdb的配置项，其他可用的后端的还包括memory、cassandra、scylladb、hbase、mysql和palo</p>
 <p>注意：</p>
 <ul>
@@ -304,7 +310,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bin/start-hugegraph.sh</span><br></pre></td></tr></table></figure>
 <p><img src="/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/startserver.png" style="zoom:50%;"></p>
 <p>执行结果如上图表示执行成功，我们也可以通过查看jps查看HugeGraphServer是否启动成功</p>
-<p><img src="/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/jsp.png" style="zoom:50%;"></p>
+<p><img src="/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/jps.png" style="zoom:25%;"></p>
 <p>如果还不放心是否启动成功，我们还可以发个HTTP请求</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl http://127.0.0.1:8080/graphs</span><br></pre></td></tr></table></figure>
 <p>但如果执行时提示</p>
@@ -326,12 +332,7 @@
 <p><img src="/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/studio-log.png" alt></p>
 <p>接下里我们按照日志中提示的信息，在浏览器中输入<code>http://localhost:8088</code>，就可以进入<code>studio</code>的界面</p>
 <p><img src="/2021/07/11/Gremlin%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/studio-ui.png" style="zoom:50%;"></p>
-<h1 id="Gremlin常用语法"><a href="#Gremlin常用语法" class="headerlink" title="Gremlin常用语法"></a>Gremlin常用语法</h1><p>Gremlin 是一种<strong>函数式数据流</strong>语言，用Gremlin进行的遍历操作是由一系列步骤组成，每一步都是在数据流上执行的一个原子操作。Gremlin包含以下3个基本的操作步骤</p>
-<ul>
-<li>map-step：对数据流中的对象进行转换</li>
-<li>filter-step：对数据流中的对象就行过滤</li>
-<li>sideEffect-step：对数据流进行计算统计</li>
-</ul>
+<h1 id="Gremlin常用语法"><a href="#Gremlin常用语法" class="headerlink" title="Gremlin常用语法"></a>Gremlin常用语法</h1><p>Gremlin 是一种<strong>函数式数据流</strong>语言，用Gremlin进行的操作是由一系列步骤组成，每一步都是作用在数据流上执行的一个原子操作</p>
 <h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><div class="table-container">
 <table>
 <thead>
@@ -368,18 +369,18 @@
 </tbody>
 </table>
 </div>
-<h2 id="图的创建"><a href="#图的创建" class="headerlink" title="图的创建"></a>图的创建</h2><p>在<code>studio</code>界面的输入框中输入以下Gremlin语句来创建一个TinkerPop关系图</p>
+<h2 id="图的创建"><a href="#图的创建" class="headerlink" title="图的创建"></a>图的创建</h2><p>在 HugeGraphStudio 的输入框中输入以下Gremlin语句来创建一个TinkerPop关系图</p>
 <p><strong>Step1 创建属性</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">graph.schema().propertyKey(&quot;name&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;age&quot;).asInt().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;addr&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;lang&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;tag&quot;).asText().ifNotExist().create()</span><br><span class="line">graph.schema().propertyKey(&quot;weight&quot;).asFloat().ifNotExist().create()</span><br></pre></td></tr></table></figure>
 <p><strong>Step2 创建顶点标签</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">graph.schema().vertexLabel(&quot;person&quot;).properties(&quot;name&quot;, &quot;age&quot;, &quot;addr&quot;, &quot;weight&quot;).useCustomizeStringId().ifNotExist().create()</span><br><span class="line">graph.schema().vertexLabel(&quot;software&quot;).properties(&quot;name&quot;, &quot;lang&quot;, &quot;tag&quot;, &quot;weight&quot;).primaryKeys(&quot;name&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().vertexLabel(&quot;language&quot;).properties(&quot;name&quot;, &quot;lang&quot;, &quot;weight&quot;).primaryKeys(&quot;name&quot;).ifNotExist().create()</span><br></pre></td></tr></table></figure>
 <p><strong>Step3 创建边标签</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建边类</span><br><span class="line">graph.schema().edgeLabel(&quot;knows&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;person&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;created&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;contains&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;define&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;implements&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;supports&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">graph.schema().edgeLabel(&quot;knows&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;person&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;created&quot;).sourceLabel(&quot;person&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;contains&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;define&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;implements&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;software&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br><span class="line">graph.schema().edgeLabel(&quot;supports&quot;).sourceLabel(&quot;software&quot;).targetLabel(&quot;language&quot;).properties(&quot;weight&quot;).ifNotExist().create()</span><br></pre></td></tr></table></figure>
 <p><strong>Step4 新增顶点</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 创建顶点</span><br><span class="line">okram &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;okram&quot;, &quot;name&quot;, &quot;Marko A. Rodriguez&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Santa Fe, New Mexico&quot;, &quot;weight&quot;, 1)</span><br><span class="line">spmallette &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;spmallette&quot;, &quot;name&quot;, &quot;Stephen Mallette&quot;, &quot;age&quot;, 0, &quot;addr&quot;, &quot;&quot;, &quot;weight&quot;, 1)</span><br><span class="line">tinkerpop &#x3D; graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;TinkerPop&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph computing framework&quot;, &quot;weight&quot;, 1)</span><br><span class="line">tinkergraph &#x3D; graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;TinkerGraph&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;In-memory property graph&quot;, &quot;weight&quot;, 1)</span><br><span class="line">gremlin &#x3D; graph.addVertex(T.label, &quot;language&quot;, &quot;name&quot;, &quot;Gremlin&quot;, &quot;lang&quot;, &quot;groovy&#x2F;python&#x2F;javascript&quot;, &quot;weight&quot;, 1)</span><br><span class="line">dalaro &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;dalaro&quot;, &quot;name&quot;, &quot;Dan LaRocque &quot;, &quot;age&quot;, 0, &quot;addr&quot;, &quot;&quot;, &quot;weight&quot;, 1)</span><br><span class="line">mbroecheler &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;mbroecheler&quot;, &quot;name&quot;, &quot;Matthias Broecheler&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;San Francisco&quot;, &quot;weight&quot;, 1)</span><br><span class="line">titan &#x3D; graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;Titan&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph Database&quot;, &quot;weight&quot;, 1)</span><br><span class="line">javeme &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;javeme&quot;, &quot;name&quot;, &quot;Jermy Li&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Beijing&quot;, &quot;weight&quot;, 1)</span><br><span class="line">zhoney &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;zhoney&quot;, &quot;name&quot;, &quot;Zhoney Zhang&quot;, &quot;age&quot;, 29, &quot;addr&quot;, &quot;Beijing&quot;, &quot;weight&quot;, 1)</span><br><span class="line">linary &#x3D; graph.addVertex(T.label, &quot;person&quot;, T.id, &quot;linary&quot;, &quot;name&quot;, &quot;Linary Li&quot;, &quot;age&quot;, 28, &quot;addr&quot;, &quot;Wuhan. Hubei&quot;, &quot;weight&quot;, 1)</span><br><span class="line">hugegraph &#x3D; graph.addVertex(T.label, &quot;software&quot;, &quot;name&quot;, &quot;HugeGraph&quot;, &quot;lang&quot;, &quot;java&quot;, &quot;tag&quot;, &quot;Graph Database&quot;, &quot;weight&quot;, 1)</span><br></pre></td></tr></table></figure>
 <p><strong>Step5 新增边</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">okram.addEdge(&quot;created&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">okram.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line">okram.addEdge(&quot;knows&quot;, spmallette, &quot;weight&quot;, 1)</span><br><span class="line">tinkerpop.addEdge(&quot;define&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line">tinkerpop.addEdge(&quot;contains&quot;, tinkergraph, &quot;weight&quot;, 1)</span><br><span class="line">hugegraph.addEdge(&quot;implements&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">hugegraph.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line">javeme.addEdge(&quot;knows&quot;, zhoney, &quot;weight&quot;, 1)</span><br><span class="line">javeme.addEdge(&quot;knows&quot;, linary, &quot;weight&quot;, 1)</span><br><span class="line">titan.addEdge(&quot;implements&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br><span class="line">titan.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line">dalaro.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line">dalaro.addEdge(&quot;knows&quot;, mbroecheler, &quot;weight&quot;, 1)</span><br><span class="line">tinkergraph.addEdge(&quot;supports&quot;, gremlin, &quot;weight&quot;, 1)</span><br><span class="line">javeme.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line">zhoney.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line">linary.addEdge(&quot;created&quot;, hugegraph, &quot;weight&quot;, 1)</span><br><span class="line">mbroecheler.addEdge(&quot;created&quot;, titan, &quot;weight&quot;, 1)</span><br><span class="line">spmallette.addEdge(&quot;created&quot;, tinkerpop, &quot;weight&quot;, 1)</span><br></pre></td></tr></table></figure>
-<p>点击界面右上角的<strong>三角按钮</strong>，就可以创建出一个完整的图。</p>
+<p>点击界面右上角的<strong>三角按钮</strong>，就可以创建出一个完整的图</p>
 <h2 id="图的查询"><a href="#图的查询" class="headerlink" title="图的查询"></a>图的查询</h2><p>图的创建主要用<code>graph</code>语句，图的查询主要用<code>g</code>语句，<code>g</code>就相当于<code>graph.traversal()</code></p>
 <p><strong>Step1 展示整个图</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 查出图的所有顶点和边。</span><br><span class="line">g.V()</span><br></pre></td></tr></table></figure>
@@ -393,16 +394,15 @@
 <p><strong>Step5 查询label</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">g.V().limit(3).label()             &#x2F;&#x2F; 查询3个顶点的label </span><br><span class="line">g.V().limit(3).hasLabel(&#39;person&#39;)  &#x2F;&#x2F; 查询3个顶点中label&#x3D;person的顶点</span><br><span class="line">        </span><br><span class="line">g.E().limit(3).label()              &#x2F;&#x2F; 查询3条边的label</span><br><span class="line">g.E().limit(3).hasLabel(&#39;person&#39;)   &#x2F;&#x2F; 查询3条边中label&#x3D;person的边</span><br></pre></td></tr></table></figure>
 <p><strong>Step6 查询路径</strong></p>
-<p>查询 Titan 顶点到与其有两层关系的顶点的不含环路的路径（只包含顶点）</p>
+<p>举例：查询 Titan 顶点到与其有两层关系的顶点的不含环路的路径</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; path 表示遍历过的所有路径</span><br><span class="line">&#x2F;&#x2F; simplePath 表示过滤掉路径中含有环路的对象，只保留路径中不含有环路的对象</span><br><span class="line">&#x2F;&#x2F; cyclicPath 表示过滤掉路径中不含有环路的对象，只保留路径中含有环路的对象</span><br><span class="line">g.V().hasLabel(&#39;software&#39;).has(&#39;name&#39;,&#39;Titan&#39;).both().both().simplePath().path()</span><br></pre></td></tr></table></figure>
 <p><strong>Step7 查询迭代</strong></p>
-<p>遍历所有点的出边直到抵达无出边的顶点，输出其路径顶点名</p>
+<p>例1: 遍历所有点的出边直到抵达无出边的顶点，输出其路径顶点名</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; repeat().until() 等同 do while 循环</span><br><span class="line">&#x2F;&#x2F; until().repeat() 等同 while do 循环</span><br><span class="line">g.V().repeat(out()).until(outE().count().is(0)).path().by(&#39;name&#39;)</span><br></pre></td></tr></table></figure>
-<p>遍历所有点的3度可达点的路径</p>
+<p>例2: 遍历所有点的3度可达点的路径</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; loops 表示当前循环的次数</span><br><span class="line">g.V().repeat(out()).until(loops().is(3)).path()</span><br></pre></td></tr></table></figure>
 <p><strong>Step8 查询进阶</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 转换操作</span><br><span class="line">g.V(&#39;2:Titan&#39;).in(&#39;created&#39;).map(values(&#39;name&#39;))  &#x2F;&#x2F; 查询 2:Titan 的所有入顶点的name属性值</span><br><span class="line">g.V(&#39;titan&#39;).in(&#39;created&#39;).flatMap(outE())        &#x2F;&#x2F; 查询 2:Titan 的所有入顶点的出边</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 排序操作                </span><br><span class="line">g.V().values(&#39;name&#39;).order()                                    &#x2F;&#x2F; 默认升序排列                          </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).order().by(&#39;age&#39;, asc).values(&#39;name&#39;)  &#x2F;&#x2F; 按照元素属性age值升序排列，并只输出姓名   </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 判断操作</span><br><span class="line">g.V().values(&#39;age&#39;).is(28)                                       &#x2F;&#x2F; 选出顶点属性“age”&#x3D;28的属性值</span><br><span class="line">g.V().and(outE(&#39;supports&#39;), outE(&#39;created&#39;)).values(&#39;name&#39;)      &#x2F;&#x2F; 选出同时包含出边为“supports”和“created”的顶点的name</span><br><span class="line">g.V().where(outE(&#39;knows&#39;).and().outE(&#39;created&#39;)).values(&#39;name&#39;)  &#x2F;&#x2F; 使用where语句等价上面的功能</span><br><span class="line">g.V().not(hasLabel(&#39;person&#39;)).label()                            &#x2F;&#x2F; 筛选出所有label&#x3D;“person”的顶点的label  </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).and(outE(&#39;created&#39;).count().is(lte(1)), values(&quot;age&quot;).is(P.not(P.eq(28)))).values(&#39;name&#39;)                &#x2F;&#x2F;获取所有最多只有一条“created”边并且年龄不等于28的“person”顶点</span><br><span class="line">                                                                                   </span><br><span class="line">&#x2F;&#x2F; 统计操作</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).mean()      &#x2F;&#x2F; 计算所有“person”的“created”出边数的均值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).max()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的最大值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).min()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的最小值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).count()     &#x2F;&#x2F; 计算所有“person”的“created”出边数的个数</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).sum()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的求和</span><br><span class="line">                             </span><br><span class="line">&#x2F;&#x2F; 分支操作  </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).choose(values(&#39;age&#39;).is(lte(30)),__.in(),__.out()).values(&#39;name&#39;)  &#x2F;&#x2F; 类似于if -else</span><br><span class="line">                                                 </span><br><span class="line">&#x2F;&#x2F; 查找所有的“person”类型的顶点</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于0，输出名字</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于28，输出年龄</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于29，输出他开发的软件的名字   </span><br><span class="line">&#x2F;&#x2F; if-elseif-else</span><br><span class="line">g.V().hasLabel(&#39;person&#39;)</span><br><span class="line"> .choose(values(&#39;age&#39;))</span><br><span class="line"> .option(0, values(&#39;name&#39;))</span><br><span class="line"> .option(28, values(&#39;age&#39;))</span><br><span class="line"> .option(29, __.out(&#39;created&#39;).values(&#39;name&#39;))</span><br><span class="line"> .option(none, values(&#39;name&#39;))</span><br></pre></td></tr></table></figure>
-
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;&#x2F; 转换操作</span><br><span class="line">g.V(&#39;2:Titan&#39;).in(&#39;created&#39;).map(values(&#39;name&#39;))  &#x2F;&#x2F; 查询 2:Titan 的所有入顶点的name属性值</span><br><span class="line">g.V(&#39;titan&#39;).in(&#39;created&#39;).flatMap(outE())        &#x2F;&#x2F; 查询 2:Titan 的所有入顶点的出边</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 排序操作                </span><br><span class="line">g.V().values(&#39;name&#39;).order()                                    &#x2F;&#x2F; 默认升序排列                          </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).order().by(&#39;age&#39;, asc).values(&#39;name&#39;)  &#x2F;&#x2F; 按照元素属性age值升序排列，并只输出姓名   </span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 判断操作</span><br><span class="line">g.V().values(&#39;age&#39;).is(28)                                       &#x2F;&#x2F; 选出顶点属性“age”&#x3D;28的属性值</span><br><span class="line">g.V().and(outE(&#39;supports&#39;), outE(&#39;created&#39;)).values(&#39;name&#39;)      &#x2F;&#x2F; 选出同时包含出边为“supports”和“created”的顶点的name</span><br><span class="line">g.V().where(outE(&#39;knows&#39;).and().outE(&#39;created&#39;)).values(&#39;name&#39;)  &#x2F;&#x2F; 使用where语句等价上面的功能</span><br><span class="line">g.V().not(hasLabel(&#39;person&#39;)).label()                            &#x2F;&#x2F; 筛选出所有label&#x3D;“person”的顶点的label  </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).and(outE(&#39;created&#39;).count().is(lte(1)), values(&quot;age&quot;).is(P.not(P.eq(28)))).values(&#39;name&#39;)                &#x2F;&#x2F;获取所有最多只有一条“created”边并且年龄不等于28的“person”顶点</span><br><span class="line">                                                                                   </span><br><span class="line">&#x2F;&#x2F; 统计操作</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).mean()      &#x2F;&#x2F; 计算所有“person”的“created”出边数的均值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).max()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的最大值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).min()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的最小值</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).count()     &#x2F;&#x2F; 计算所有“person”的“created”出边数的个数</span><br><span class="line">g.V().hasLabel(&#39;person&#39;).map(outE(&#39;created&#39;).count()).sum()       &#x2F;&#x2F; 计算所有“person”的“created”出边数的求和</span><br><span class="line">                             </span><br><span class="line">&#x2F;&#x2F; 分支操作  </span><br><span class="line">g.V().hasLabel(&#39;person&#39;).choose(values(&#39;age&#39;).is(lte(30)),__.in(),__.out()).values(&#39;name&#39;)  &#x2F;&#x2F; 类似if -else</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 类似if-elif-else                                                 </span><br><span class="line">&#x2F;&#x2F; 查找所有的“person”类型的顶点</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于0，输出名字</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于28，输出年龄</span><br><span class="line">&#x2F;&#x2F; 如果“age”属性等于29，输出他开发的软件的名字   </span><br><span class="line">g.V().hasLabel(&#39;person&#39;)</span><br><span class="line"> .choose(values(&#39;age&#39;))</span><br><span class="line"> .option(0, values(&#39;name&#39;))</span><br><span class="line"> .option(28, values(&#39;age&#39;))</span><br><span class="line"> .option(29, __.out(&#39;created&#39;).values(&#39;name&#39;))</span><br><span class="line"> .option(none, values(&#39;name&#39;))</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -420,7 +420,10 @@
     <a href="/2021/05/15/Next%E4%B8%AA%E6%80%A7%E5%8C%96%E9%85%8D%E7%BD%AE/" rel="prev" title="Next主题个性化配置">
       <i class="fa fa-chevron-left"></i> Next主题个性化配置
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2021/07/12/ESMM%E6%A8%A1%E5%9E%8B%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="ESMM模型学习笔记">
+      ESMM模型学习笔记 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -506,18 +509,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-count">28</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">36</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span>
       </div>
   </nav>
@@ -559,12 +562,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">185k</span>
+    <span title="站点总字数">193k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:48</span>
+    <span title="站点阅读时长">2:56</span>
 </div>
 
         
