@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="google-site-verification" content="d1AGlulK-YE5DyygkFpJxEEeJpwC8OAk07ZzYE6ewJM">
+  <meta name="baidu-site-verification" content="uMYiXVMIsE">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.loli.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|sans-serif:300,300italic,400,400italic,700,700italic|Times New Roman:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    hostname: new URL('http://yoursite.com').hostname,
+    root: '/',
+    scheme: 'Pisces',
+    version: '7.6.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: true,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    comments: {"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}
+  };
+</script>
+
+  <meta name="description" content="业务案例​        互联网企业A 为了提高用户对金融产品“小小贷”购买的转化率，想和金融企业B达成合作。互联网企业A有用户上网行为特征X1、X2、X3，金融企业B有用户的信用特征X4、X5和标签Y，这样就可以把两边的特征结合起来，并通过机器学习来提高“小小贷”购买的转化率。但是在合作的过程发现一个问题，那就是企业之间无法进行互通数据 ！！！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NeoFL-快速入门联邦学习">
+<meta property="og:url" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="黄宁の博客">
+<meta property="og:description" content="业务案例​        互联网企业A 为了提高用户对金融产品“小小贷”购买的转化率，想和金融企业B达成合作。互联网企业A有用户上网行为特征X1、X2、X3，金融企业B有用户的信用特征X4、X5和标签Y，这样就可以把两边的特征结合起来，并通过机器学习来提高“小小贷”购买的转化率。但是在合作的过程发现一个问题，那就是企业之间无法进行互通数据 ！！！">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/fl_architecture.jpeg">
+<meta property="og:image" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/losschange.png">
+<meta property="article:published_time" content="2022-01-03T08:02:52.000Z">
+<meta property="article:modified_time" content="2022-01-03T10:04:59.560Z">
+<meta property="article:author" content="黄宁">
+<meta property="article:tag" content="｜统计学|机器学习|python|">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/fl_architecture.jpeg">
+
+<link rel="canonical" href="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true
+  };
+</script>
+
+  <title>NeoFL-快速入门联邦学习 | 黄宁の博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+	<a href="https://github.com/HuangNing616" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">黄宁の博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">算法攻城狮</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpeg">
+      <meta itemprop="name" content="黄宁">
+      <meta itemprop="description" content="务实敢为 追求极致">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="黄宁の博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NeoFL-快速入门联邦学习
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2022-01-03 16:02:52 / 修改时间：18:04:59" itemprop="dateCreated datePublished" datetime="2022-01-03T16:02:52+08:00">2022-01-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">机器学习</span>
+                  </a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index">
+                    <span itemprop="name">NeoFL-快速入门联邦学习</span>
+                  </a>
+                </span>
+            </span>
+
+          
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>17k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>15 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="业务案例"><a href="#业务案例" class="headerlink" title="业务案例"></a>业务案例</h1><p>​        互联网企业A 为了提高用户对金融产品“小小贷”购买的转化率，想和金融企业B达成合作。互联网企业A有用户上网行为特征X1、X2、X3，金融企业B有用户的信用特征X4、X5和标签Y，这样就可以把两边的特征结合起来，并通过机器学习来提高“小小贷”购买的转化率。但是在合作的过程发现一个问题，那就是<strong>企业之间无法进行互通数据</strong> ！！！</p>
+<a id="more"></a>
+<h1 id="NeoFL概述"><a href="#NeoFL概述" class="headerlink" title="NeoFL概述"></a>NeoFL概述</h1><p>用户数据的隐私问题越来越受到重视，未来<strong>数据孤岛</strong>的问题也会越来越普遍，这对现有的传统机器学习的模式提出了挑战，因此一种全新的机器学习模式诞生了，那就是<strong>联邦学习</strong>。联邦学习源于2016年由谷歌正式提出的算法模型<sup>[1]</sup>，在2017年<sup>[2]</sup>首次定义了联邦学习。</p>
+<p>目前市面上存在一些开源的联邦学习框架，但每个框架都存在一定的问题，比如微众银行的FATE虽然称作是工业级的框架, 但配置多，操作起来特别复杂；百度提出的PaddleFL，存在初学者上手难，文档理解难的问题。因此本着取其精华弃其糟粕的想法，小编未依赖任何底层框架，从0到1手动实现了基于<strong>半同态加密</strong>的<strong>纵向联邦模式的</strong>逻辑回归算法框架 — NeoFL。我们通过NeoFL就可以解决最开始提出的<strong>企业之间无法进行互通数据</strong>的问题。NeoFL实现的大致流程如下图👇</p>
+<p><img src="/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/fl_architecture.jpeg" style="zoom:80%;"></p>
+<h1 id="算法介绍"><a href="#算法介绍" class="headerlink" title="算法介绍"></a>算法介绍</h1><h2 id="符号说明"><a href="#符号说明" class="headerlink" title="符号说明"></a>符号说明</h2><p>设有n个训练样本，Features和 Label分别表示成</p>
+<script type="math/tex; mode=display">
+X=\begin{bmatrix}
+x_{1}^T\\x_{2}^T\\\vdots\\x_{n}^T\\ 
+\end{bmatrix} 
+
+=\begin{bmatrix}
+x_{11} \cdots x_{1p}\\
+\vdots  \ddots \vdots\\
+x_{n1} \cdots x_{np}\\ 
+\end{bmatrix} 
+=\begin{bmatrix}
+X_{A(n*k)} ｜ X_{B(n*(p-k))}
+\end{bmatrix}</script><p>和</p>
+<script type="math/tex; mode=display">
+y=\begin{bmatrix}
+y_{1}\\y_{2}\\\vdots\\y_{n}\\ 
+\end{bmatrix}</script><p>其中$y=0$和$y=1$分别表示表示用户不购买和购买金融产品，<script type="math/tex">X</script>的每行代表每个用户的特征向量。</p>
+<h2 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h2><p><strong>逻辑回归模型</strong>的损失函数和梯度公式中包含指数运算，如果采用<strong>半**</strong>同态加密<strong>**算法</strong>，需要对原始的公式进行变换，使其变成只包含加法和数乘的形式，这里我们可以通过泰勒展开来对指数形式的表达式进行近似。</p>
+<p>常用的<strong>逻辑回归损失函数</strong>为</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+l(\theta)&=\frac{1}{n}\sum_{i=1}^{n}(1+exp(-y_{i}x_{i}^{T}\theta))\\
+\end{aligned}</script><p>根据<script type="math/tex">\begin{aligned}  f(z)&=(1+exp(-z))\\ \end{aligned}</script>可以得到</p>
+<script type="math/tex; mode=display">
+\begin{cases} 
+f(0)=log2\\
+\\
+f^{'}(0)=-\frac{1}{2}\\
+\\
+ f^{''}(0)=\frac{1}{4}\\
+\\
+f^{'''}(0)=0
+\end{cases}</script><p>那么<script type="math/tex">f(z)</script>在 <script type="math/tex">z=0</script> 处的泰勒展开式可以写成</p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+f(z)&=f(0)+ f^{'}(0)z+\frac{f^{''}(0)}{2}z^2+0+O(x^3)\\
+&\approx log2-\frac{1}{2}z+\frac{1}{8}z^2
+\end{aligned}</script><p>因此，将损失函数进行二阶泰勒展开</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+l(\theta)&=\frac{1}{n}\sum_{i=1}^{n}(1+exp(-y_{i}x_{i}^{T}\theta))\\
+&\approx\frac{1}{n}\sum_{i=1}^{n}\{log2-\frac{1}{2}y_{i}x_{i}^{T}\theta+\frac{1}{8}y_{i}^2(x_{i}^{T}\theta)^2\}\\
+&=\frac{1}{n}\sum_{i=1}^{n}[-\frac{1}{2}y_{i}(x_{iA}+x_{iB})^{T}\theta+\frac{1}{8}y_{i}^2\{(x_{iA}+x_{iB})^{T}\theta\}^2] + log2
+\end{aligned}</script><p>那么损失函数的梯度表达式为</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+&\frac{dl(\theta)}{d\theta}=\frac{1}{n}\sum_{i=1}^{n}\{-\frac{1}{2}y_{i}x_{i}+\frac{1}{4}y_{i}^2(x_{i}^{T}\theta)x_{i}\}\\
+\end{aligned}</script><p>根据PartyA和PartyB，将梯度分成上下两部分</p>
+<script type="math/tex; mode=display">
+\begin{aligned} 
+\begin{bmatrix}
+\frac{dl(\theta)}{d\theta_A}\\ \\ \frac{dl(\theta)}{d\theta_B}\\ 
+\end{bmatrix} 
+&=\frac{1}{n}\sum_{i=1}^{n}
+\begin{bmatrix}
+-\frac{1}{2}y_{i}x_{iA}+\frac{1}{4}y_{i}^2\{(x_{iA}+x_{iB})^{T}\theta\}x_{iA}\\ \\-\frac{1}{2}y_{i}x_{iA}+\frac{1}{4}y_{i}^2\{(x_{iA}+x_{iB})^{T}\theta\}x_{iB}\\ 
+\end{bmatrix} \\
+&\\
+&=\frac{1}{n}
+\begin{bmatrix}\frac{1}{4}\sum_{i=1}^{n}
+x_{iA}(x_{iA}^{T}\theta_A+x_{iB}^{T}\theta_B)-\frac{1}{2}\sum_{i=1}^{n}y_ix_{iA}\\ \\\frac{1}{4}\sum_{i=1}^{n}
+x_{iB}(x_{i}^{T}\theta_A+x_{iB}^{T}\theta_B)-\frac{1}{2}\sum_{i=1}^{n}y_ix_{iB}\\ 
+\end{bmatrix} \\
+&\\
+&=\frac{1}{n}
+\begin{bmatrix}X_A^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B)-\frac{1}{2}X_A^{T}y\\ \\
+X_B^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B)-\frac{1}{2}X_B^{T}y\\
+\end{bmatrix} \\
+& \\
+&=\frac{1}{n}
+\begin{bmatrix}X_A^{T}(\frac{1}{4}X_A^{T}\theta_A+\frac{1}{4}X_A^{T}\theta_B-\frac{1}{2}y)\\ \\
+X_B^{T}(\frac{1}{4}X_A^{T}\theta_A+\frac{1}{4}X_A^{T}\theta_B-\frac{1}{2}y)\\
+\end{bmatrix} \\
+\end{aligned}</script><p>这样就实现了分别在 PartyA 和 PartyB 计算梯度的目的</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>为了后续描述方便，我们将互联网企业A，金融企业B以及中间委托人C，分别命名为PartyA，PartyB以及PartyC</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>步骤</strong></th>
+<th><strong>PartyA</strong></th>
+<th>PartyB</th>
+<th><strong>PartyC</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Step1</strong></td>
+<td>初始化 PartyA模型的训练参数<script type="math/tex">\theta_A</script></td>
+<td>初始化 PartyB模型的训练参数<script type="math/tex">\theta_B</script></td>
+<td>生成秘钥对，并分发公钥🔑给</td>
+</tr>
+<tr>
+<td><strong>Step2</strong></td>
+<td>计算加密的中间项<script type="math/tex">[[\frac{1}{4}X_A\theta_A]]</script>，将其发送给PartyB</td>
+<td>计算加密的中间项<script type="math/tex">[[\frac{1}{4}X_B\theta_B-\frac{y}{2}]]</script>，并将其发送给PartyA</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Step3</strong></td>
+<td>计算加密的梯度<script type="math/tex">[[dA]] = [[X_A^T(\frac{1}{4}X_A\theta_A + \frac{1}{4}X_B\theta_B-\frac{1}{2}y ]]</script>，将带有随机项的加密梯度 <script type="math/tex">[[dA+RA]]</script>其发送给PartyC</td>
+<td>计算加密的梯度<script type="math/tex">[[dB]] = [[X_B^T(\frac{1}{4}X_A\theta_A + \frac{1}{4}X_B\theta_B-\frac{1}{2}y]]</script>，将带有随机项的加密梯度 <script type="math/tex">[[dB+RB]]</script>其发送给PartyC</td>
+<td>接收来自PartyA和PartyB的加密梯度项</td>
+</tr>
+<tr>
+<td><strong>Step4</strong></td>
+<td>根据解密的梯度获取<script type="math/tex">dA</script>，并更新 PartyA 的模型参数<script type="math/tex">\theta^{t+1} = \theta^{t} - \alpha*\frac{dA}{n}</script></td>
+<td>根据解密的梯度获取 <script type="math/tex">dB</script>，并更新 PartyB 的模型 <script type="math/tex">\theta^{t+1} = \theta^{t} - \alpha*\frac{dB}{n}</script></td>
+<td>将加密的梯度进行解密，并分别发送给PartyA和PartyB 计算解密后的loss，并判断loss是否收敛，若收敛增本轮迭代结束，否则重复Step2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>为了评估NeoFL中<strong>纵向联邦逻辑回归</strong>的效果，我们将未进行联邦学习的逻辑回归算法作为对照组，其中对照组中针对损失函数是否进行泰勒近似分成对照组1和对照组2。</p>
+<p>本文是基于sklearn中的乳腺癌数据集生成的模拟数据来进行实验，通过使用相同的训练数据集进行模型训练，观察损失值的下降曲线以及在测试集上的模型效果</p>
+<h2 id="损失变化"><a href="#损失变化" class="headerlink" title="损失变化"></a>损失变化</h2><p><img src="/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/losschange.png" style="zoom:50%;"></p>
+<p>其中上述曲线中，横轴代表算法的迭代次数，纵轴表示每次迭代对应损失值，其中每条曲线的含义如下：</p>
+<p>(1) <strong>vertical lr loss</strong>: 表示纵向联邦学习LR模型训练过程中的损失变化曲线；<br>(2) <strong>taylor lr loss</strong>: 表示标准的LR模型训练过程中的损失变化曲线，其中损失函数用泰勒展开来近似；<br>(3) <strong>normal lr loss</strong>: 表示标准的LR模型训练过程中的损失变化曲线。</p>
+<h2 id="模型效果"><a href="#模型效果" class="headerlink" title="模型效果"></a>模型效果</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>数据集</strong></th>
+<th><strong>行数</strong></th>
+<th><strong>特征数</strong></th>
+<th><strong>纵向联邦LR的AUC</strong></th>
+<th><strong>标准LR的AUC(泰勒近似)</strong></th>
+<th><strong>标准LR的AUC</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Breast Cancer</td>
+<td>426</td>
+<td>30</td>
+<td>训练集：0.9921</td>
+<td>训练集：0.9921</td>
+<td>训练集：0.9895</td>
+</tr>
+<tr>
+<td>Breast Cancer</td>
+<td>123</td>
+<td>30</td>
+<td>测试集：0.9843</td>
+<td>测试集：0.9816</td>
+<td>测试集：0.9816</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>由上述的损失变化以及模型效果可以看到，与标准的逻辑回归相比，NeoFL的纵向逻辑回归算法<strong>在保证各方数据隐私性的同时，实现了模型效果没有损失的目的。</strong></p>
+<h1 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h1><p>针对目前的联邦学习框架，还有进一步的优化空间，比如：</p>
+<ol>
+<li>优化频繁通信带来的性能问题</li>
+<li>优化模型训练时中间数据落盘的存储问题</li>
+<li>增加惩罚项来缓解模型的过拟合，并解决增加惩罚项之后，损失会越来越大的问题</li>
+</ol>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><blockquote>
+<p>[1] H. Brendan M, Eider M. Federated Learning of Deep Networks using Model Averaging(2016). <a href="https://arxiv.org/pdf/1602.05629v1.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1602.05629v1.pdf</a></p>
+<p>[2] H. Brendan M, Eider M. Communication-Efficient Learning of Deep Networks from Decentralized Data(2017). <a href="https://arxiv.org/pdf/1602.05629.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1602.05629.pdf</a></p>
+</blockquote>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p>在这一部分，小编向大家介绍下如何通过Python实现NeoFL中纵向联邦的逻辑回归算法🥳</p>
+<h2 id="参与方父类"><a href="#参与方父类" class="headerlink" title="参与方父类"></a>参与方父类</h2><p>我们首先需要创建各参与方的父类，主要用于保存模型的参数、中间的计算结果以及与其他参与方的连接状态</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 各参与方的父类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Party</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, config)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 模型参数</span></span><br><span class="line">        self.config = config</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 保存各参与方的基本信息</span></span><br><span class="line">        self.data = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 保存与其他节点的连接状况</span></span><br><span class="line">        self.other_party = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 与其他参与方建立连接</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">connect</span><span class="params">(self, client_name, target_client)</span>:</span></span><br><span class="line">        self.other_party[client_name] = target_client</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 向特定参与方发送数据</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_data</span><span class="params">(self, data, target_client)</span>:</span></span><br><span class="line">        </span><br><span class="line">        target_client.data.update(data)</span><br></pre></td></tr></table></figure>
+<h2 id="参与方子类"><a href="#参与方子类" class="headerlink" title="参与方子类"></a>参与方子类</h2><p>参与方A：在训练过程中仅提供特征数据</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 参与方A: 在训练过程中，仅提供特征</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PartyA</span><span class="params">(Party)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 初始化，当需要继承父类构造函数中的内容，且子类需要在父类的基础上补充时，使用super().__init__()方法。</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, XA, config)</span>:</span></span><br><span class="line">        super().__init__(config)</span><br><span class="line">        self.X = XA</span><br><span class="line">        self.theta = np.zeros(XA.shape[<span class="number">1</span>]) <span class="comment"># 将逻辑回归的训练参数theta初始化为1</span></span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    <span class="comment">## A: Step3部分，计算encrypt的中间项, 并发送给PartyB</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_encrypted_items</span><span class="params">(self, client_B_name)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取对应的密钥信息</span></span><br><span class="line">        partyA_info = self.data </span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"public_key"</span> <span class="keyword">in</span> partyA_info.keys(), <span class="string">"Error: 在Step2中send_public_key部分, PartyA没有成功接收到ClientC的 'public_key'. "</span></span><br><span class="line">        public_key = partyA_info[<span class="string">'public_key'</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算中间项 XA * thetaA 并进行加密</span></span><br><span class="line">        za = np.dot(self.X, self.theta) <span class="comment"># 得到n*1的向量</span></span><br><span class="line">        ua = <span class="number">0.25</span> * za</span><br><span class="line">        za_square = za ** <span class="number">2</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 更新自己的加密信息</span></span><br><span class="line">        encrypted_ua = np.asarray([public_key.encrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> ua])  <span class="comment"># 针对向量中的每个元素进行加密</span></span><br><span class="line">        partyA_info.update(&#123;<span class="string">"encrypted_ua"</span>: encrypted_ua&#125;)              <span class="comment"># 将加密后的中间项1/4*XA * thetaA保存到partyA_info</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 求平方后，将对应的dict发送给B，为啥需要za_square这个平方项目</span></span><br><span class="line">        encrypted_za_square = np.asarray([public_key.encrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> za_square])</span><br><span class="line">        data_to_B = &#123;<span class="string">"encrypted_ua"</span>: encrypted_ua, <span class="string">"encrypted_za_square"</span>: encrypted_za_square&#125;</span><br><span class="line">        self.send_data(data_to_B, self.other_party[client_B_name])</span><br><span class="line">        </span><br><span class="line">    <span class="comment">## A: step4部分，计算加密的梯度，并发送给partyC </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_encrypt_gradient</span><span class="params">(self, party_C_name)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取自身的基本信息：包括秘钥，加密的中间项</span></span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"encrypted_ub"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 在PartyB的Step3中 PartyA没有成功接收到PartyB发过来的'encrypted_ub'."</span></span><br><span class="line">        </span><br><span class="line">        encrypted_ub = dt[<span class="string">'encrypted_ub'</span>]</span><br><span class="line">        encrypted_u = dt[<span class="string">'encrypted_ua'</span>] + encrypted_ub</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 加密后的损失函数梯度为, 数乘不会影响同态性，其中第二项是损失函数的惩罚项，用的self.theta是前一轮的参数, 后续可以删除self.config['lambda'] * self.theta 这一项</span></span><br><span class="line">        <span class="comment"># 这个惩罚项后续删除！！！+ self.config['lambda'] * self.theta </span></span><br><span class="line">        encrypted_dl_a = self.X.T.dot(encrypted_u)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 新增同维度随机项，并将其也用同样的方式进行加密</span></span><br><span class="line">        mask = np.random.rand(len(encrypted_dl_a))</span><br><span class="line">        public_key = dt[<span class="string">'public_key'</span>] <span class="comment"># 走到这一步，一定能取到秘钥</span></span><br><span class="line">        encrypted_mask = np.asarray([public_key.encrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> mask])  <span class="comment"># 针对向量中的每个元素进行加密</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 增加随机项后的梯度为</span></span><br><span class="line">        encrypted_masked_dl_a = encrypted_dl_a + encrypted_mask</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将随机项保存，用于后续的解码</span></span><br><span class="line">        dt.update(&#123;<span class="string">"mask"</span>: mask&#125;)</span><br><span class="line">        data_to_C = &#123;<span class="string">'encrypted_masked_dl_a'</span>: encrypted_masked_dl_a&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将加密后的带有随机项的梯度发送给partyC</span></span><br><span class="line">        self.send_data(data_to_C, self.other_party[party_C_name])</span><br><span class="line">        </span><br><span class="line">    <span class="comment">## partyA: 接收解密的梯度，更新参数，并开启下一轮迭代</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_model_theta</span><span class="params">(self)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 获取解密的梯度</span></span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"decrypted_masked_dl_a"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"在 partyC的step5中，PartyA没有成功接收到来自partyC的解密的梯度decrypted_masked_dl_a."</span></span><br><span class="line">        decrypted_masked_dl_a = dt[<span class="string">'decrypted_masked_dl_a'</span>]</span><br><span class="line">        dl_a = decrypted_masked_dl_a - dt[<span class="string">'mask'</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 更新模型参数theta = self.theta - .config["eta"](学习率) / n * dl_a</span></span><br><span class="line">        self.theta = self.theta - config[<span class="string">"eta"</span>] * dl_a / self.X.shape[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<p>参与方B：在训练过程中，提供特征和标签</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 参与方B: 在训练过程中，提供特征和标签</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PartyB</span><span class="params">(Party)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, XB, y, config)</span>:</span></span><br><span class="line">        super().__init__(config)</span><br><span class="line">        self.X = XB</span><br><span class="line">        self.y = y</span><br><span class="line">        self.theta = np.zeros(XB.shape[<span class="number">1</span>])<span class="comment"># 将逻辑回归的训练参数theta初始化为1</span></span><br><span class="line">        self.data = &#123;&#125;</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># Step3 接收PartyA中的加密项, 并将自己的加密项发送给A</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_encrypted_items</span><span class="params">(self, client_A_name)</span>:</span></span><br><span class="line">        </span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"public_key"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 在Step2中send_public_key部分, PartyB没有成功接收到ClientC的 'public_key'."</span></span><br><span class="line">        public_key = dt[<span class="string">'public_key'</span>]</span><br><span class="line"></span><br><span class="line">        zb = np.dot(self.X, self.theta)</span><br><span class="line">        ub = <span class="number">0.25</span>*zb - <span class="number">0.5</span> * self.y</span><br><span class="line">        encrypted_ub = np.asarray([public_key.encrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> ub])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 更新自己的加密信息</span></span><br><span class="line">        dt.update(&#123;<span class="string">"encrypted_ub"</span>: encrypted_ub&#125;)</span><br><span class="line">        dt.update(&#123;<span class="string">"zb"</span>: zb&#125;) <span class="comment"># 用于后续计算加密的loss</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 构造发送给A的数据</span></span><br><span class="line">        data_to_A= &#123;<span class="string">"encrypted_ub"</span>: encrypted_ub&#125;</span><br><span class="line">        self.send_data(data_to_A, self.other_party[client_A_name])</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># B: step4部分，计算加密的梯度，并发送给partyC </span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_encrypt_gradient</span><span class="params">(self,client_C_name)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 不考虑惩罚项+ self.config['lambda'] * self.theta</span></span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"encrypted_ua"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 在PartyA的Step3中 PartyB没有成功接收到PartyA发过来的'encrypted_ua'."</span></span><br><span class="line">        encrypted_ua = dt[<span class="string">'encrypted_ua'</span>]</span><br><span class="line">        encrypted_u = encrypted_ua + dt[<span class="string">'encrypted_ub'</span>]</span><br><span class="line">        encrypted_dl_b = self.X.T.dot(encrypted_u) </span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 新增同维度随机项(认为也是加密项)</span></span><br><span class="line">        mask = np.random.rand(len(encrypted_dl_b))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 增加随机项后的梯度为</span></span><br><span class="line">        public_key = dt[<span class="string">'public_key'</span>] <span class="comment"># 走到这一步，一定能取到秘钥</span></span><br><span class="line">        encrypted_mask = np.asarray([public_key.encrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> mask])  <span class="comment"># 针对向量中的每个元素进行加密</span></span><br><span class="line">        encrypted_masked_dl_b = encrypted_dl_b + encrypted_mask</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 更新PartyB中的随机数</span></span><br><span class="line">        dt.update(&#123;<span class="string">"mask"</span>: mask&#125;)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"encrypted_za_square"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 在PartyA的Step3中 PartyB没有成功接收到PartyA发过来的'encrypted_za_square'"</span></span><br><span class="line">        encrypted_z = <span class="number">4</span> * encrypted_ua + dt[<span class="string">'zb'</span>] <span class="comment"># 这一项是4*0.25*XA*thetaA + XB*thetaB = XA*thetaA + XB*thetaB</span></span><br><span class="line">        <span class="comment"># 计算加密后的Loss</span></span><br><span class="line">        encrypted_loss = np.sum( <span class="number">-0.5</span>*self.y*encrypted_z + <span class="number">0.125</span>*dt[<span class="string">"encrypted_za_square"</span>] + <span class="number">0.125</span>*dt[<span class="string">"zb"</span>] * (<span class="number">8</span>*encrypted_ua + dt[<span class="string">"zb"</span>]) )</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将加密后的B梯度以及加密后的loss保存成dict，并将其发送给clientC</span></span><br><span class="line">        data_to_C = &#123;<span class="string">"encrypted_masked_dl_b"</span>: encrypted_masked_dl_b, <span class="string">"encrypted_loss"</span>: encrypted_loss&#125;</span><br><span class="line">        self.send_data(data_to_C, self.other_party[client_C_name])</span><br><span class="line">        </span><br><span class="line">    <span class="comment">## partyB: 接收解密的梯度，更新参数，并开启下一轮迭代</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">update_model_theta</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取解密的梯度</span></span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"decrypted_masked_dl_b"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"在 partyC的step5中，PartyB没有成功接收到来自partyC的解密的梯度decrypted_masked_dl_b."</span></span><br><span class="line">        decrypted_masked_dl_b = dt[<span class="string">'decrypted_masked_dl_b'</span>]</span><br><span class="line">        dl_b = decrypted_masked_dl_b - dt[<span class="string">'mask'</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 更新模型参数theta = self.theta - .config["eta"](学习率) / </span></span><br><span class="line">        self.theta = self.theta - self.config[<span class="string">"eta"</span>] * dl_b / self.X.shape[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<p>参与方C: 在训练过程中，提供秘钥对</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">PartyC</span><span class="params">(Party)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, XA_shape, XB_shape, config)</span>:</span></span><br><span class="line">        super().__init__(config)</span><br><span class="line">        self.A_data_shape, self.B_data_shape = XA_shape, XB_shape <span class="comment"># 保存各参与方的数据维度</span></span><br><span class="line">        self.public_key, self.private_key = <span class="literal">None</span>, <span class="literal">None</span>           <span class="comment"># 保存公钥和私钥</span></span><br><span class="line">        self.loss = []                                           <span class="comment"># 保存训练中的损失值(用Taylor展开近似）</span></span><br><span class="line">       </span><br><span class="line">    <span class="comment"># Step1 发送密钥对给partyA和partyB</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_public_key</span><span class="params">(self, party_A_name, party_B_name)</span>:</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            public_key, private_key = paillier.generate_paillier_keypair()</span><br><span class="line">            self.public_key = public_key</span><br><span class="line">            self.private_key = private_key</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            print(<span class="string">"PartyC 产生密钥对的过程失败, 详细失败原因: %s"</span> % e)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将公钥保存成字典的形式</span></span><br><span class="line">        key_to_AB = &#123;<span class="string">"public_key"</span>: public_key&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将公钥分别发送给PartyA和PartyB, 更新相应对象的.data属性</span></span><br><span class="line">        self.send_data(key_to_AB, self.other_party[party_A_name])</span><br><span class="line">        self.send_data(key_to_AB, self.other_party[party_B_name])</span><br><span class="line">        <span class="keyword">return</span> </span><br><span class="line"></span><br><span class="line">    <span class="comment"># Step5 将partyA和partyB发来的加密梯度进行解密, 并返回</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">send_decrypt_gradient</span><span class="params">(self, party_A_name, party_B_name)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取接收PartyA的加密梯度和PartyB的加密梯度</span></span><br><span class="line">        dt = self.data</span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"encrypted_masked_dl_a"</span> <span class="keyword">in</span> dt.keys() <span class="keyword">and</span> <span class="string">"encrypted_masked_dl_b"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 在 Step4 中 partyC 没有成功接收到来自 partyA 的'masked_dJ_a'或者来自 partyB 的'masked_dl_b'."</span></span><br><span class="line">        </span><br><span class="line">        encrypted_masked_dl_a = dt[<span class="string">'encrypted_masked_dl_a'</span>]</span><br><span class="line">        encrypted_masked_dl_b = dt[<span class="string">'encrypted_masked_dl_b'</span>]</span><br><span class="line">        </span><br><span class="line">        decrypted_masked_dl_a = np.asarray([self.private_key.decrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> encrypted_masked_dl_a])</span><br><span class="line">        decrypted_masked_dl_b = np.asarray([self.private_key.decrypt(x) <span class="keyword">for</span> x <span class="keyword">in</span> encrypted_masked_dl_b])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 将加密后的loss进行解密</span></span><br><span class="line">        <span class="keyword">assert</span> <span class="string">"encrypted_loss"</span> <span class="keyword">in</span> dt.keys(), <span class="string">"Error: 'encrypted_loss' 在Step4中 没有成功接收到来自 partyB 的'encrypted_loss'."</span></span><br><span class="line">        encrypted_loss = dt[<span class="string">'encrypted_loss'</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将加密后的loss进行解密</span></span><br><span class="line">        <span class="comment"># 计算解密后的loss，即除以n 再加上常数项log2</span></span><br><span class="line">        <span class="comment"># 不考虑惩罚项 #config['lambda']*(np.sum(decrypted_theta_a_square) + np.sum(decrypted_theta_b_square))/2*self.A_data_shape[0]</span></span><br><span class="line">        loss = self.private_key.decrypt(encrypted_loss) / self.A_data_shape[<span class="number">0</span>] + math.log(<span class="number">2</span>) </span><br><span class="line">        print(<span class="string">"******本轮迭代，计算的损失loss= "</span>, loss, <span class="string">"******"</span>)</span><br><span class="line">        self.loss.append(loss)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 针对至少迭代一次的loss开始进行判断，如果两次loss相减小于0.001，或者达到最大迭代次数max_iter，那么算法停止</span></span><br><span class="line">        <span class="keyword">if</span> len(self.loss) &gt; <span class="number">1</span> <span class="keyword">and</span> (self.loss[<span class="number">-2</span>] - self.loss[<span class="number">-1</span>])&lt;<span class="number">0.0001</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        data_to_A = &#123;<span class="string">"decrypted_masked_dl_a"</span>: decrypted_masked_dl_a&#125;</span><br><span class="line">        data_to_B = &#123;<span class="string">"decrypted_masked_dl_b"</span>: decrypted_masked_dl_b&#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将解密后的梯度发送给 partyA 和 partyB</span></span><br><span class="line">        self.send_data(data_to_A, self.other_party[party_A_name])</span><br><span class="line">        self.send_data(data_to_B, self.other_party[party_B_name])</span><br><span class="line">        <span class="keyword">return</span></span><br></pre></td></tr></table></figure>
+<h2 id="纵向联邦LR"><a href="#纵向联邦LR" class="headerlink" title="纵向联邦LR"></a>纵向联邦LR</h2><p>训练基于半同态加密的纵向联邦逻辑回归模型</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vertical_logistic_regression</span><span class="params">(XA_train,XB_train,y_train,config)</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Step1 将各参与方进行初始化</span></span><br><span class="line">    party_A = PartyA(XA_train, config)</span><br><span class="line">    print(<span class="string">"参与方A 已成功初始化."</span>)</span><br><span class="line">    party_B = PartyB(XB_train, y_train, config)</span><br><span class="line">    print(<span class="string">"参与方B 已成功初始化."</span>)</span><br><span class="line">    party_C = PartyC(XA_train.shape, XB_train.shape, config)</span><br><span class="line">    print(<span class="string">"参与方C 已成功初始化."</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将各个参与方进行连接, 本质上在每个客户端上, 将其他客户端的键值对&#123;其他客户端别名: 其他客户端对象&#125;保存到 other_party 这个属性中</span></span><br><span class="line">    party_A.connect(<span class="string">"neofl_B"</span>, party_B)</span><br><span class="line">    party_A.connect(<span class="string">"neofl_C"</span>, party_C)</span><br><span class="line"></span><br><span class="line">    party_B.connect(<span class="string">"neofl_A"</span>, party_A)</span><br><span class="line">    party_B.connect(<span class="string">"neofl_C"</span>, party_C)</span><br><span class="line"></span><br><span class="line">    party_C.connect(<span class="string">"neofl_A"</span>, party_A)</span><br><span class="line">    party_C.connect(<span class="string">"neofl_B"</span>, party_B)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">## 开始训练, 根据配置的迭代次数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(config[<span class="string">'n_iter'</span>]):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step2 生成秘钥并发送给客户端A和B,每次迭代都产生不同的秘钥</span></span><br><span class="line">        party_C.send_public_key(<span class="string">"neofl_A"</span>, <span class="string">"neofl_B"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step3 互相传递加密部分</span></span><br><span class="line">        party_A.send_encrypted_items(<span class="string">"neofl_B"</span>)</span><br><span class="line">        party_B.send_encrypted_items(<span class="string">"neofl_A"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step4 计算各自的梯度部分，并将其发送给partyC</span></span><br><span class="line">        party_A.send_encrypt_gradient(<span class="string">"neofl_C"</span>)</span><br><span class="line">        party_B.send_encrypt_gradient(<span class="string">"neofl_C"</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Step5 接收A,B发来的加密梯度,并进行解密</span></span><br><span class="line">        end = party_C.send_decrypt_gradient(<span class="string">"neofl_A"</span>, <span class="string">"neofl_B"</span>)</span><br><span class="line"></span><br><span class="line">        party_A.update_model_theta()</span><br><span class="line">        party_B.update_model_theta()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> end == <span class="literal">True</span>:</span><br><span class="line">            print(<span class="string">"提前终止迭代"</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        print(<span class="string">f"====== 第<span class="subst">&#123;i+<span class="number">1</span>&#125;</span>轮迭代完成 =========== "</span>)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">"所有迭代全部完成 Success!!!"</span>)</span><br><span class="line">    <span class="keyword">return</span> party_C.loss, party_A.theta, party_B.theta</span><br></pre></td></tr></table></figure>
+<h2 id="实验样例"><a href="#实验样例" class="headerlink" title="实验样例"></a>实验样例</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 加载数据并分成训练集和验证集</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_data</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 加载数据</span></span><br><span class="line">    breast = load_breast_cancer()</span><br><span class="line"><span class="comment">#     print("特征名称: ", breast.feature_names, len(breast.feature_names))</span></span><br><span class="line"><span class="comment">#     print("标签取值: ", breast.target_names, len(breast.target_names))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 数据拆分</span></span><br><span class="line">    X_train, X_test, y_train, y_test = train_test_split(breast.data, breast.target, random_state=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 数据标准化</span></span><br><span class="line">    std = StandardScaler()</span><br><span class="line">    X_train = std.fit_transform(X_train)</span><br><span class="line">    X_test = std.transform(X_test)</span><br><span class="line">    <span class="keyword">return</span> X_train, y_train, X_test, y_test</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 纵向分割数据, 将特征分配给A和B</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vertically_partition_data</span><span class="params">(X_train, X_test, A_idx, B_idx)</span>:</span></span><br><span class="line">    <span class="string">"""</span></span><br><span class="line"><span class="string">    Vertically partition feature for party A and B</span></span><br><span class="line"><span class="string">    :param X:      训练集特征数据</span></span><br><span class="line"><span class="string">    :param X_test: 测试集特征数据</span></span><br><span class="line"><span class="string">    :param A_idx: Party A 的特征索引</span></span><br><span class="line"><span class="string">    :param B_idx: Party B 的特征索引</span></span><br><span class="line"><span class="string">    :return: 分割后的训练特征数据XA_train, XB_train, 以及测试特征数据XA_test, XB_test</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 训练集分割，并在原始数组的起始部分，新增一列1</span></span><br><span class="line">    XA_train = X_train[:, A_idx]  </span><br><span class="line">    XB_train = X_train[:, B_idx]  </span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 测试集分割，并在原始数组的起始部分，新增一列1</span></span><br><span class="line">    XA_test = X_test[:, A_idx]</span><br><span class="line">    XB_test = X_test[:, B_idx]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> XA_train, XB_train, XA_test, XB_test</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="comment"># 导入数据，将数据分成训练和测试集，并标准化</span></span><br><span class="line">X_train, y_train, X_test, y_test = load_data()</span><br><span class="line">print(<span class="string">"分割并标准化后的训练数据维度: &#123;&#125;行&#123;&#125;列"</span>.format(X_train.shape[<span class="number">0</span>], X_train.shape[<span class="number">1</span>]))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置模型的配置参数</span></span><br><span class="line">config = &#123;</span><br><span class="line">    <span class="string">'n_iter'</span>: <span class="number">20</span>,  <span class="comment"># 迭代次数</span></span><br><span class="line">    <span class="string">'eta'</span>: <span class="number">0.05</span>,  <span class="comment"># 学习率</span></span><br><span class="line">    <span class="string">'A_idx'</span>: [<span class="number">10</span>, <span class="number">11</span>, <span class="number">12</span>, <span class="number">13</span>, <span class="number">14</span>, <span class="number">15</span>, <span class="number">16</span>, <span class="number">17</span>, <span class="number">18</span>, <span class="number">19</span>, <span class="number">20</span>, <span class="number">21</span>, <span class="number">22</span>, <span class="number">23</span>, <span class="number">24</span>, <span class="number">25</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">28</span>, <span class="number">29</span>],  <span class="comment"># PartyA 部分的特征索引</span></span><br><span class="line">    <span class="string">'B_idx'</span>: [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>],                                                    <span class="comment"># PartyB 部分的特征索引</span></span><br><span class="line">&#125; </span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分成 PartyA 和 PartyB 部分</span></span><br><span class="line">XA_train, XB_train, XA_test, XB_test = vertically_partition_data(X_train, X_test, config[<span class="string">'A_idx'</span>], config[<span class="string">'B_idx'</span>])</span><br><span class="line">print(<span class="string">'PartyA部分的数据规模:&#123;&#125;'</span>.format(XA_train.shape))</span><br><span class="line">print(<span class="string">'PartyB部分的数据规模:&#123;&#125;'</span>.format(XB_train.shape))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开始训练</span></span><br><span class="line">fl_loss, fl_theta_a, fl_theta_b = vertical_logistic_regression(XA_train, XB_train, y_train, config)</span><br></pre></td></tr></table></figure>
+<p>为了与没有联邦学习的模型做对比，需要训练标准LR模型以及损失函数用泰勒展开近似的LR模型</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 标准逻辑回归</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">normal_logistic_regression</span><span class="params">(X_train, y_train, X_test, y_test, config)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 参数初始化</span></span><br><span class="line">    theta = np.zeros(X_train.shape[<span class="number">1</span>])</span><br><span class="line">    normal_loss_list = []</span><br><span class="line">    </span><br><span class="line">    <span class="comment">## 开始训练, 根据配置的迭代次数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(config[<span class="string">'n_iter'</span>]):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算梯度        </span></span><br><span class="line">        dl=<span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> range(X_train.shape[<span class="number">0</span>]):</span><br><span class="line">            tmp = <span class="number">1</span>/(<span class="number">1</span>+np.exp(y_train[j]*X_train[j,:].dot(theta)))</span><br><span class="line">            dl += -tmp * y_train[j]*X_train[j,:]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算损失(去掉惩罚项)</span></span><br><span class="line">        normal_loss = np.sum(np.log(<span class="number">1</span>+np.exp(-y_train*X_train.dot(theta))))/X_train.shape[<span class="number">0</span>]</span><br><span class="line">        normal_loss_list.append(normal_loss)</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 更新theta</span></span><br><span class="line">        theta = theta - config[<span class="string">'eta'</span>] * dl / X_train.shape[<span class="number">0</span>]</span><br><span class="line">                      </span><br><span class="line">    <span class="keyword">return</span> normal_loss_list, theta</span><br><span class="line">    </span><br><span class="line"><span class="comment"># 泰勒近似型逻辑回归</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">taylor_logistic_regression</span><span class="params">(X_train, y_train, X_test, y_test, config)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 参数初始化</span></span><br><span class="line">    theta = np.zeros(X_train.shape[<span class="number">1</span>])<span class="comment"># 将逻辑回归的训练参数theta初始化为1</span></span><br><span class="line">    <span class="comment"># 记录泰勒近似的损失函数</span></span><br><span class="line">    taylor_loss_list = []</span><br><span class="line">    </span><br><span class="line">    <span class="comment">## 开始训练, 根据配置的迭代次数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(config[<span class="string">'n_iter'</span>]):</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 计算梯度</span></span><br><span class="line">        tmp = <span class="number">0.25</span>*X_train.dot(theta) - <span class="number">0.5</span>*y_train</span><br><span class="line">        dl = X_train.T.dot(tmp)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计算损失(去掉惩罚项)</span></span><br><span class="line">        taylor_loss = np.sum(<span class="number">-0.5</span>*y_train * X_train.dot(theta) + <span class="number">0.125</span> * (X_train.dot(theta)*X_train.dot(theta)))/X_train.shape[<span class="number">0</span>]  + math.log(<span class="number">2</span>)</span><br><span class="line">        taylor_loss_list.append(taylor_loss)</span><br><span class="line">                      </span><br><span class="line">        <span class="comment"># 更新参数</span></span><br><span class="line">        <span class="keyword">if</span> len(taylor_loss_list)&gt;<span class="number">1</span> <span class="keyword">and</span> taylor_loss_list[<span class="number">-2</span>]-taylor_loss_list[<span class="number">-1</span>]&lt;<span class="number">0.000001</span>:</span><br><span class="line">            print(<span class="string">f"前后两次迭代损失差为<span class="subst">&#123;taylor_loss_list[<span class="number">-2</span>]-taylor_loss_list[<span class="number">-1</span>]&#125;</span>, 提前终止迭代"</span>)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 更新theta</span></span><br><span class="line">        theta = theta - config[<span class="string">'eta'</span>] * dl / X_train.shape[<span class="number">0</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 获取最终的训练参数theta</span></span><br><span class="line">    <span class="keyword">return</span> taylor_loss_list, theta</span><br></pre></td></tr></table></figure>
+<p>最后，我们可以将联邦学习的LR，标准的LR以及带有泰勒近似的LR模型的预测结果进行比较</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 联邦学习LR训练</span></span><br><span class="line">fl_loss, fl_theta_a, fl_theta_b = vertical_logistic_regression(XA_train, XB_train, y_train, config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 标准LR训练</span></span><br><span class="line">norm_loss, normal_theta = normal_logistic_regression(X_train, y_train, X_test, y_test, config)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 带有泰勒近似的LR训练</span></span><br><span class="line">taylor_loss, taylor_theta = taylor_logistic_regression(X_train, y_train, X_test, y_test, config)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#模型效果评估</span></span><br><span class="line">fl_y_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-XA_test.dot(fl_theta_a) - XB_test.dot(fl_theta_b)))</span><br><span class="line">taylor_y_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-X_test.dot(taylor_theta)))</span><br><span class="line">normal_y_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-X_test.dot(normal_theta)))</span><br><span class="line"></span><br><span class="line">fl_y_train_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-XA_train.dot(fl_theta_a) - XB_train.dot(fl_theta_b)))</span><br><span class="line">taylor_y_train_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-X_train.dot(taylor_theta)))</span><br><span class="line">normal_y_train_prob = <span class="number">1</span>/(<span class="number">1</span> + np.exp(-X_train.dot(normal_theta)))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"train fl lr auc"</span>, roc_auc_score(y_train, fl_y_train_prob))</span><br><span class="line">print(<span class="string">"train taylor lr auc"</span>, roc_auc_score(y_train, taylor_y_train_prob))</span><br><span class="line">print(<span class="string">"train normal lr auc"</span>, roc_auc_score(y_train, normal_y_train_prob))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"test fl lr auc"</span>, roc_auc_score(y_test, fl_y_prob))</span><br><span class="line">print(<span class="string">"test taylor lr auc"</span>, roc_auc_score(y_test, taylor_y_prob))</span><br><span class="line">print(<span class="string">"test normal lr auc"</span>, roc_auc_score(y_test, normal_y_prob))</span><br></pre></td></tr></table></figure>
+<p>完整代码见👉：<a href="https://github.com/HuangNing616/neo_fl" target="_blank" rel="noopener">https://github.com/HuangNing616/neo_fl</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/09/12/DeepFM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="DeepFM学习笔记">
+      <i class="fa fa-chevron-left"></i> DeepFM学习笔记
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81MDU4NS8yNzA2OA=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let activeClass = CONFIG.comments.activeClass;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+
+      <!-- Insert clustrmaps.com -->
+      <script type="text/javascript" id="clustrmaps" src="//cdn.clustrmaps.com/map_v2.js?d=KtGJoKXxclcQVx7sNXJH54c78A8tjanQrniTrGne0CE&cl=ffffff&w=a"></script>
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#业务案例"><span class="nav-number">1.</span> <span class="nav-text">业务案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NeoFL概述"><span class="nav-number">2.</span> <span class="nav-text">NeoFL概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#算法介绍"><span class="nav-number">3.</span> <span class="nav-text">算法介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#符号说明"><span class="nav-number">3.1.</span> <span class="nav-text">符号说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#损失函数"><span class="nav-number">3.2.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流程"><span class="nav-number">3.3.</span> <span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#损失变化"><span class="nav-number">4.1.</span> <span class="nav-text">损失变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型效果"><span class="nav-number">4.2.</span> <span class="nav-text">模型效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#展望"><span class="nav-number">5.</span> <span class="nav-text">展望</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">6.</span> <span class="nav-text">参考文献</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#附录"><span class="nav-number">7.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参与方父类"><span class="nav-number">7.1.</span> <span class="nav-text">参与方父类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参与方子类"><span class="nav-number">7.2.</span> <span class="nav-text">参与方子类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#纵向联邦LR"><span class="nav-number">7.3.</span> <span class="nav-text">纵向联邦LR</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验样例"><span class="nav-number">7.4.</span> <span class="nav-text">实验样例</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="黄宁"
+      src="/images/%E5%A4%B4%E5%83%8F.jpeg">
+  <p class="site-author-name" itemprop="name">黄宁</p>
+  <div class="site-description" itemprop="description">务实敢为 追求极致</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">29</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HuangNing616" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HuangNing616" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:nnkawayi@qq.com" title="E-Mail → mailto:nnkawayi@qq.com" rel="noopener" target="_blank"><i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">黄宁</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">212k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:13</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        访客数：<span id="busuanzi_value_site_uv"></span>人
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        总访问量：<span id="busuanzi_value_site_pv"></span>次
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var bp = document.createElement('script');
+      var curProtocol = window.location.protocol.split(':')[0];
+      bp.src = (curProtocol === 'https') ? 'https://zz.bdstatic.com/linksubmit/push.js' : 'http://push.zhanzhang.baidu.com/push.js';
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(bp, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+    MathJax.Ajax.config.path['mhchem'] = '//cdn.jsdelivr.net/npm/mathjax-mhchem@3';
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        extensions: ['[mhchem]/mhchem.js'],
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+
+  <div id="tp-weather-widget"></div>
+  <script>
+    (function(a,h,g,f,e,d,c,b){b=function(){d=h.createElement(g);c=h.getElementsByTagName(g)[0];d.src=e;d.charset="utf-8";d.async=1;c.parentNode.insertBefore(d,c)};a["SeniverseWeatherWidgetObject"]=f;a[f]||(a[f]=function(){(a[f].q=a[f].q||[]).push(arguments)});a[f].l=+new Date();if(a.attachEvent){a.attachEvent("onload",b)}else{a.addEventListener("load",b,false)}}(window,document,"script","SeniverseWeatherWidget","//cdn.sencdn.com/widget2/static/js/bundle.js?t="+parseInt((new Date().getTime() / 100000000).toString(),10)));
+    window.SeniverseWeatherWidget('show', {
+      flavor: "bubble",
+      location: "WX4FBXXFKE4F",
+      geolocation: false,
+      language: "zh-Hans",
+      unit: "c",
+      theme: "auto",
+      token: "64e9ee0f-b930-45d8-8184-36671cb034af",
+      hover: "enabled",
+      container: "tp-weather-widget"
+    })
+  </script>
+  
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"log":false,"model":{"jsonPath":"/live2dw/assets/koharu.model.json"},"display":{"position":"right","width":200,"height":400},"mobile":{"show":true},"react":{"opacity":0.7}});</script></body>
+</html>

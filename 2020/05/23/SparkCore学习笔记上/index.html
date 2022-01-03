@@ -61,7 +61,7 @@
 <meta property="og:description" content="Spark是基于内存的计算框架，它主要包括SparkCore，SparkSQL，SparkML，SparkStreaming等内容，本文从与MR的区别，运行模式，RDD，Spark Application以及算子来介绍SparkCore">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-23T10:51:19.000Z">
-<meta property="article:modified_time" content="2020-09-05T04:02:12.752Z">
+<meta property="article:modified_time" content="2021-09-20T16:08:40.852Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="Spark学习记录｜计算机学习笔记">
 <meta name="twitter:card" content="summary">
@@ -189,7 +189,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/SparkCore%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0%E4%B8%8A/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      <meta itemprop="image" content="/images/%E5%A4%B4%E5%83%8F.jpeg">
       <meta itemprop="name" content="黄宁">
       <meta itemprop="description" content="务实敢为 追求极致">
     </span>
@@ -216,7 +216,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-09-05 12:02:12" itemprop="dateModified" datetime="2020-09-05T12:02:12+08:00">2020-09-05</time>
+                <time title="修改时间：2021-09-21 00:08:40" itemprop="dateModified" datetime="2021-09-21T00:08:40+08:00">2021-09-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -306,7 +306,8 @@
 <li><p>哪里体现了RDD的<strong>分布式</strong>？<br>RDD的partition是分布在多个<strong>节点（机器）</strong>上的</p>
 </li>
 </ul>
-<h1 id="Spark-Application"><a href="#Spark-Application" class="headerlink" title="Spark Application"></a>Spark Application</h1><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1. Spark Application（应用程序）就是一段完整的spark代码</span></span><br><span class="line"><span class="comment"> * 2. 下述容是WordCount的完整代码流程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step1: 配置信息</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	<span class="comment">// Spark应用程序的名称</span></span><br><span class="line">  .setMaster(<span class="string">"local"</span>)	<span class="comment">// Spark的运行模式</span></span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	<span class="comment">// 其他配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2: SparkContext是通往Spark集群的唯一通道</span></span><br><span class="line"><span class="comment">// 将之前的配置信息传入</span></span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step3: 读入数据并加载成RDD</span></span><br><span class="line"><span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step4: RDD的转换操作</span></span><br><span class="line"><span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = lines.flatMap(line =&gt; &#123;</span><br><span class="line">  line.split(<span class="string">" "</span>)</span><br><span class="line">&#125;)  </span><br><span class="line"><span class="keyword">val</span> pairWords: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map(word =&gt; &#123;</span><br><span class="line">  (word, <span class="number">1</span>)</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = pairWords.reduceByKey((v1, v2) =&gt; &#123;</span><br><span class="line">	v1 + v2</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="keyword">val</span> sortResult: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = result.sortBy(tuple =&gt; &#123;</span><br><span class="line">  tuple._2</span><br><span class="line">&#125;, ascending = <span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// Step5: RDD的执行操作</span></span><br><span class="line">sortResult.foreach(line =&gt; &#123;</span><br><span class="line">  println(line)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6: 关闭SparkContext</span></span><br><span class="line">sc.stop()</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *为了减少代码量，我们可以将Step2至Step5合并，下面是WordCount代码流程的简洁版</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step1</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	</span><br><span class="line">  .setMaster(<span class="string">"local"</span>)</span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2 - Step5</span></span><br><span class="line">sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line">.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">.map((_, <span class="number">1</span>))</span><br><span class="line">.reduceByKey(_+_)</span><br><span class="line">.sortBy(_._2)</span><br><span class="line">.foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6</span></span><br><span class="line">sc.stop()</span><br></pre></td></tr></table></figure>
+<h1 id="Spark-Application"><a href="#Spark-Application" class="headerlink" title="Spark Application"></a>Spark Application</h1><p>Spark Application是通过Scala语言来实现的，其中版本的对应关系为：Spark1.6==&gt;Scala2.10，Spark2.0+6==&gt;Scala2.11</p>
+<figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1. Spark Application（应用程序）就是一段完整的spark代码</span></span><br><span class="line"><span class="comment"> * 2. 下述容是WordCount的完整代码流程</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step1: 配置信息</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	<span class="comment">// Spark应用程序的名称</span></span><br><span class="line">  .setMaster(<span class="string">"local"</span>)	<span class="comment">// Spark的运行模式</span></span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	<span class="comment">// 其他配置</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2: SparkContext是通往Spark集群的唯一通道</span></span><br><span class="line"><span class="comment">// 将之前的配置信息传入</span></span><br><span class="line"><span class="keyword">val</span> sc = <span class="keyword">new</span> <span class="type">SparkContext</span>(conf)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step3: 读入数据并加载成RDD</span></span><br><span class="line"><span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">String</span>] = sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step4: RDD的转换操作</span></span><br><span class="line"><span class="keyword">val</span> words: <span class="type">RDD</span>[<span class="type">String</span>] = lines.flatMap(line =&gt; &#123;</span><br><span class="line">  line.split(<span class="string">" "</span>)</span><br><span class="line">&#125;)  </span><br><span class="line"><span class="keyword">val</span> pairWords: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = words.map(word =&gt; &#123;</span><br><span class="line">  (word, <span class="number">1</span>)</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = pairWords.reduceByKey((v1, v2) =&gt; &#123;</span><br><span class="line">	v1 + v2</span><br><span class="line">&#125;)	</span><br><span class="line"><span class="keyword">val</span> sortResult: <span class="type">RDD</span>[(<span class="type">String</span>, <span class="type">Int</span>)] = result.sortBy(tuple =&gt; &#123;</span><br><span class="line">  tuple._2</span><br><span class="line">&#125;, ascending = <span class="literal">false</span>) </span><br><span class="line"></span><br><span class="line"><span class="comment">// Step5: RDD的执行操作</span></span><br><span class="line">sortResult.foreach(line =&gt; &#123;</span><br><span class="line">  println(line)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6: 关闭SparkContext</span></span><br><span class="line">sc.stop()</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *为了减少代码量，我们可以将Step2至Step5合并，下面是WordCount代码流程的简洁版</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Step1</span></span><br><span class="line"><span class="keyword">val</span> conf: <span class="type">SparkConf</span> = <span class="keyword">new</span> <span class="type">SparkConf</span>()</span><br><span class="line">  .setAppName(<span class="string">"wordcount"</span>)	</span><br><span class="line">  .setMaster(<span class="string">"local"</span>)</span><br><span class="line">  .set(<span class="string">"spark.driver.memory"</span>, <span class="string">"100"</span>)	</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step2 - Step5</span></span><br><span class="line">sc.textFile(<span class="string">"./data/words"</span>)</span><br><span class="line">.flatMap(_.split(<span class="string">" "</span>))</span><br><span class="line">.map((_, <span class="number">1</span>))</span><br><span class="line">.reduceByKey(_+_)</span><br><span class="line">.sortBy(_._2)</span><br><span class="line">.foreach(println)</span><br><span class="line"></span><br><span class="line"><span class="comment">// Step6</span></span><br><span class="line">sc.stop()</span><br></pre></td></tr></table></figure>
 <h1 id="算子"><a href="#算子" class="headerlink" title="算子"></a>算子</h1><h2 id="Transformations"><a href="#Transformations" class="headerlink" title="Transformations"></a>Transformations</h2><p>Transformations（转换）算子的特点是<strong>懒执行</strong>，需要Actions（执行）算子触发执行</p>
 <h3 id="Single-RDD"><a href="#Single-RDD" class="headerlink" title="Single RDD"></a>Single RDD</h3><h4 id="filter"><a href="#filter" class="headerlink" title="filter"></a>filter</h4><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">//filter过滤数据，返回true的数据会被留下</span></span><br><span class="line"><span class="keyword">val</span> infos: <span class="type">RDD</span>[<span class="type">Int</span>] = sc.makeRDD(<span class="type">List</span>[<span class="type">Int</span>](<span class="number">11</span>,<span class="number">22</span>,<span class="number">32</span>,<span class="number">46</span>,<span class="number">83</span>))</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">Int</span>] = infos.filter(one=&gt;&#123;</span><br><span class="line">  one&gt;<span class="number">50</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
 <h4 id="sample"><a href="#sample" class="headerlink" title="sample"></a>sample</h4><figure class="highlight scala"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1. 参数(有无放回抽样，抽样的比例，种子)</span></span><br><span class="line"><span class="comment"> * 2. 有种子和无种子的区别</span></span><br><span class="line"><span class="comment"> *    1) 如果有种子，那么针对同一数据源并且指定相同的参数，那么每次抽样到的数据都是一样的</span></span><br><span class="line"><span class="comment"> *    2) 如果没有种子, 那么针对同一数据源，每次抽样都是随机抽样</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">val</span> lines: <span class="type">RDD</span>[<span class="type">Int</span>] = sc.makeRDD(<span class="type">List</span>[<span class="type">Int</span>](<span class="number">1</span>,<span class="number">2</span>,<span class="number">4</span>,<span class="number">12</span>,<span class="number">3</span>,<span class="number">1</span>))</span><br><span class="line"><span class="keyword">val</span> result: <span class="type">RDD</span>[<span class="type">Int</span>] = lines.sample(withReplacement = <span class="literal">true</span>,<span class="number">1</span>,<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
@@ -433,7 +434,7 @@
       <div class="site-overview-wrap sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="黄宁"
-      src="/images/%E4%BA%91%E5%8D%97%E5%B1%B1%E9%97%B4%E8%87%AA%E6%8B%8D.jpg">
+      src="/images/%E5%A4%B4%E5%83%8F.jpeg">
   <p class="site-author-name" itemprop="name">黄宁</p>
   <div class="site-description" itemprop="description">务实敢为 追求极致</div>
 </div>
@@ -441,14 +442,14 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives">
-          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-count">29</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">36</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -485,7 +486,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2022</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -494,12 +495,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">193k</span>
+    <span title="站点总字数">212k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">2:56</span>
+    <span title="站点阅读时长">3:13</span>
 </div>
 
         
