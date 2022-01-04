@@ -63,7 +63,7 @@
 <meta property="og:image" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/fl_architecture.jpeg">
 <meta property="og:image" content="http://yoursite.com/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/losschange.png">
 <meta property="article:published_time" content="2022-01-03T08:02:52.000Z">
-<meta property="article:modified_time" content="2022-01-04T01:28:39.641Z">
+<meta property="article:modified_time" content="2022-01-04T01:32:26.035Z">
 <meta property="article:author" content="黄宁">
 <meta property="article:tag" content="｜统计学|机器学习|python|">
 <meta name="twitter:card" content="summary">
@@ -219,7 +219,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-04 09:28:39" itemprop="dateModified" datetime="2022-01-04T09:28:39+08:00">2022-01-04</time>
+                <time title="修改时间：2022-01-04 09:32:26" itemprop="dateModified" datetime="2022-01-04T09:32:26+08:00">2022-01-04</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -349,7 +349,7 @@ X_B^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B)-\frac{1}{2}X_B^{T}y\\
 \begin{bmatrix}X_A^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B-\frac{1}{2}y)\\ \\
 X_B^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B-\frac{1}{2}y)\\
 \end{bmatrix} \\
-\end{aligned}</script><p>这样就实现了分别在 PartyA 和 PartyB 计算梯度的目的</p>
+\end{aligned}</script><p>这样就实现了分别在 PartyA 和 PartyB 计算梯度的目的。</p>
 <h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>为了后续描述方便，我们将互联网企业A，金融企业B以及中间委托人C，分别命名为PartyA，PartyB以及PartyC</p>
 <div class="table-container">
 <table>
@@ -390,7 +390,7 @@ X_B^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B-\frac{1}{2}y)\\
 </table>
 </div>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>为了评估NeoFL中<strong>纵向联邦逻辑回归</strong>的效果，我们将未进行联邦学习的逻辑回归算法作为对照组，其中对照组中针对损失函数是否进行泰勒近似分成对照组1和对照组2。</p>
-<p>本文是基于sklearn中的乳腺癌数据集生成的模拟数据来进行实验，通过使用相同的训练数据集进行模型训练，观察损失值的下降曲线以及在测试集上的模型效果</p>
+<p>本文是基于sklearn中的乳腺癌数据集生成的模拟数据来进行实验，通过使用相同的训练数据集进行模型训练，观察损失值的下降曲线以及在测试集上的模型效果。</p>
 <h2 id="损失变化"><a href="#损失变化" class="headerlink" title="损失变化"></a>损失变化</h2><p><img src="/2022/01/03/NeoFL-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8%E8%81%94%E9%82%A6%E5%AD%A6%E4%B9%A0/losschange.png" style="zoom:50%;"></p>
 <p>其中上述曲线中，横轴代表算法的迭代次数，纵轴表示每次迭代对应损失值，其中每条曲线的含义如下：</p>
 <p>(1) <strong>vertical lr loss</strong>: 表示纵向联邦学习LR模型训练过程中的损失变化曲线；<br>(2) <strong>taylor lr loss</strong>: 表示标准的LR模型训练过程中的损失变化曲线，其中损失函数用泰勒展开来近似；<br>(3) <strong>normal lr loss</strong>: 表示标准的LR模型训练过程中的损失变化曲线。</p>
@@ -429,9 +429,9 @@ X_B^{T}(\frac{1}{4}X_A\theta_A+\frac{1}{4}X_B\theta_B-\frac{1}{2}y)\\
 <p>由上述的损失变化以及模型效果可以看到，与标准的逻辑回归相比，NeoFL的纵向逻辑回归算法<strong>在保证各方数据隐私性的同时，实现了模型效果没有损失的目的。</strong></p>
 <h1 id="展望"><a href="#展望" class="headerlink" title="展望"></a>展望</h1><p>针对目前的联邦学习框架，还有进一步的优化空间，比如：</p>
 <ol>
-<li>优化频繁通信带来的性能问题</li>
-<li>优化模型训练时中间数据落盘的存储问题</li>
-<li>增加惩罚项来缓解模型的过拟合，并解决增加惩罚项之后，损失会越来越大的问题</li>
+<li>优化频繁通信带来的性能问题；</li>
+<li>优化模型训练时中间数据落盘的存储问题；</li>
+<li>增加惩罚项来缓解模型的过拟合，并解决增加惩罚项之后，损失会越来越大的问题。</li>
 </ol>
 <h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><blockquote>
 <p>[1] H. Brendan M, Eider M. Federated Learning of Deep Networks using Model Averaging(2016). <a href="https://arxiv.org/pdf/1602.05629v1.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1602.05629v1.pdf</a></p>
